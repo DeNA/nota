@@ -1,0 +1,3 @@
+packages/nota-client/public/* linguist-vendored
+packages/nota-client/public/index.html linguist-vendored=false
+packages/nota-server/docs/* linguist-documentation

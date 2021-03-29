@@ -1,0 +1,41 @@
+version: '3.2'
+services:
+  mysql:
+    image: mysql:5.6.44
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    ports:
+      - '127.0.0.1:3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+  redis:
+    image: redis:5.0.5
+    ports:
+      - '127.0.0.1:6379:6379'
+  app:
+    build:
+      context: Dockerfile.d
+      dockerfile: development.Dockerfile
+    image: nota_app
+    environment:
+      NOTA_DB_HOST: 'mysql'
+      NOTA_REDIS_HOST: 'redis'
+    working_dir: /app
+    command:
+      - bash
+      - -c
+      - |
+        npm install
+        npm run start
+    ports:
+      - '127.0.0.1:3000:3000'
+      - '127.0.0.1:3001:3001'
+    volumes:
+      - .:/app:delegated
+      - /app/node_modules/
+      - /app/packages/nota-server/node_modules/
+      - /app/packages/nota-client/node_modules/
+      - /app/packages/svg-image-annotation/node_modules/
+volumes:
+  mysql-data:
+    driver: local

@@ -1,0 +1,568 @@
+body {
+  min-width: 1000px;
+  overflow-x: auto;
+}
+
+.annotate-view {
+  display: flex;
+  height: 100%;
+  background-color: rgb(27, 28, 29);
+  color: rgb(255, 255, 255);
+}
+
+.annotate-view > div {
+  padding: 8px;
+}
+
+.annotate-view .annotation-preview-container {
+  width: 50%;
+  height: 100%;
+}
+
+.annotate-view .annotation-label-list-container {
+  width: 50%;
+  box-shadow: -1px 0px 0px 0px rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-top: 0px;
+}
+
+.annotate-view .annotation-list-container {
+  display: none;
+  width: 150px;
+  height: 100%;
+  box-shadow: -1px 0px 0px 0px rgba(255, 255, 255, 0.1);
+}
+
+.Preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.Preview .top {
+  display: flex;
+}
+
+.Preview .main-menu {
+  margin: 0 !important;
+}
+
+.Preview .main-menu .item {
+  color: grey !important;
+}
+
+.Preview .main-menu .item button {
+  color: grey !important;
+}
+
+.Preview .main-menu input {
+  margin-left: 5px;
+}
+
+.Preview .labels-show {
+  width: 100%;
+  cursor: pointer;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Preview .labels-show.label_show_off {
+  opacity: 0.3;
+}
+
+.Preview .labels-show.label_show_hover {
+  opacity: 0.6;
+}
+
+.Preview .list .active.item {
+  background: rgba(0, 0, 80, 0.2) !important;
+}
+
+.image-list {
+  flex: 1;
+  height: 70px;
+  overflow: hidden;
+  margin: 0 !important;
+  margin-left: 5px !important;
+  padding: 0 !important;
+  background-color: darkgray !important;
+}
+
+.image-list .item {
+  height: 25px;
+  cursor: pointer;
+  padding: 0.2em 0.5em;
+  font-size: 0.85714286em;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.image-list .item:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.image-list .item .image-name {
+  display: inline-block;
+  padding-left: 5px;
+}
+
+.image-list .item.active {
+  background: rgba(0, 100, 200, 0.3);
+  color: rgba(0, 0, 0, 0.95);
+}
+
+.image-list .item .metadata-toggle {
+  cursor: pointer;
+}
+
+.current-image {
+  display: flex;
+  min-height: 0;
+  flex: 2;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 3px !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.Preview svg {
+  flex: 1;
+}
+
+.Preview svg .new {
+  fill: none;
+  stroke: rgb(255, 69, 0);
+}
+
+.Preview svg .box {
+  fill: rgba(100, 100, 100, 0.3);
+  cursor: pointer;
+}
+
+.Preview svg .box:hover {
+  fill: rgba(0, 100, 0, 0.3);
+  cursor: pointer;
+}
+
+.Preview svg g.active .box {
+  fill: rgba(100, 100, 100, 0);
+  cursor: auto;
+}
+
+.Preview svg .line {
+  stroke: rgba(0, 0, 0, 0.5);
+}
+
+.Preview svg g.active .corner {
+  stroke-linecap: round;
+}
+
+.Preview svg g.active .line {
+  stroke: rgb(21, 80, 180);
+}
+
+.Preview svg g.active .corner {
+  stroke: rgb(21, 80, 180);
+}
+
+.Preview svg g.active.editable .line,
+.Preview svg g.active.editable .corner {
+  stroke: rgb(21, 180, 36);
+}
+
+.Preview svg g.active.editable .dragCorner,
+.Preview svg g.active.editable .dragLine {
+  stroke: rgba(0, 0, 0, 0.0001);
+}
+
+.Preview svg g.active.editable .dragCorner {
+  stroke-linecap: round;
+}
+
+.Preview svg g.active.editable .dragLine.e,
+.Preview svg g.active.editable .dragLine.w {
+  cursor: ew-resize;
+}
+
+.Preview svg g.active.editable .dragLine.n,
+.Preview svg g.active.editable .dragLine.s {
+  cursor: ns-resize;
+}
+
+.Preview svg g.active.editable .corner {
+  stroke: rgb(0, 0, 0);
+  stroke-linecap: round;
+}
+
+.Preview svg g.active.editable .dragCorner.nw,
+.Preview svg g.active.editable .dragCorner.se {
+  cursor: nwse-resize;
+}
+
+.Preview svg g.active.editable .dragCorner.ne,
+.Preview svg g.active.editable .dragCorner.sw {
+  cursor: nesw-resize;
+}
+
+.image-filters {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.image-filters .image-filters-header {
+  margin-bottom: 5px;
+  color: black;
+}
+
+.annotation-label-list-container .image-status {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  /* min-height: 35px; */
+}
+
+.annotation-label-list-container .image-status .done-button {
+  flex: 1;
+}
+
+.annotation-label-list-container .ui.toggle.checkbox input:checked ~ label,
+.annotation-label-list-container .image-status .done-button label {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.annotation-label-list-container .annotation-label-list {
+  overflow-y: auto;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.annotation-label-list .label {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation-label-list .label .header {
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.annotation-label-list .label .header .title {
+  font-weight: bolder;
+  flex: 1;
+}
+
+.annotation-label-list .label .header .header-contents {
+  margin-left: 10px;
+}
+
+.annotation-label-list .label .contents {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  color: black;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation-label-list .label .contents .radio-button {
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.annotation-label-list .label .contents .image-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.annotation-label-list .label .contents .selected-image {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.annotation-label-list .label .contents .selected-image img {
+  width: 100%;
+}
+
+.annotation-label-list .label .contents .image-buttons .image-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0);
+}
+
+.annotation-label-list .label .contents .image-buttons .image-button.active {
+  background-color: rgba(0, 100, 200, 0.3);
+  border-color: rgba(0, 100, 200, 0.3);
+}
+
+.annotation-label-list .label .contents .image-buttons .image-button img {
+  width: 100%;
+}
+
+.annotation-label-list-container .annotation-label-status {
+  text-align: center;
+  min-height: 35px;
+}
+
+.Preview .image-annotations {
+  background-color: darkgrey;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.Preview .image-controls-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background-color: darkgrey;
+  margin-top: 3px;
+  margin-bottom: -10px;
+  padding-bottom: 10px;
+  border-top-left-radius: 0.28571429rem;
+  border-top-right-radius: 0.28571429rem;
+}
+
+.Preview .image-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+}
+
+.Preview .image-controls .add-icon {
+  color: rgba(255, 255, 255, 0.5);
+  padding: 5px;
+}
+
+.Preview .image-controls .toggle-add-annotation {
+  flex-wrap: wrap;
+  align-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+}
+
+.Preview .image-controls .toggle-add-annotation .item {
+  font-size: smaller;
+  padding-top: 2px;
+  padding-right: 3px;
+  padding-left: 3px;
+  padding-bottom: 1px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  border-bottom: 2px solid;
+  min-width: 100px;
+}
+
+.Preview .image-controls .toggle-add-annotation .item:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.Preview .image-controls .toggle-add-annotation .item.active {
+  background: rgba(0, 100, 200, 0.3);
+}
+
+.Preview .image-controls .toggle-add-annotation .item .name {
+  white-space: nowrap;
+  flex: 1;
+  text-align: center;
+}
+
+.Preview .image-controls .toggle-add-annotation .item .color {
+  width: 4px;
+  height: 12px;
+  display: block;
+  margin-right: 1px;
+}
+
+.Preview .annotation-list {
+  flex: 0 1;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  margin: 0 !important;
+  min-width: 0;
+}
+
+.Preview .annotation-list .item {
+  width: 100px;
+  flex: 0 0;
+  margin-right: 1px;
+  padding: 0 !important;
+}
+
+.Preview .annotation-list .item .header {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 20px;
+  align-items: center;
+}
+
+.Preview .annotation-list .item .header .status {
+  width: 18px;
+}
+
+.Preview .annotation-list .item .header .color {
+  width: 4px;
+  height: 70%;
+  margin-right: 1px;
+}
+
+.Preview .annotation-list .item .header .name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Preview .annotation-list .item .contents {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.Preview .annotation-list .item .contents .annotation-label-review {
+  display: flex;
+  flex-direction: column;
+  font-size: smaller;
+}
+
+.annotation-label-review .selected-image-review {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.annotation-label-review .selected-image-review .image-image {
+  margin-right: 3px;
+}
+
+.Preview .annotation-list .item .contents .image {
+  /* height: 100px; */
+  width: 100px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.annotation-label-view .annotation-image-metadata {
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.annotation-label-view .annotation-image-metadata-field {
+  padding: 3px;
+  margin: 0px;
+  line-height: 1;
+}
+
+.annotation-label-view .annotation-label-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.annotation-label-view .annotation-label-controls .popup-button {
+  cursor: pointer;
+  font-size: smaller;
+}
+
+.annotation-label-view {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation-label-view .annotation-label-list {
+  width: 100%;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation-label-view .annotation-label-list .label {
+  flex-shrink: 0;
+}
+
+.annotation-label-view .annotation-label-list .label.expands {
+  flex: 1;
+}
+
+.fullscreen-popup .annotation-label-controls {
+  display: none;
+}
+
+.annotation-label-view
+  .annotation-label-list
+  .annotation-group-items
+  .itemOptions {
+  flex-shrink: 1;
+}
+
+.annotation-label-view
+  .annotation-label-list
+  .annotation-group-items
+  .itemOptions
+  .ui.selection.dropdown {
+  font-size: 80%;
+  padding: 0.4em 1.3em 0.2em 0.2em;
+  min-height: 2em;
+}
+
+.annotation-label-view
+  .annotation-label-list
+  .annotation-group-items
+  .itemOptions
+  .dropdown.icon {
+  right: 0.3em;
+  top: 0.3em;
+}
+
+.annotation-label-view
+  .annotation-label-list
+  .annotation-group-items
+  .itemOptions
+  .ui.selection.dropdown
+  .menu
+  .item {
+  font-size: 100%;
+  padding: 0.5em 0.5em 0.5em 0.5em !important;
+}
+
+g.selectable rect,
+g.selectable polygon {
+  stroke-dasharray: 10 1 !important;
+}
+
+input.form-control:disabled {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}

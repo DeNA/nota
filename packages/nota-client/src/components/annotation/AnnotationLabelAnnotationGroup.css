@@ -1,0 +1,65 @@
+.annotation-label-group {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  outline: none;
+}
+
+.annotation-label-group:focus {
+  background-color: rgba(0, 166, 255, 0.1);
+  outline: 4px solid rgba(0, 162, 255, 0.3);
+}
+
+.annotation-label-group .image {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.annotation-label-group .image > svg {
+  flex: 1;
+}
+
+.annotation-label-group .annotation-controls {
+  flex: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.annotation-label-group .annotation-controls .annotation-groups {
+  height: 100%;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.annotation-label-group .annotation-group .annotation-group-item {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2px;
+  align-content: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.annotation-label-group .annotation-group .annotation-group-item:hover {
+  background-color: rgba(0, 0, 100, 0.2);
+}
+
+.annotation-label-group .annotation-group .annotation-group-item.selected {
+  background-color: rgba(0, 0, 100, 0.3);
+}
+
+.annotation-label-group .annotation-group .annotation-group-label {
+  font-weight: bolder;
+}
+
+.annotation-label-group .annotation-group .annotation-group-item .color {
+  width: 8px;
+}
+
+.annotation-label-group .annotation-group .annotation-group-item .label {
+  flex: 1;
+  padding: 2px;
+}

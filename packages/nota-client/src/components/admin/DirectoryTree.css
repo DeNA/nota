@@ -1,0 +1,9 @@
+.tree-item:hover {
+  background-color: rgba(23, 162, 184, 0.5);
+  cursor: pointer;
+}
+
+.tree-item.selected {
+  background-color: rgba(23, 162, 184, 1);
+  cursor: default;
+}

@@ -1,0 +1,145 @@
+.annotated-video {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.annotated-video .spacer {
+  flex-grow: 1;
+}
+
+.annotated-video .annotated-video-container {
+  width: 100%;
+  display: flex;
+  min-height: 0;
+  justify-content: center;
+}
+
+.annotated-video .annotated-video-container video {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.annotated-seekbar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.annotated-seekbar-bar {
+  width: 100%;
+  height: 32px;
+  background-color: rgb(50, 50, 50);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2px;
+}
+
+.annotated-seekbar-bar .controls-container .play-button {
+  width: 30px;
+}
+
+.annotated-seekbar-bar .progress-container {
+  height: 100%;
+  flex-grow: 1;
+  border: 1px solid black;
+  background-color: rgb(100, 100, 100);
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.annotated-seekbar-bar .progress-container .progress {
+  height: 60%;
+  background-color: rgb(210, 207, 207);
+}
+
+.annotated-seekbar-bar .progress-container .events {
+  height: 40%;
+  width: 100%;
+  background-color: rgb(230, 230, 230);
+  position: relative;
+  margin-top: auto;
+}
+
+.annotated-seekbar-bar .progress-container .events .event {
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.annotated-seekbar-bar .progress-container .events .event-start {
+  margin-left: -8px;
+}
+
+.annotated-seekbar-bar .progress-container .events .event-end {
+  margin-right: -8px;
+}
+
+.annotated-seekbar-bar .progress-container .events .event-start,
+.annotated-seekbar-bar .progress-container .events .event-end {
+  height: 100%;
+  width: 8px;
+  opacity: 0.7;
+}
+
+.annotated-seekbar-bar .progress-container .events .event-content {
+  height: 100%;
+  flex-grow: 1;
+  opacity: 0.5;
+}
+
+.annotated-seekbar-bar
+  .progress-container
+  .events
+  .event.selected
+  .event-content {
+  opacity: 1;
+}
+
+.annotated-seekbar-bar .progress-container .events .event .event-content:hover {
+  opacity: 1;
+}
+
+.annotated-seekbar-bar .progress-container .events .event-content:hover,
+.annotated-seekbar-bar .progress-container .events .event-start:hover,
+.annotated-seekbar-bar .progress-container .events .event-end:hover {
+  border: 1px solid white;
+}
+
+.annotated-seekbar-bar .time {
+  padding-right: 3px;
+  min-width: 100px;
+  text-align: right;
+}
+
+.annotated-seekbar-controls {
+  margin-top: 2px;
+  padding: 5px;
+  background-color: rgb(50, 50, 50);
+}
+
+.annotated-seekbar-controls button {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.annotated-seekbar-controls .play-button {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.annotated-seekbar-controls .skip-button {
+  width: 44px;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "svg-image-annotation",
+  "private": true,
+  "version": "2.0.0",
+  "description": "svg-image-annotation",
+  "main": "dist/bundle.js",
+  "module": "dist/bundle.es.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "node_modules/.bin/prettier --write \"src/**/*.{js,css,ts}\"",
+    "buildold": "tsc -p src && cp src/*.css built/ && cp src/.babelrc built/ && rollup -c rollup.config.js",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dena/nota"
+  },
+  "author": "Jonatan Alama <jonatan.alama@dena.com>",
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "rollup": "^1.19.4",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "typescript": "^3.5.3"
+  }
+}

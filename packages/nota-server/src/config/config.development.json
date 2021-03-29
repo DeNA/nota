@@ -1,0 +1,34 @@
+{
+  "nota": {
+    "host": "http://localhost:3000"
+  },
+  "redis": {
+    "host": "redis"
+  },
+  "db": {
+    "username": "root",
+    "password": null,
+    "database": "notav2_development",
+    "host": "mysql",
+    "logging": false,
+    "dialect": "mysql",
+    "dialectOptions": {
+      "charset": "utf8mb4"
+    },
+    "pool": {
+      "max": 10,
+      "min": 5,
+      "acquire": 30000,
+      "idle": 10000
+    }
+  },
+  "authenticators": {
+    "authenticators": [
+      {
+        "id": "local",
+        "label": "Local Account"
+      }
+    ],
+    "ssoAuthenticators": []
+  }
+}

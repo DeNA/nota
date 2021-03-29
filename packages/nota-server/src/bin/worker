@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+const { notaJobQueues } = require("../lib/notaJobQueue");
+const notaJobScheduler = require("../lib/notaJobScheduler");
+const { JobTask } = require("../models");
+const CONCURRENCY = 1;
+
+notaJobQueues[JobTask.TASK_NAME.MEDIA_SOURCE_FETCH].process(
+  CONCURRENCY,
+  `${__dirname}/../services/mediaSourceFetch.js`
+);
+notaJobQueues[JobTask.TASK_NAME.TASK_FETCH].process(
+  CONCURRENCY,
+  `${__dirname}/../services/taskInitialize.js`
+);
+notaJobQueues[JobTask.TASK_NAME.TASK_EXPORT].process(
+  CONCURRENCY,
+  `${__dirname}/../services/taskExport.js`
+);
+
+const REPEAT_EVERY = 1000 * 60; // 1 minute
+
+notaJobScheduler.getRepeatableJobs().then(async jobs => {
+  for (let i = 0; i < jobs.length; i++) {
+    const job = jobs[i];
+    await notaJobScheduler.removeRepeatableByKey(job.key);
+  }
+  notaJobScheduler.add(
+    "JOB_SCHEDULER",
+    {},
+    { repeat: { every: REPEAT_EVERY } }
+  );
+  notaJobScheduler.process(
+    "JOB_SCHEDULER",
+    CONCURRENCY,
+    `${__dirname}/../services/jobScheduler.js`
+  );
+});

@@ -1,0 +1,64 @@
+.shift-key .polygon-point:hover {
+  cursor: not-allowed !important;
+}
+
+.alt-key .polygon-line:hover {
+  cursor: pointer !important;
+}
+
+g text {
+  display: none;
+}
+
+g.label-always text {
+  display: inherit;
+}
+
+g.label-hover:hover text {
+  display: inherit;
+}
+
+g.selectable .selectable-item {
+  cursor: pointer;
+}
+
+g.selectable rect.selectable-item,
+g.selectable circle.selectable-item,
+g.selectable polygon.selectable-item {
+  fill: rgba(0, 0, 0, 0.01);
+}
+
+g.selectable:hover rect.selectable-item,
+g.selectable:hover polygon.selectable-item {
+  fill: rgba(0, 100, 0, 0.3);
+}
+
+g.selectable:hover circle.selectable-item {
+  fill: rgba(0, 0, 0, 0.1);
+}
+
+.polygon-point {
+  cursor: move;
+}
+
+g.moving .polygon-point {
+  cursor: default;
+}
+
+g.selectable rect,
+g.selectable polygon {
+  stroke-dasharray: 1 1;
+}
+
+line.creation-guide {
+  stroke-dasharray: 3 1;
+}
+
+g.canAddNew image {
+  cursor: crosshair;
+}
+
+line.point-creation-guide {
+  mix-blend-mode: difference;
+  stroke-dasharray: 5 1;
+}

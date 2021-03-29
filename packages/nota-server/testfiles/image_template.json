@@ -1,0 +1,243 @@
+{
+  "parser": "jsonv2",
+  "mediaType": "IMAGE",
+  "mediaExtensions": ["jpg", "png"],
+  "annotations": [
+    {
+      "name": "media_test",
+      "label": "MediaLabelsTest",
+      "type": "MEDIA_LABELS",
+      "options": {
+        "autoCreate": true,
+        "undeletable": true
+      },
+      "labels": [
+        {
+          "name": "frame",
+          "label": "Frame",
+          "type": "TEXT_INPUT",
+          "options": {
+            "required": true,
+            "regExp": "^[0-9]*$",
+            "description": "Insert the frame number"
+          }
+        }
+      ]
+    },
+    {
+      "name": "person",
+      "label": "Person",
+      "type": "RECTANGLE",
+      "hotkey": "z",
+      "labels": [
+        {
+          "name": "gender",
+          "label": "gender",
+          "type": "SINGLE_SELECTION",
+          "options": {
+            "required": true,
+            "items": [
+              {
+                "label": "Male",
+                "value": "male",
+                "hotkey": "m"
+              },
+              {
+                "label": "Female",
+                "value": "female",
+                "hotkey": "f"
+              }
+            ],
+            "display": "RADIO"
+          }
+        },
+        {
+          "name": "age",
+          "label": "Age",
+          "type": "SINGLE_SELECTION",
+          "options": {
+            "required": true,
+            "items": [
+              {
+                "label": "15-",
+                "value": "0",
+                "hotkey": "1 5"
+              },
+              {
+                "label": "20-",
+                "value": "1",
+                "hotkey": "2 0"
+              },
+              {
+                "label": "25-",
+                "value": "2",
+                "hotkey": "2 5"
+              },
+              {
+                "label": "30-",
+                "value": "3",
+                "hotkey": "3 0"
+              },
+              {
+                "label": "35-",
+                "value": "4",
+                "hotkey": "3 5"
+              },
+              {
+                "label": "40-",
+                "value": "5",
+                "hotkey": "4 0"
+              },
+              {
+                "label": "45-",
+                "value": "6",
+                "hotkey": "4 5"
+              },
+              {
+                "label": "50-",
+                "value": "7",
+                "hotkey": "5 0"
+              },
+              {
+                "label": "55-",
+                "value": "8",
+                "hotkey": "5 5"
+              },
+              {
+                "label": "60-",
+                "value": "9",
+                "hotkey": "6 0"
+              }
+            ],
+            "display": "RADIO"
+          }
+        },
+        {
+          "name": "occluded",
+          "label": "Occluded",
+          "type": "BOOLEAN",
+          "hotkey": "k",
+          "options": {
+            "default": true,
+            "required": false,
+            "display": "CHECKBOX"
+          }
+        },
+        {
+          "name": "truncated",
+          "label": "Truncated",
+          "type": "BOOLEAN",
+          "hotkey": "m",
+          "options": {
+            "default": false,
+            "required": false,
+            "display": "CHECKBOX"
+          }
+        },
+        {
+          "name": "invalid",
+          "label": "Invalid",
+          "type": "BOOLEAN",
+          "hotkey": "i",
+          "options": {
+            "default": false,
+            "required": false,
+            "display": "CHECKBOX"
+          }
+        },
+        {
+          "name": "pose_annotation",
+          "label": "Pose Annotation",
+          "type": "ANNOTATION_GROUP",
+          "options": {
+            "items": [
+              {
+                "name": "head_rect",
+                "label": "Head Rect",
+                "type": "RECTANGLE",
+                "itemOptions": {
+                  "default": "2",
+                  "items": [
+                    {
+                      "value": "0",
+                      "label": "Visible"
+                    },
+                    {
+                      "value": "1",
+                      "label": "Partially Visible"
+                    },
+                    {
+                      "value": "2",
+                      "label": "Not Visible"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "key_points",
+                "label": "Pose Points",
+                "type": "POINT_GROUP",
+                "options": {
+                  "items": [
+                    {
+                      "name": "0",
+                      "label": "Head-top",
+                      "type": "POINT",
+                      "color": "rgba(100,100,100,1)",
+                      "itemOptions": {
+                        "default": "1",
+                        "items": [
+                          {
+                            "value": "0",
+                            "label": "Visible"
+                          },
+                          {
+                            "value": "1",
+                            "label": "Partially Visible"
+                          },
+                          {
+                            "value": "2",
+                            "label": "Not Visible"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "name": "1",
+                      "label": "Right Eye",
+                      "type": "POINT",
+                      "color": "rgba(128,0,0,1)",
+                      "itemOptions": {
+                        "default": "0",
+                        "items": [
+                          {
+                            "value": "0",
+                            "label": "Visible"
+                          },
+                          {
+                            "value": "1",
+                            "label": "Partially Visible"
+                          },
+                          {
+                            "value": "2",
+                            "label": "Not Visible"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "name": "2",
+                      "label": "Left Eye",
+                      "type": "POINT",
+                      "color": "rgba(128,0,0,1)"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+.report-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.report-container .report-column {
+  flex: 1;
+  position: relative;
+}
+
+.report-container .report-column.active {
+  background: rgb(167, 193, 246);
+}
+
+.report-container .report-header-column {
+  max-width: 40%;
+}
+
+.report-container .report-header {
+  font-size: 120%;
+}
+
+.report-container .report-header-row {
+  height: 30px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px;
+}
+
+.report-container .report-row {
+  height: 50px;
+  padding: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.report-container .report-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.report-container .report-cell .positive {
+  color: rgb(40, 172, 40);
+}

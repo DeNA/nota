@@ -1,0 +1,27 @@
+{
+  "parser": "jsonv2",
+  "mediaType": "VIDEO",
+  "mediaExtensions": ["mp4"],
+  "options": {
+    "showReview": true
+  },
+  "annotations": [
+    {
+      "name": "frame",
+      "label": "Frame",
+      "type": "MEDIA_LABELS",
+      "labels": [
+        {
+          "name": "frame",
+          "label": "Frame",
+          "type": "TEXT_INPUT",
+          "options": {
+            "required": true,
+            "regExp": "^[0-9]*$",
+            "description": "Insert the frame number"
+          }
+        }
+      ]
+    }
+  ]
+}

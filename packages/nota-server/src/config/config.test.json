@@ -1,0 +1,15 @@
+{
+  "nota": {
+    "host": "http://example.com"
+  },
+  "db": {
+    "dialect": "sqlite",
+    "logging": false,
+    "storage": "/tmp/nota_test.sqlite3"
+  },
+  "datasources": {},
+  "authenticators": {
+    "authenticators": [{ "id": "local", "label": "Local Account" }],
+    "ssoAuthenticators": []
+  }
+}

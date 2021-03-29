@@ -1,0 +1,48 @@
+.content-login {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content-login .login {
+  width: 90%;
+  min-width: 200px !important;
+  max-width: 300px;
+}
+
+.content-login .login .sso-signin button:last-child {
+  margin-bottom: 20px;
+}
+
+.content-login .login .local-signin {
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.1rem;
+  padding: 3px;
+  opacity: 0.9;
+}
+
+.content-login .login .local-signin-toggle {
+  font-size: small;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.content-login .login .card-header {
+  padding: 0.5rem 0.75rem;
+}
+
+.content-login .login .card-body {
+  padding: 0.75rem;
+}
+
+.content-login .login .input-group {
+  margin-bottom: 5px;
+}
+
+.content-login .login .alert {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  padding: 0.4rem 1rem;
+}
