@@ -211,6 +211,7 @@ export const imageAnnotations = function(state, select, id) {
       imageAnnotations.push({
         ...annotation,
         color: options.color,
+        options,
         label
       });
     }

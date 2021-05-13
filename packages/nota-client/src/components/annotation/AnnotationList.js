@@ -44,7 +44,7 @@ const AnnotationList = ({
       annotation => selectedAnnotationId === annotation.id
     );
 
-    if (annotation.undeletable) {
+    if (!annotation || annotation.undeletable) {
       return;
     }
     deleteAnnotation(annotation);

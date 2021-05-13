@@ -73,6 +73,10 @@ class Rect extends Element<RectangleAnnotation> {
     evt.stopPropagation();
     evt.preventDefault();
 
+    if (this.movingRect !== null) {
+      return;
+    }
+
     const { x, y, width, height } = this.annotation.properties;
     this.movingRect = { x, y, width, height };
 
@@ -88,6 +92,16 @@ class Rect extends Element<RectangleAnnotation> {
     const mouseUpHandler = (evt: MouseEvent) => {
       evt.stopPropagation();
       evt.preventDefault();
+
+      const { movingRect } = this;
+      const { minHeight = 0, minWidth = 0 } = this.annotation.properties;
+      const isMinHeight = movingRect ? movingRect.height >= minHeight : true;
+      const isMinWidth = movingRect ? movingRect.width >= minWidth : true;
+  
+      if (!isMinHeight || !isMinWidth) {
+        return;
+      }
+
       window.removeEventListener("mousemove", mouseMoveHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
 
@@ -231,19 +245,26 @@ class Rect extends Element<RectangleAnnotation> {
   }
   update() {
     const { editable, label, selectable } = this.annotation;
-    const { style = {} } = this.annotation.properties;
+    const { style = {}, minHeight = 0, minWidth = 0 } = this.annotation.properties;
     let { x, y, width, height } = this.annotation.properties;
     const { strokeColor, fillColor } = this.style;
     const scaleFactor = 1 / this.parent.status.scale;
     const strokeWidth = this.selected
       ? this.parent.options.selectedAnnotationStrokeWidth
       : this.parent.options.strokeWidth;
-
+      
+    this.rect.setAttribute("class", "");
+      
     if (this.movingRect) {
+      const isMinHeight = this.movingRect.height >= minHeight;
+      const isMinWidth = this.movingRect.width >= minWidth;
+      const rectClassName = !isMinHeight || !isMinWidth ? "not-min-size" : "";
+
       x = this.movingRect.x;
       y = this.movingRect.y;
       width = this.movingRect.width;
       height = this.movingRect.height;
+      this.rect.setAttribute("class", rectClassName);
     }
 
     this.emptyContainer();

@@ -1,5 +1,5 @@
 import { getNode } from "./util";
-import { NewAnnotation, AnnotationType } from "./common";
+import { NewAnnotation } from "./common";
 import ImageAnnotation from "./index";
 
 class ElementCreate<T extends NewAnnotation> {
