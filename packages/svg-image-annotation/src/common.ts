@@ -21,6 +21,8 @@ export interface RectangleProperties extends Properties {
   y: number;
   width: number;
   height: number;
+  minWidth?: number;
+  minHeight?: number;
 }
 
 export interface PolygonProperties extends Properties {
@@ -53,23 +55,19 @@ export type Annotation =
   | PolygonAnnotation
   | PointAnnotation;
 
-export interface NewProperties extends Properties {}
-
-interface NewAnnotationBase<T extends AnnotationType, P extends NewProperties> {
-  id: string;
-  type: T;
-  editable?: boolean;
-  selectable?: boolean;
-  label?: string;
-  properties: P;
+export interface NewRectagleProperties extends Properties {
+  minWidth?: number;
+  minHeight?: number;
 }
+export interface NewPolygonProperties extends Properties {}
+export interface NewPointProperties extends Properties {}
 
 export interface RectangleNewAnnotation
-  extends AnnotationBase<"RECTANGLE", NewProperties> {}
+  extends AnnotationBase<"RECTANGLE", NewRectagleProperties> {}
 export interface PolygonNewAnnotation
-  extends AnnotationBase<"POLYGON", NewProperties> {}
+  extends AnnotationBase<"POLYGON", NewPolygonProperties> {}
 export interface PointNewAnnotation
-  extends AnnotationBase<"POINT", NewProperties> {}
+  extends AnnotationBase<"POINT", NewPointProperties> {}
 
 export type NewAnnotation =
   | RectangleNewAnnotation

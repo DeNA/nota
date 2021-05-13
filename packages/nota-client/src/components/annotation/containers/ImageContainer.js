@@ -40,6 +40,7 @@ const mapStateToProps = state => {
         newAnnotationType.options &&
         newAnnotationType.options.color) ||
       DEFAULT_ANNOTATION_COLOR,
+    addNewOptions: newAnnotationType?.options ?? {},
     showAnnotations: !state.addAnnotation,
     imageFilters: state.imageFilters,
     labelAnnotations: db.select("annotationFieldAnnotations", annotations),
