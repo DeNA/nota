@@ -1,12 +1,11 @@
-import { getNode } from "./util";
-import ElementCreate from "./element-create";
-import ImageAnnotation from "./index";
 import {
   Position2D,
   RectangleAnnotation,
-  RectangleNewAnnotation,
-  NewAnnotation
+  RectangleNewAnnotation
 } from "./common";
+import ElementCreate from "./element-create";
+import ImageAnnotation from "./index";
+import { getNode } from "./util";
 
 class RectCreate extends ElementCreate<RectangleNewAnnotation> {
   rect: SVGRectElement = null;
@@ -80,15 +79,22 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     this._update();
   };
   mouseUpHandler = (evt: MouseEvent) => {
-    window.removeEventListener("mouseup", this.mouseUpHandler);
-    window.removeEventListener("mousemove", this.mouseMoveHandler);
-
     const { startPoint, movingPoint } = this;
+    const { minHeight = 0, minWidth = 0 } = this.annotation.properties;
     const x = Math.min(startPoint.x, movingPoint.x);
     const y = Math.min(startPoint.y, movingPoint.y);
     const width = Math.max(startPoint.x, movingPoint.x) - x;
     const height = Math.max(startPoint.y, movingPoint.y) - y;
+    const isMinHeight = height >= minHeight;
+    const isMinWidth = width >= minWidth;
 
+    if (!isMinHeight || !isMinWidth) {
+      return;
+    }
+    
+    window.removeEventListener("mouseup", this.mouseUpHandler);
+    window.removeEventListener("mousemove", this.mouseMoveHandler);
+    
     const properties = {
       ...this.annotation.properties,
       x,
@@ -103,7 +109,7 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     this.parent._annotationCreated(created);
   };
   _update() {
-    const { style } = this.annotation.properties;
+    const { style, minHeight = 0, minWidth = 0 } = this.annotation.properties;
     const { strokeColor, fillColor } = this.style;
     const { startPoint, movingPoint } = this;
 
@@ -157,7 +163,11 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     const y = Math.min(startPoint.y, movingPoint.y);
     const width = Math.max(startPoint.x, movingPoint.x) - x;
     const height = Math.max(startPoint.y, movingPoint.y) - y;
+    const isMinHeight = height >= minHeight;
+    const isMinWidth = width >= minWidth;
+    const className = !isMinHeight || !isMinWidth ? "not-min-size" : "";
 
+    this.rect.setAttribute("class", className);
     this.rect.setAttributeNS(null, "x", x.toString());
     this.rect.setAttributeNS(null, "y", y.toString());
     this.rect.setAttributeNS(null, "width", width.toString());
