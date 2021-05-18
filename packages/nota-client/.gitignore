@@ -17,3 +17,4 @@ yarn-debug.log*
 yarn-error.log*
 .eslintcache
 
+src/components/epipolar/dummy
