@@ -5,7 +5,7 @@ import Login from "../containers/LoginContainer";
 import asyncComponent from "../lib/AsyncComponent";
 import history from "../lib/history";
 import AnnotationMain from "./annotation/containers/AnnotationMainWrap";
-import EpipolarTest from "./epipolar/EpipolarTest";
+import EpipolarAnnotation from "./epipolar/EpipolarTest";
 import Logout from "./Logout";
 import "./Main.css";
 const Main = asyncComponent(() => import("./Main"));
@@ -26,7 +26,7 @@ const App = () => {
           path="/annotation/:projectId/:taskId/:taskAssignmentId/:taskItemId"
           component={AnnotationMain}
         />
-        <Route exact path="/epipolartest" component={EpipolarTest} />
+        <Route exact path="/epipolartest" component={EpipolarAnnotation} />
         <Route path="/" component={Main} />
       </Switch>
     </Router>

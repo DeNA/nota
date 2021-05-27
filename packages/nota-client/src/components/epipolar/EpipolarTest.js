@@ -1,9 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { h11h12, h11h31, h11h32 } from "./dummy/calibration";
-import h11 from "./dummy/h11.jpg";
-import h12 from "./dummy/h12.jpg";
-import h31 from "./dummy/h31.jpg";
-import h32 from "./dummy/h32.jpg";
+import React, { useRef, useState } from "react";
+import { imageSources, template } from "./dummy/template";
 
 const getEpipolarLineEquations = function(x, y, f) {
   const a = f[0][0] * x + f[0][1] * y + f[0][2];
@@ -23,14 +19,66 @@ const getEpipolarLineEquations = function(x, y, f) {
   };
 };
 
-const width = 1920;
-const height = 1080;
+const EpipolarLine = function({
+  width,
+  height,
+  mousePointer,
+  equation,
+  color
+}) {
+  const x1 = 0;
+  const x2 = width;
+  const y1 = Math.min(height, Math.max(0, equation.y(x1)));
+  const y2 = Math.min(height, Math.max(0, equation.y(x2)));
+  const closestPoint = mousePointer
+    ? equation.closestPoint(mousePointer.x, mousePointer.y)
+    : null;
 
-const EpipolarImage = function({ image, equation, width, height }) {
-  const [movingPoint, setMovingPoint] = useState(null);
+  return (
+    <g>
+      <line
+        strokeWidth={5}
+        stroke={color}
+        fill={color}
+        x1={x1}
+        x2={x2}
+        y1={y1}
+        y2={y2}
+      />
+      {closestPoint && (
+        <circle
+          r={10}
+          cx={closestPoint.x}
+          cy={closestPoint.y}
+          strokeWidth={5}
+          stroke={color}
+          fill="rgba(0,0,0,0)"
+        />
+      )}
+    </g>
+  );
+};
+
+const EpipolarImage = function({
+  image,
+  template,
+  width,
+  height,
+  points,
+  lines,
+  pointCreate,
+  onPointCreated,
+  selectedPointId,
+  onPointSelected,
+  onPointUpdated
+}) {
+  const [movingPointer, setMovingPointer] = useState(null);
+  const [isUpdatingPoint, setIsUpdatingPoint] = useState(false);
+  const svgRef = useRef();
   const imageRef = useRef();
+
   const handleMouseMove = function(e) {
-    const svgPoint = e.currentTarget.createSVGPoint();
+    const svgPoint = svgRef.current.createSVGPoint();
     svgPoint.x = e.clientX;
     svgPoint.y = e.clientY;
 
@@ -38,45 +86,87 @@ const EpipolarImage = function({ image, equation, width, height }) {
       imageRef.current.getScreenCTM().inverse()
     );
 
-    setMovingPoint({
+    setMovingPointer({
       x: Math.max(0, Math.min(imagePosition.x, width)),
       y: Math.max(0, Math.min(imagePosition.y, height))
     });
   };
 
-  const x1 = 0;
-  const x2 = width;
-  const y1 = equation.y(x1);
-  const y2 = equation.y(x2);
-  const closestPoint = movingPoint
-    ? equation.closestPoint(movingPoint.x, movingPoint.y)
-    : null;
+  const handleMouseLeave = function(e) {
+    setMovingPointer(null);
+  };
+
+  const handleMouseUp = function(e) {
+    const svgPoint = svgRef.current.createSVGPoint();
+    svgPoint.x = e.clientX;
+    svgPoint.y = e.clientY;
+
+    const imagePosition = svgPoint.matrixTransform(
+      imageRef.current.getScreenCTM().inverse()
+    );
+
+    setMovingPointer(null);
+
+    if (pointCreate) {
+      onPointCreated(pointCreate, template, imagePosition);
+    } else if (selectedPointId && isUpdatingPoint) {
+      setIsUpdatingPoint(false);
+      onPointUpdated(selectedPointId, imagePosition);
+    }
+  };
+  const handlePointSelected = function(point) {
+    onPointSelected(point.id);
+    setIsUpdatingPoint(true);
+  };
+
+  const parsedPoints = points.map(point => {
+    if (point.id === selectedPointId && isUpdatingPoint && movingPointer) {
+      return { ...point, position: movingPointer };
+    } else {
+      return point;
+    }
+  });
 
   return (
-    <svg width="100%" height="100%" onMouseMove={handleMouseMove}>
-      <defs>
-        <clipPath id="clip-image">
-          <rect x="0" y="0" width={width} height={height} />
-        </clipPath>
-      </defs>
-      <g transform="scale(0.3)" clipPath="url(#clip-image)">
+    <svg
+      width="100%"
+      height="100%"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseUp={handleMouseUp}
+      ref={svgRef}
+    >
+      <defs />
+      <g transform="scale(0.4)">
         <image x="0" y="0" xlinkHref={image} ref={imageRef} />
-        <line
-          strokeWidth={2}
-          stroke="red"
-          fill="red"
-          x1={x1}
-          x2={x2}
-          y1={y1}
-          y2={y2}
-        />
-        {closestPoint && (
+        {lines.map(line => (
+          <EpipolarLine
+            width={width}
+            height={height}
+            equation={line.equation}
+            mousePointer={movingPointer}
+            color={line.color}
+          />
+        ))}
+        {parsedPoints.map(point => (
+          <circle
+            key={point.id}
+            r={10}
+            cx={point.position.x}
+            cy={point.position.y}
+            strokeWidth={5}
+            stroke={point.color}
+            fill="rgba(0,0,0,0)"
+            onMouseDown={() => handlePointSelected(point)}
+          />
+        ))}
+        {pointCreate && movingPointer && (
           <circle
             r={10}
-            cx={closestPoint.x}
-            cy={closestPoint.y}
+            cx={movingPointer.x}
+            cy={movingPointer.y}
             strokeWidth={5}
-            stroke="red"
+            stroke={pointCreate.color}
             fill="rgba(0,0,0,0)"
           />
         )}
@@ -85,99 +175,143 @@ const EpipolarImage = function({ image, equation, width, height }) {
   );
 };
 
-const EpipolarTest = function() {
-  const [[h11X, h11Y], setPoint] = useState([923, 594]);
-  const [isMoving, setIsMoving] = useState(false);
-  const svgRef = useRef();
-  const imageRef = useRef();
-  const fh12 = getEpipolarLineEquations(h11X, h11Y, h11h12);
-  const fh31 = getEpipolarLineEquations(h11X, h11Y, h11h31);
-  const fh32 = getEpipolarLineEquations(h11X, h11Y, h11h32);
-
-  const handleMouseDown = function(e) {
-    setIsMoving(true);
+const EpipolarAnnotation = function() {
+  const {
+    width,
+    height,
+    images,
+    transformationMatrices,
+    pointDefinitions
+  } = template;
+  const [points, setPoints] = useState([]);
+  const [selectedPointId, setSelectedPointId] = useState(null);
+  const [pointCreate, setPointCreate] = useState(null);
+  const handlePointCreated = function(point, template, { x, y }) {
+    setPointCreate(null);
+    setPoints([
+      ...points,
+      { id: point.id, imageId: template.id, position: { x, y } }
+    ]);
   };
-
-  useEffect(() => {
-    const handleMouseMove = function(e) {
-      if (!isMoving) {
-        return;
+  const handlePointSelected = function(pointId) {
+    setSelectedPointId(pointId);
+  };
+  const handlePointUpdated = function(pointId, { x, y }) {
+    const updatedPoints = points.map(point => {
+      if (point.id === pointId) {
+        return { ...point, position: { x, y } };
+      } else {
+        return point;
       }
-      const svgPoint = svgRef.current.createSVGPoint();
-      svgPoint.x = e.clientX;
-      svgPoint.y = e.clientY;
+    });
+    setPoints(updatedPoints);
+  };
+  const handleCreatePointClick = function(point) {
+    if (pointCreate && pointCreate.id === point.id) {
+      setPointCreate(null);
+    } else {
+      setPointCreate(point);
+      setSelectedPointId(null);
+    }
+  };
+  const epipolarImages = images.map(template => {
+    return {
+      template,
+      points: points
+        .filter(point => point.imageId === template.id)
+        .map(point => {
+          const pointDefinition = pointDefinitions.find(
+            pointDefinitions => pointDefinitions.id === point.id
+          );
 
-      const imagePosition = svgPoint.matrixTransform(
-        imageRef.current.getScreenCTM().inverse()
-      );
+          return {
+            ...point,
+            color: pointDefinition.color
+          };
+        }),
+      lines: points
+        .filter(point => {
+          const pointDefinition = pointDefinitions.find(
+            pointDefinitions => pointDefinitions.id === point.id
+          );
+          return (
+            point.imageId !== template.id &&
+            pointDefinition.to.includes(template.id)
+          );
+        })
+        .map(point => {
+          const pointDefinition = pointDefinitions.find(
+            pointDefinitions => pointDefinitions.id === point.id
+          );
 
-      setPoint([
-        Math.max(0, Math.min(imagePosition.x, width)),
-        Math.max(0, Math.min(imagePosition.y, height))
-      ]);
+          return {
+            color: pointDefinition.color,
+            equation: getEpipolarLineEquations(
+              point.position.x,
+              point.position.y,
+              transformationMatrices[`${point.imageId}_${template.id}`]
+            )
+          };
+        })
     };
-
-    const handleMouseUp = function(e) {
-      setIsMoving(false);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isMoving, setIsMoving]);
+  });
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <div style={{ width: "100%", height: "50%", display: "flex" }}>
-        <div style={{ width: "50%", height: "100%" }}>
-          <svg width="100%" height="100%" ref={svgRef}>
-            <g transform="scale(0.3)">
-              <image x="0" y="0" xlinkHref={h11} ref={imageRef} />
-              <circle
-                r={10}
-                cx={h11X}
-                cy={h11Y}
-                strokeWidth={5}
-                stroke="red"
-                fill="rgba(0,0,0,0)"
-                onMouseDown={handleMouseDown}
-              />
-            </g>
-          </svg>
-        </div>
-        <div style={{ width: "50%", height: "100%" }}>
-          <EpipolarImage
-            image={h12}
-            height={height}
-            width={width}
-            equation={fh12}
-          />
-        </div>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
+      <div>
+        {pointDefinitions.map(pointDefinition => (
+          <button
+            type="button"
+            style={{ backgroundColor: pointDefinition.color }}
+            onClick={() => handleCreatePointClick(pointDefinition)}
+          >
+            {pointDefinition.id}
+          </button>
+        ))}
       </div>
-      <div style={{ width: "100%", height: "50%", display: "flex" }}>
-        <div style={{ width: "50%", height: "100%" }}>
-          <EpipolarImage
-            image={h31}
-            height={height}
-            width={width}
-            equation={fh31}
-          />
-        </div>
-        <div style={{ width: "50%", height: "100%" }}>
-          <EpipolarImage
-            image={h32}
-            height={height}
-            width={width}
-            equation={fh32}
-          />
-        </div>
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          flexWrap: "wrap"
+        }}
+      >
+        {epipolarImages.map(epipolarImage => (
+          <div
+            style={{
+              flex: "1 0 50%"
+            }}
+          >
+            <EpipolarImage
+              key={epipolarImage.template.id}
+              template={epipolarImage.template}
+              image={imageSources[epipolarImage.template.id]}
+              width={width}
+              height={height}
+              points={epipolarImage.points}
+              lines={epipolarImage.lines}
+              pointCreate={
+                pointCreate?.from.includes(epipolarImage.template.id)
+                  ? pointCreate
+                  : null
+              }
+              onPointCreated={handlePointCreated}
+              selectedPointId={selectedPointId}
+              onPointSelected={handlePointSelected}
+              onPointUpdated={handlePointUpdated}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default EpipolarTest;
+export default EpipolarAnnotation;
