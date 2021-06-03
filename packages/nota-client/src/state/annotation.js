@@ -9,6 +9,7 @@ export function createAnnotationLocal(
   labelsName = undefined,
   mediaDefaults = undefined
 ) {
+  console.log(annotation, labelsName, mediaDefaults);
   const id = `new_${Math.random()}`;
   return {
     type: CREATE_ANNOTATION_LOCAL,
