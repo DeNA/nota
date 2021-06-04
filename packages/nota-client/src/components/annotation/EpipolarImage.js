@@ -74,7 +74,7 @@ const EpipolarImage = function({
       onPointCreated(pointCreate, template, imagePosition);
     } else if (selectedPointId && isUpdatingPoint) {
       setIsUpdatingPoint(false);
-      onPointUpdated(selectedPointId, imagePosition);
+      onPointUpdated(selectedPointId, template, imagePosition);
     }
   };
   const handlePointSelected = function(point) {
@@ -111,6 +111,7 @@ const EpipolarImage = function({
             equation={line.equation}
             mousePointer={movingPointer}
             color={line.color}
+            active={line.id === selectedPointId}
           />
         ))}
         {parsedPoints.map(point => (

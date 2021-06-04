@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import EpipolarImage from "./EpipolarImage";
 // import { cropImageToDataString } from "../../lib/image";
 
@@ -70,25 +70,22 @@ const EpipolarImageAnnotation = function({
     imageSet,
     transformationMatrices
   } = epipolarAnnotationOptions;
-  const handlePointCreated = function(pointTemplate, imageTemplate, { x, y }) {
+  const handleAnnotationCreated = function(pointTemplate, imageTemplate, { x, y }) {
     createAnnotation(taskItemId, {
       images: { [imageTemplate.id]: { x, y } },
       type: pointTemplate.type,
       startingImage: imageTemplate.id
     });
   };
-  const handlePointSelected = function(pointId) {
-    // setSelectedPointId(pointId);
+  const handleAnnotationSelected = function(annotationId) {
+    selectAnnotation(annotationId);
   };
-  const handlePointUpdated = function(pointId, { x, y }) {
-    // const updatedPoints = points.map(point => {
-    //   if (point.id === pointId) {
-    //     return { ...point, position: { x, y } };
-    //   } else {
-    //     return point;
-    //   }
-    // });
-    // setPoints(updatedPoints);
+  const handleAnnotationUpdated = function(pointId, imageTemplate, { x, y }) {
+    const selectedAnnotation = annotations.find(annotation => annotation.id === selectedAnnotationId);
+    const updatedBoundaries = {...selectedAnnotation.boundaries};
+    
+    updatedBoundaries.images[imageTemplate.id] = { x, y };
+    updateAnnotation(selectedAnnotationId, updatedBoundaries);
   };
 
   const epipolarImages = imageSet.map(template => {
@@ -106,6 +103,8 @@ const EpipolarImageAnnotation = function({
           );
 
           return {
+            id: point.id,
+            imageId: template.id,
             position: {
               x: point.boundaries.images[template.id].x,
               y: point.boundaries.images[template.id].y
@@ -126,6 +125,8 @@ const EpipolarImageAnnotation = function({
           );
 
           return {
+            id: point.id,
+            imageId: template.id,
             color: pointTemplate.options.color,
             equation: getEpipolarLineEquations(
               point.boundaries.images[point.boundaries.startingImage].x,
@@ -177,10 +178,10 @@ const EpipolarImageAnnotation = function({
                   ? pointCreate
                   : null
               }
-              onPointCreated={handlePointCreated}
+              onPointCreated={handleAnnotationCreated}
               selectedPointId={selectedAnnotationId}
-              onPointSelected={handlePointSelected}
-              onPointUpdated={handlePointUpdated}
+              onPointSelected={handleAnnotationSelected}
+              onPointUpdated={handleAnnotationUpdated}
             />
           </div>
         ))}

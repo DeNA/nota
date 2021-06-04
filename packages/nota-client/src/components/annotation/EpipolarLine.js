@@ -5,13 +5,14 @@ const EpipolarLine = function({
   height,
   mousePointer,
   equation,
-  color
+  color,
+  active
 }) {
   const x1 = 0;
   const x2 = width;
   const y1 = Math.min(height, Math.max(0, equation.y(x1)));
   const y2 = Math.min(height, Math.max(0, equation.y(x2)));
-  const closestPoint = mousePointer
+  const closestPoint = mousePointer && active
     ? equation.closestPoint(mousePointer.x, mousePointer.y)
     : null;
 
