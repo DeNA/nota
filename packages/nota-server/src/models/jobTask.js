@@ -6,12 +6,14 @@ module.exports = function(sequelize) {
   JobTask.TASK = {
     MEDIA_SOURCE_FETCH: 1,
     TASK_FETCH: 2,
-    TASK_EXPORT: 3
+    TASK_EXPORT: 3,
+    TASK_MAINTENANCE: 4
   };
   JobTask.TASK_NAME = {
     MEDIA_SOURCE_FETCH: "MEDIA_SOURCE_FETCH",
     TASK_FETCH: "TASK_FETCH",
-    TASK_EXPORT: "TASK_EXPORT"
+    TASK_EXPORT: "TASK_EXPORT",
+    TASK_MAINTENANCE: "TASK_MAINTENANCE"
   };
 
   JobTask.TYPE = {

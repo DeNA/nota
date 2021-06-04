@@ -40,6 +40,7 @@ const taskResponseTemplate = function(task) {
       : undefined,
     exportJobs: task.exportJobs,
     fetchJobs: task.fetchJobs,
+    maintenanceJobs: task.maintenanceJobs,
     done: parseInt(task.get("done")),
     total: parseInt(task.get("total")),
     assignable:
@@ -87,6 +88,8 @@ const getTask = async function(req, res, next) {
     task.exportJobs = exportJobs;
     const fetchJobs = await task.getLastFetchJobs();
     task.fetchJobs = fetchJobs;
+    const maintenanceJobs = await task.getLastMaintenanceJobs();
+    task.maintenanceJobs = maintenanceJobs;
 
     res.locals.response = task;
     res.locals.responseTemplate = taskResponseTemplate;
@@ -230,6 +233,51 @@ const refreshTaskItems = async function(req, res, next) {
   }
 };
 
+/**
+ * req.body
+ *  // taskItems/annotations status reset
+ * {
+ *   type: "STATUS_RESET",
+ *   options: {
+ *     annotations?: boolean,
+ *     taskItems?: boolean,
+ *     taskAssignments?: boolean,
+ *     annotationConditions?: {
+ *       name?: string[]
+ *     },
+ *     taskItemConditions?: {
+ *       onlyWithOngoing?: boolean
+ *     },
+ *     taskAssignmentConditions?: {
+ *       onlyWithOngoing?: boolean
+ *     }
+ *   }
+ * }
+ */
+const taskMaintenance = async function(req, res, next) {
+  const { type, options } = req.body;
+
+  if (!type || !options) {
+    const error = new Error("Invalid");
+    error.status = 400;
+    next(error);
+    return;
+  }
+
+  try {
+    await notaJobQueue.add(JobTask.TASK_NAME.TASK_MAINTENANCE, {
+      projectId: res.locals.project.id,
+      resourceId: res.locals.task.id,
+      data: { type, options },
+      userId: req.user.id
+    });
+
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const exportTask = async function(req, res, next) {
   try {
     const {
@@ -288,5 +336,6 @@ module.exports = {
   deleteTask,
   exportTask,
   downloadTask,
-  refreshTaskItems
+  refreshTaskItems,
+  taskMaintenance
 };

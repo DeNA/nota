@@ -1,4 +1,4 @@
-const { Model, DataTypes, Op } = require("sequelize");
+const { Model, DataTypes, Op, QueryTypes } = require("sequelize");
 const datasource = require("../lib/datasource");
 const parser = require("../lib/parser");
 const { logger } = require("../lib/logger");
@@ -178,6 +178,128 @@ module.exports = function(sequelize) {
     }
   };
 
+  Task.prototype.statusReset = async function(options = {}) {
+    const {
+      annotations = false,
+      taskItems = false,
+      taskAssignments = false,
+      annotationConditions = {},
+      taskItemConditions = {},
+      taskAssignmentConditions = {}
+    } = options;
+
+    // Transaction
+    const transaction = await sequelize.transaction();
+    const result = {};
+
+    try {
+      // Reset annotation status
+      if (annotations) {
+        const annotationName = Array.isArray(annotationConditions.name)
+          ? annotationConditions.name
+          : false;
+        const replacements = { taskId: this.id };
+
+        if (annotationName) {
+          replacements.annotationName = annotationName;
+        }
+        const [, annotationUpdatedCount] = await sequelize.query(
+          `UPDATE annotations
+SET status=0
+WHERE task_item_id IN (
+  SELECT id 
+  FROM task_items 
+  WHERE task_id=:taskId
+) AND status=1
+${annotationName ? "AND labels_name IN (:annotationName)" : ""}`,
+          {
+            replacements,
+            type: QueryTypes.UPDATE,
+            transaction
+          }
+        );
+        result.annotationUpdatedCount = annotationUpdatedCount;
+      }
+
+      // Reset taskItem status
+      if (taskItems) {
+        const { onlyWithOngoing = false } = taskItemConditions;
+        const replacements = { taskId: this.id };
+        const onlyOngoingSubquery = onlyWithOngoing
+          ? `
+AND id IN(
+  SELECT task_item_id
+  FROM annotations
+  WHERE task_item_id IN (
+    SELECT task_item_id
+    FROM (
+      SELECT id as task_item_id 
+      FROM task_items 
+      WHERE task_id=:taskId
+    ) AS tmp
+  ) AND status=0
+)
+`
+          : "";
+
+        const [, taskItemsUpdatedCount] = await sequelize.query(
+          `
+UPDATE task_items
+SET status=0 
+WHERE task_id=:taskId
+AND status=1
+${onlyOngoingSubquery}`,
+          {
+            replacements,
+            type: QueryTypes.UPDATE,
+            transaction
+          }
+        );
+        result.taskItemsUpdatedCount = taskItemsUpdatedCount;
+      }
+
+      // Reset taskAssignment status
+      if (taskAssignments) {
+        const { onlyWithOngoing = false } = taskAssignmentConditions;
+        const replacements = { taskId: this.id };
+        const onlyOngoingSubquery = onlyWithOngoing
+          ? `
+AND id IN(
+  SELECT task_assignment_id 
+  FROM task_items 
+  WHERE task_id=:taskId 
+  AND status=0
+)
+`
+          : "";
+
+        const [, taskAssignmentsUpdatedCount] = await sequelize.query(
+          `
+UPDATE task_assignments
+SET status=100 
+WHERE task_id=:taskId
+AND status=500
+${onlyOngoingSubquery}`,
+          {
+            replacements,
+            type: QueryTypes.UPDATE,
+            transaction
+          }
+        );
+        result.taskAssignmentsUpdatedCount = taskAssignmentsUpdatedCount;
+      }
+
+      // Commit
+      await transaction.commit();
+
+      // Return results
+      return result;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  };
+
   Task.prototype.exportTask = async function(options) {
     const [name, archive, exportedCount] = await this.getArchive(options);
 
@@ -291,6 +413,20 @@ module.exports = function(sequelize) {
         projectId: this.projectId,
         resourceId: this.id,
         task: sequelize.models.JobTask.TASK.TASK_FETCH
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10
+    });
+
+    return fetchJobs;
+  };
+
+  Task.prototype.getLastMaintenanceJobs = async function() {
+    const fetchJobs = await sequelize.models.JobTask.findAll({
+      where: {
+        projectId: this.projectId,
+        resourceId: this.id,
+        task: sequelize.models.JobTask.TASK.TASK_MAINTENANCE
       },
       order: [["createdAt", "DESC"]],
       limit: 10

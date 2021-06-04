@@ -17,6 +17,10 @@ notaJobQueues[JobTask.TASK_NAME.TASK_EXPORT].process(
   CONCURRENCY,
   `${__dirname}/../services/taskExport.js`
 );
+notaJobQueues[JobTask.TASK_NAME.TASK_MAINTENANCE].process(
+  CONCURRENCY,
+  `${__dirname}/../services/taskMaintenance.js`
+);
 
 const REPEAT_EVERY = 1000 * 60; // 1 minute
 
