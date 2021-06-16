@@ -17,6 +17,7 @@ const EpipolarImage = function({
 }) {
   const [image, setImage] = useState(null);
   const [movingPointer, setMovingPointer] = useState(null);
+  const [lineMagnet, setLineMagnet] = useState(false);
   const [isUpdatingPoint, setIsUpdatingPoint] = useState(false);
   const svgRef = useRef();
   const imageRef = useRef();
@@ -53,6 +54,7 @@ const EpipolarImage = function({
       x: Math.max(0, Math.min(imagePosition.x, width)),
       y: Math.max(0, Math.min(imagePosition.y, height))
     });
+    setLineMagnet(e.shiftKey);
   };
 
   const handleMouseLeave = function(e) {
@@ -75,6 +77,15 @@ const EpipolarImage = function({
     } else if (selectedPointId && isUpdatingPoint) {
       setIsUpdatingPoint(false);
       onPointUpdated(selectedPointId, template, imagePosition);
+    } else if (
+      selectedPointId &&
+      lines.find(line => line.id === selectedPointId)
+    ) {
+      const line = lines.find(line => line.id === selectedPointId);
+      const newPoint = lineMagnet
+        ? line.equation.closestPoint(imagePosition.x, imagePosition.y)
+        : imagePosition;
+      onPointUpdated(selectedPointId, template, newPoint);
     }
   };
   const handlePointSelected = function(point) {
@@ -89,6 +100,15 @@ const EpipolarImage = function({
       return point;
     }
   });
+  const parsedLinePoints = lines
+    .filter(line => line.point)
+    .map(line => {
+      if (line.id === selectedPointId && isUpdatingPoint && movingPointer) {
+        return { ...line.point, position: movingPointer };
+      } else {
+        return line.point;
+      }
+    });
 
   if (!image) return null;
 
@@ -109,12 +129,30 @@ const EpipolarImage = function({
             width={width}
             height={height}
             equation={line.equation}
-            mousePointer={movingPointer}
             color={line.color}
             active={line.id === selectedPointId}
+            linePoint={
+              movingPointer && line.id === selectedPointId && !line.point
+                ? lineMagnet
+                  ? line.equation.closestPoint(movingPointer.x, movingPointer.y)
+                  : movingPointer
+                : null
+            }
           />
         ))}
         {parsedPoints.map(point => (
+          <circle
+            key={point.id}
+            r={10}
+            cx={point.position.x}
+            cy={point.position.y}
+            strokeWidth={5}
+            stroke={point.color}
+            fill="rgba(0,0,0,0)"
+            onMouseDown={() => handlePointSelected(point)}
+          />
+        ))}
+        {parsedLinePoints.map(point => (
           <circle
             key={point.id}
             r={10}

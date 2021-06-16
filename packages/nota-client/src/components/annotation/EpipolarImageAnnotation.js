@@ -70,7 +70,11 @@ const EpipolarImageAnnotation = function({
     imageSet,
     transformationMatrices
   } = epipolarAnnotationOptions;
-  const handleAnnotationCreated = function(pointTemplate, imageTemplate, { x, y }) {
+  const handleAnnotationCreated = function(
+    pointTemplate,
+    imageTemplate,
+    { x, y }
+  ) {
     createAnnotation(taskItemId, {
       images: { [imageTemplate.id]: { x, y } },
       type: pointTemplate.type,
@@ -81,9 +85,11 @@ const EpipolarImageAnnotation = function({
     selectAnnotation(annotationId);
   };
   const handleAnnotationUpdated = function(pointId, imageTemplate, { x, y }) {
-    const selectedAnnotation = annotations.find(annotation => annotation.id === selectedAnnotationId);
-    const updatedBoundaries = {...selectedAnnotation.boundaries};
-    
+    const selectedAnnotation = annotations.find(
+      annotation => annotation.id === selectedAnnotationId
+    );
+    const updatedBoundaries = { ...selectedAnnotation.boundaries };
+
     updatedBoundaries.images[imageTemplate.id] = { x, y };
     updateAnnotation(selectedAnnotationId, updatedBoundaries);
   };
@@ -117,7 +123,10 @@ const EpipolarImageAnnotation = function({
           const pointTemplate = annotationTemplates.find(
             pointTemplate => pointTemplate.name === point.labelsName
           );
-          return pointTemplate.options.to.includes(template.id);
+          return (
+            pointTemplate.options.to.includes(template.id) &&
+            point.boundaries.startingImage !== template.id
+          );
         })
         .map(point => {
           const pointTemplate = annotationTemplates.find(
@@ -128,6 +137,17 @@ const EpipolarImageAnnotation = function({
             id: point.id,
             imageId: template.id,
             color: pointTemplate.options.color,
+            point: point.boundaries.images[template.id]
+              ? {
+                  id: point.id,
+                  imageId: template.id,
+                  position: {
+                    x: point.boundaries.images[template.id].x,
+                    y: point.boundaries.images[template.id].y
+                  },
+                  color: pointTemplate.options.color
+                }
+              : null,
             equation: getEpipolarLineEquations(
               point.boundaries.images[point.boundaries.startingImage].x,
               point.boundaries.images[point.boundaries.startingImage].y,
