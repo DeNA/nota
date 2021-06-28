@@ -2,6 +2,10 @@
   cursor: not-allowed !important;
 }
 
+.shift-key .epipolar-point:hover {
+  cursor: not-allowed !important;
+}
+
 .alt-key .polygon-line:hover {
   cursor: pointer !important;
 }

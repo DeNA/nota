@@ -11,7 +11,7 @@ import {
   createAnnotationLocal,
   updateAnnotationLocal
 } from "../../../state/annotation";
-import EpipolarImage from "../EpipolarImageAnnotation";
+import EpipolarImageAnnotation from "../EpipolarImageAnnotation";
 
 const mapStateToProps = state => {
   const db = selector(state);
@@ -66,5 +66,5 @@ const bindings = {
 const EpipolarImageContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(hotkeys(bindings)(EpipolarImage));
+)(hotkeys(bindings)(EpipolarImageAnnotation));
 export default EpipolarImageContainer;

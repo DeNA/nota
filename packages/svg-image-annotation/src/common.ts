@@ -31,7 +31,16 @@ export interface PointProperties extends Properties {
   position: Position2D;
 }
 
-export type AnnotationType = "RECTANGLE" | "POLYGON" | "POINT";
+export interface EpipolarPointProperties extends Properties {
+  position: Position2D | null;
+  lineEquation: {
+    x: (y: number) => number,
+    y: (x: number) => number,
+    closestPoint: (x: number, y: number) => { x: number, y: number }
+  } | null
+}
+
+export type AnnotationType = "RECTANGLE" | "POLYGON" | "POINT" | "EPIPOLAR_POINT";
 
 interface AnnotationBase<T extends AnnotationType, P extends Properties> {
   id: string;
@@ -43,33 +52,27 @@ interface AnnotationBase<T extends AnnotationType, P extends Properties> {
 }
 
 export interface RectangleAnnotation
-  extends AnnotationBase<"RECTANGLE", RectangleProperties> {}
+  extends AnnotationBase<"RECTANGLE", RectangleProperties> { }
 export interface PolygonAnnotation
-  extends AnnotationBase<"POLYGON", PolygonProperties> {}
+  extends AnnotationBase<"POLYGON", PolygonProperties> { }
 export interface PointAnnotation
-  extends AnnotationBase<"POINT", PointProperties> {}
+  extends AnnotationBase<"POINT", PointProperties> { }
+export interface EpipolarPointAnnotation
+  extends AnnotationBase<"EPIPOLAR_POINT", EpipolarPointProperties> { }
 export type Annotation =
   | RectangleAnnotation
   | PolygonAnnotation
-  | PointAnnotation;
+  | PointAnnotation
+  | EpipolarPointAnnotation;
 
-export interface NewProperties extends Properties {}
-
-interface NewAnnotationBase<T extends AnnotationType, P extends NewProperties> {
-  id: string;
-  type: T;
-  editable?: boolean;
-  selectable?: boolean;
-  label?: string;
-  properties: P;
-}
+export interface NewProperties extends Properties { }
 
 export interface RectangleNewAnnotation
-  extends AnnotationBase<"RECTANGLE", NewProperties> {}
+  extends AnnotationBase<"RECTANGLE", NewProperties> { }
 export interface PolygonNewAnnotation
-  extends AnnotationBase<"POLYGON", NewProperties> {}
+  extends AnnotationBase<"POLYGON", NewProperties> { }
 export interface PointNewAnnotation
-  extends AnnotationBase<"POINT", NewProperties> {}
+  extends AnnotationBase<"POINT", NewProperties> { }
 
 export type NewAnnotation =
   | RectangleNewAnnotation

@@ -1,6 +1,6 @@
 import React from "react";
 import EpipolarImage from "./EpipolarImage";
-// import { cropImageToDataString } from "../../lib/image";
+import { Annotation } from "../../lib/models";
 
 const getEpipolarLineEquations = function(x, y, f) {
   const a = f[0][0] * x + f[0][1] * y + f[0][2];
@@ -64,12 +64,7 @@ const EpipolarImageAnnotation = function({
   selectAnnotation,
   onToggleHideCompleted
 }) {
-  const {
-    imageWidth,
-    imageHeight,
-    imageSet,
-    transformationMatrices
-  } = epipolarAnnotationOptions;
+  const { imageSet, transformationMatrices } = epipolarAnnotationOptions;
   const handleAnnotationCreated = function(
     pointTemplate,
     imageTemplate,
@@ -84,13 +79,20 @@ const EpipolarImageAnnotation = function({
   const handleAnnotationSelected = function(annotationId) {
     selectAnnotation(annotationId);
   };
-  const handleAnnotationUpdated = function(pointId, imageTemplate, { x, y }) {
+  const handleAnnotationUpdated = function(pointId, imageTemplate, position) {
     const selectedAnnotation = annotations.find(
       annotation => annotation.id === selectedAnnotationId
     );
     const updatedBoundaries = { ...selectedAnnotation.boundaries };
 
-    updatedBoundaries.images[imageTemplate.id] = { x, y };
+    if (position === null) {
+      delete updatedBoundaries.images[imageTemplate.id];
+    } else {
+      updatedBoundaries.images[imageTemplate.id] = {
+        x: position.x,
+        y: position.y
+      };
+    }
     updateAnnotation(selectedAnnotationId, updatedBoundaries);
   };
 
@@ -110,12 +112,19 @@ const EpipolarImageAnnotation = function({
 
           return {
             id: point.id,
+            type: "POINT",
             imageId: template.id,
-            position: {
-              x: point.boundaries.images[template.id].x,
-              y: point.boundaries.images[template.id].y
+            properties: {
+              position: {
+                x: point.boundaries.images[template.id].x,
+                y: point.boundaries.images[template.id].y
+              },
+              style: {
+                strokeColor: pointTemplate.options.color
+              }
             },
-            color: pointTemplate.options.color
+            selectable: true,
+            editable: editable && point.status === Annotation.STATUS.NOT_DONE
           };
         }),
       lines: annotations
@@ -136,25 +145,30 @@ const EpipolarImageAnnotation = function({
           return {
             id: point.id,
             imageId: template.id,
-            color: pointTemplate.options.color,
-            point: point.boundaries.images[template.id]
-              ? {
-                  id: point.id,
-                  imageId: template.id,
-                  position: {
+            type: "EPIPOLAR_POINT",
+            properties: {
+              position: point.boundaries.images[template.id]
+                ? {
                     x: point.boundaries.images[template.id].x,
                     y: point.boundaries.images[template.id].y
-                  },
-                  color: pointTemplate.options.color
-                }
-              : null,
-            equation: getEpipolarLineEquations(
-              point.boundaries.images[point.boundaries.startingImage].x,
-              point.boundaries.images[point.boundaries.startingImage].y,
-              transformationMatrices[
-                `${point.boundaries.startingImage}_${template.id}`
-              ]
-            )
+                  }
+                : null,
+              lineEquation:
+                point.id === selectedAnnotationId
+                  ? getEpipolarLineEquations(
+                      point.boundaries.images[point.boundaries.startingImage].x,
+                      point.boundaries.images[point.boundaries.startingImage].y,
+                      transformationMatrices[
+                        `${point.boundaries.startingImage}_${template.id}`
+                      ]
+                    )
+                  : null,
+              style: {
+                strokeColor: pointTemplate.options.color
+              }
+            },
+            selectable: true,
+            editable: editable && point.status === Annotation.STATUS.NOT_DONE
           };
         })
     };
@@ -189,8 +203,6 @@ const EpipolarImageAnnotation = function({
               key={epipolarImage.template.id}
               template={epipolarImage.template}
               imageUri={`${imageBaseUri}/${epipolarImage.template.id}`}
-              width={imageWidth}
-              height={imageHeight}
               points={epipolarImage.points}
               lines={epipolarImage.lines}
               pointCreate={
@@ -202,6 +214,8 @@ const EpipolarImageAnnotation = function({
               selectedPointId={selectedAnnotationId}
               onPointSelected={handleAnnotationSelected}
               onPointUpdated={handleAnnotationUpdated}
+              options={options}
+              imageFilters={imageFilters}
             />
           </div>
         ))}
