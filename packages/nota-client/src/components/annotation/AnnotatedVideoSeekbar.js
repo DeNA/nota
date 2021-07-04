@@ -128,7 +128,6 @@ const AnnotatedVideoSeekbar = function({
   };
 
   const handleSkip = function(frames) {
-    console.log(frames);
     setPlayUntil(+Infinity);
     skipFrames(frames);
   };

@@ -23,6 +23,7 @@ module.exports = function(task, processor) {
       });
       done();
     } catch (error) {
+      logger.error(error);
       jobTask.status = JobTask.STATUS.ERROR;
       jobTask.finishedAt = new Date();
       jobTask.config = { ...jobTask.config, error: error.message };
