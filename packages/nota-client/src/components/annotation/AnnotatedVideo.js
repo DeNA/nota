@@ -64,6 +64,7 @@ const AnnotatedVideo = function({
           </video>
         </div>
         <AnnotatedVideoSeekbar
+          key={videoUri}
           duration={duration}
           currentTime={currentTime}
           playing={playing}
