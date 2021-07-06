@@ -25,6 +25,10 @@ const queues = {
   [JobTask.TASK_NAME.TASK_EXPORT]: new Bull(
     "job-queue-task-export",
     queueOptions
+  ),
+  [JobTask.TASK_NAME.TASK_MAINTENANCE]: new Bull(
+    "job-queue-task-maintenance",
+    queueOptions
   )
 };
 logger.info({ logType: "service", message: "nota-job-service initialized" });

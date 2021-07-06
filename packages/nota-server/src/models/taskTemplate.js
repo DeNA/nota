@@ -60,7 +60,7 @@ module.exports = function(sequelize) {
       ]
     });
     TaskTemplate.addScope("forTask", {
-      attributes: ["id", "name"]
+      attributes: ["id", "name", "template"]
     });
     TaskTemplate.addScope("forReference", {
       attributes: ["id", "name"]

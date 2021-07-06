@@ -20,6 +20,7 @@ import Loading from "../Loading";
 import AdminProjectTaskAssignment from "./AdminProjectTaskAssignment";
 import AdminProjectTaskExport from "./AdminProjectTaskExport";
 import AdminProjectTaskFetch from "./AdminProjectTaskFetch";
+import AdminProjectTaskMaintenance from "./AdminProjectTaskMaintenance";
 
 export function AdminProjectTask({ resource, project, loading, doGet }) {
   const { task, assignableUsers } = resource || {
@@ -238,6 +239,13 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
         projectId={project.id}
         task={task}
         fetchJobs={task.fetchJobs}
+        reload={handleReload}
+      />
+      <br />
+      <AdminProjectTaskMaintenance
+        projectId={project.id}
+        task={task}
+        fetchJobs={task.maintenanceJobs}
         reload={handleReload}
       />
     </>

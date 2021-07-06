@@ -201,6 +201,20 @@ export async function refreshTaskItems({ projectId, taskId }) {
   );
 }
 
+export async function performTaskMaintenance({
+  projectId,
+  taskId,
+  maintenance
+}) {
+  return await fetch(`/api/projects/${projectId}/tasks/${taskId}/maintenance`, {
+    method: "post",
+    body: JSON.stringify(maintenance),
+    headers: new Headers({
+      "content-type": "application/json"
+    })
+  });
+}
+
 export async function deleteTask({ projectId, taskId }) {
   return await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
     method: "delete",
