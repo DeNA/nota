@@ -55,6 +55,8 @@ $ docker-compose up
 
 Application will run on `localhost:3000` by default
 
+Default user is created with username `admin` and password `admin`
+
 ### Setup Database
 
 Only required the first time
