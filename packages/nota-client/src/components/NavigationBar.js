@@ -1,5 +1,6 @@
 import React from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { LinkContainer } from "react-router-bootstrap";
 import logo from "../logo@2x.png";
 
@@ -9,6 +10,7 @@ const NavigationBar = function({
   showUserAdmin,
   showReport
 }) {
+  const { t } = useTranslation();
   const activeKey = window.location.pathname.startsWith("/admin/users")
     ? "userAdmin"
     : window.location.pathname.startsWith("/admin/report")
@@ -21,13 +23,19 @@ const NavigationBar = function({
     <Navbar bg="dark" variant="dark" fixed="top" className="shadow-sm">
       <LinkContainer to="/" isActive={() => activeKey === "annotation"}>
         <Navbar.Brand className="pt-0 pb-0">
-          <img src={logo} alt="Nota" title="Nota" width="30" height="30" />
+          <img
+            src={logo}
+            alt={t("nota")}
+            title={t("nota")}
+            width="30"
+            height="30"
+          />
         </Navbar.Brand>
       </LinkContainer>
       <Nav className="mr-auto">
         <Nav.Item>
           <LinkContainer to="/" isActive={() => activeKey === "annotation"}>
-            <Nav.Link>アノテーション</Nav.Link>
+            <Nav.Link>{t("annotation")}</Nav.Link>
           </LinkContainer>
         </Nav.Item>
         {showAdmin && (
@@ -36,7 +44,7 @@ const NavigationBar = function({
               to="/admin"
               isActive={() => activeKey === "projectAdmin"}
             >
-              <Nav.Link>プロジェクト管理</Nav.Link>
+              <Nav.Link>{t("project-management")}</Nav.Link>
             </LinkContainer>
           </Nav.Item>
         )}{" "}
@@ -46,7 +54,7 @@ const NavigationBar = function({
               to="/admin/report/status"
               isActive={() => activeKey === "report"}
             >
-              <Nav.Link>Report</Nav.Link>
+              <Nav.Link>{t("report")}</Nav.Link>
             </LinkContainer>
           </Nav.Item>
         )}
@@ -56,7 +64,7 @@ const NavigationBar = function({
               to="/admin/users"
               isActive={() => activeKey === "userAdmin"}
             >
-              <Nav.Link>ユーザ管理</Nav.Link>
+              <Nav.Link>{t("user-management")}</Nav.Link>
             </LinkContainer>
           </Nav.Item>
         )}
@@ -64,7 +72,7 @@ const NavigationBar = function({
       <Nav>
         <NavDropdown id="user-menu" title={username} alignRight>
           <LinkContainer to="/logout">
-            <NavDropdown.Item>ログアウト</NavDropdown.Item>
+            <NavDropdown.Item>{t("sign-out")}</NavDropdown.Item>
           </LinkContainer>
         </NavDropdown>
       </Nav>
