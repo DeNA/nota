@@ -1,0 +1,10 @@
+{
+  "nota": "Nota",
+  "login-sign-in": "Nota - Sign In",
+  "login-other": "Other accounts",
+  "login-error": "Invalid Username or Password",
+  "login-username": "Username",
+  "login-password": "Password",
+  "login-local-button": "Sign In",
+  "login-sso-button": "Sign in with {{label}}"
+}

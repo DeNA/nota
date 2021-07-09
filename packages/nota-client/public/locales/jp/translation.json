@@ -1,0 +1,10 @@
+{
+  "nota": "Nota",
+  "login-sign-in": "Nota - ログイン",
+  "login-other": "その他",
+  "login-error": "ユーザネームまたはパスワードが間違ってる",
+  "login-username": "ユーザネーム",
+  "login-password": "パスワード",
+  "login-local-button": "ログイン",
+  "login-sso-button": "{{label}}でログイン"
+}
