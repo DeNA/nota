@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "./semantic";
 import "./FullscreenPopup.css";
+import { withTranslation } from "react-i18next";
 
 /**
  * @augments {Component<{
@@ -27,7 +28,7 @@ class FullscreenPopup extends Component {
     evt.stopPropagation();
   };
   render() {
-    const { contents, close } = this.props;
+    const { contents, close, t } = this.props;
 
     const popup = (
       <div className="container" onClick={close}>
@@ -36,7 +37,7 @@ class FullscreenPopup extends Component {
             className="close-button"
             name="close"
             size="big"
-            title={`Close (o)`}
+            title={t("close-popup")}
             onClick={close}
           />
         </div>
@@ -51,4 +52,4 @@ class FullscreenPopup extends Component {
   }
 }
 
-export default FullscreenPopup;
+export default withTranslation()(FullscreenPopup);

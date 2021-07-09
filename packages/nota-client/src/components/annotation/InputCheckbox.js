@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Checkbox } from "./semantic";
 
 /**
  * @param {{item: Nota.OptionItem, name?: string, checked: boolean, editable: boolean, onChange: any}} props
  */
 const SingleSelectionRadio = props => {
+  const { t } = useTranslation();
   const { item, checked, editable, onChange } = props;
   const renderInput = () => (
     <Checkbox
@@ -21,7 +23,7 @@ const SingleSelectionRadio = props => {
     />
   );
 
-  const renderValue = () => <span>{checked ? "Yes" : "No"}</span>;
+  const renderValue = () => <span>{checked ? t("yes") : t("no")}</span>;
 
   return editable ? renderInput() : renderValue();
 };

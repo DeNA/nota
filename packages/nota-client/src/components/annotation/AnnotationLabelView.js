@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import useHotkeys from "../../lib/useHotkeys";
 import AnnotationLabelListContainer from "./containers/AnnotationLabelListContainer";
 import AnnotationLabelStatusContainer from "./containers/AnnotationLabelStatusContainer";
@@ -8,6 +9,7 @@ import { Icon } from "./semantic";
 const HOTKEY = "o";
 
 const AnnotationLabelView = function(props) {
+  const { t } = useTranslation();
   const [popup, setPopup] = useState(props.popup);
   const togglePopup = function(force = !popup) {
     setPopup(force);
@@ -21,7 +23,8 @@ const AnnotationLabelView = function(props) {
       <div className="annotation-label-controls">
         <div className="popup-button" onClick={() => togglePopup(true)}>
           <Icon name="external square" />
-          Open popup{HOTKEY && ` (${HOTKEY})`}
+          {t("open-popup")}
+          {HOTKEY && ` (${HOTKEY})`}
         </div>
       </div>
       {metadataFields.length ? (
