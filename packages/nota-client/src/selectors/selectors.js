@@ -32,6 +32,12 @@ export const folderTemplateOptions = function(state, select) {
   return folderTemplate.options || {};
 };
 
+export const folderTemplateMediaOptions = function(state, select) {
+  const folderTemplate = select("folderTemplate");
+
+  return folderTemplate.mediaOptions || {};
+};
+
 const getMetadataItem = function(metadataField, imageMetadata) {
   let metadataPath = metadataField;
   let metadataLabel = metadataField;

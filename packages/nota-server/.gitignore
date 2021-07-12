@@ -4,7 +4,9 @@
 /node_modules
 src/config/config.json
 
+#dev data
 nota_test.sqlite3
+testfiles/hidden
 
 # production
 /build
