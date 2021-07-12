@@ -267,6 +267,11 @@ router.put(
   tasksApi.updateTask
 );
 router.post(
+  "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/maintenance",
+  projectCanAdmin,
+  tasksApi.taskMaintenance
+);
+router.post(
   "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/refreshTaskItems",
   projectCanAdmin,
   tasksApi.refreshTaskItems

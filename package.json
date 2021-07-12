@@ -2,10 +2,11 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "concurrently": "^5.3.0",
+    "concurrently": "^6.0.2",
+    "enquirer": "^2.3.6",
     "husky": "1.3.1",
-    "lerna": "^3.18.3",
-    "lint-staged": "8.1.5",
+    "lerna": "^4.0.0",
+    "lint-staged": "^10.5.4",
     "nodemon": "2.0.3",
     "prettier": "1.17.0"
   },
@@ -22,7 +23,8 @@
     "postinstall": "lerna exec -- npm install",
     "release": "lerna version",
     "resetdb": "cd packages/nota-server && npm run resetdb",
-    "seed": "cd packages/nota-server && npm run seed"
+    "seed": "cd packages/nota-server && npm run seed",
+    "createLocalUser": "node scripts/createLocalUser.js"
   },
   "husky": {
     "hooks": {

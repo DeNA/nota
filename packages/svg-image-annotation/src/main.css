@@ -66,3 +66,7 @@ line.point-creation-guide {
   mix-blend-mode: difference;
   stroke-dasharray: 5 1;
 }
+
+rect.not-min-size {
+  stroke-opacity: 0.3;
+}

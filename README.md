@@ -30,6 +30,7 @@ You can find more details about the motivations and capabilities in this article
   - [Run Server and Client](#run-server-and-client)
   - [Setup Database](#setup-database)
     - [Add seed data](#add-seed-data)
+  - [Create new local user / Change local user password](#create-new-local-user--change-local-user-password)
   - [Run Tests](#run-tests)
 - [Limitations](#limitations)
 - [Documentation](#documentation)
@@ -55,6 +56,8 @@ $ docker-compose up
 
 Application will run on `localhost:3000` by default
 
+Default user is created with username `admin` and password `admin`
+
 ### Setup Database
 
 Only required the first time
@@ -69,6 +72,16 @@ $ docker-compose exec app npm run resetdb
 $ docker-compose exec app npm run seed
 ```
 
+### Create new local user / Change local user password
+
+There is no local user creation UI, but local users can be added/updated by running the following script:
+
+```shellsession
+$ docker-compose exec app npm run createLocalUser
+```
+
+After a user is created, an administrator can manage all the users from the UI.
+
 ### Run Tests
 
 - All tests `npm run test`
@@ -78,7 +91,7 @@ $ docker-compose exec app npm run seed
 ## Limitations
 
 - Application text is not yet localized. Some text appears in Japanese.
-- No Local User management UI. We use SAML authentication, and local users have only beed used for development so no UI for user creation, password change, etc exists. It is possible to create local users directly into the database and login.
+- No Local User management UI. We use SAML authentication, and local users have only beed used for development so no UI for user creation, password change, etc exists. It is possible to create local users using the script noted above.
 - No local filesystem source setup UI. We use mainly S3 as the backend for our images and videos, and local filesystem is only used for development and test. Seed data provides an already setup local filesystem path (`packages/nota-server/testfiles`) with some dummy files for development and testing. It is possible to add local sources directly into the database.
 
 ## Documentation

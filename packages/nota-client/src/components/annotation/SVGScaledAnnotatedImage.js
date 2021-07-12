@@ -15,6 +15,7 @@ import Icon from "../Icon";
       editable: boolean,
       addNew: boolean,
       addNewColor: string,
+      addNewOptions: any,
       annotations: object[],
       labelAnnotations: object[],
       dragLineWidth: number,
@@ -53,6 +54,8 @@ class SVGScaledAnnotatedImage extends Component {
       nextProps.addNew !== this.props.addNew ||
       nextProps.addNewColor !== this.props.addNewColor
     ) {
+      const { minHeight, minWidth } = nextProps.addNewOptions;
+
       newAnnotation = nextProps.addNew
         ? {
             id: "new_annotation_" + Math.random(),
@@ -60,7 +63,9 @@ class SVGScaledAnnotatedImage extends Component {
             properties: {
               style: {
                 strokeColor: nextProps.addNewColor
-              }
+              },
+              minWidth,
+              minHeight
             }
           }
         : null;
@@ -212,10 +217,14 @@ class SVGScaledAnnotatedImage extends Component {
         const properties = {};
 
         if (boundaries.type === "RECTANGLE") {
+          const { minWidth, minHeight } = annotation.options ?? {};
+
           properties.x = boundaries.left;
           properties.y = boundaries.top;
           properties.width = boundaries.right - properties.x;
           properties.height = boundaries.bottom - properties.y;
+          properties.minWidth = minWidth;
+          properties.minHeight = minHeight;
         } else if (boundaries.type === "POLYGON") {
           properties.points = boundaries.points;
         } else if (boundaries.type === "POINT") {
