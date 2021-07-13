@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { LinkContainer } from "react-router-bootstrap";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { fetchProject } from "../../lib/api";
@@ -29,6 +30,7 @@ export function AdminProjectMain({
   params,
   reloadProjectsList
 }) {
+  const { t } = useTranslation();
   const me = React.useContext(MeContext);
 
   if (loading) {
@@ -47,7 +49,7 @@ export function AdminProjectMain({
               <div>
                 <LinkContainer to={`/admin/projects/${project.id}/edit`}>
                   <Button size="sm" variant="outline-info">
-                    Edit
+                    {t("edit-button")}
                   </Button>
                 </LinkContainer>
               </div>
@@ -56,13 +58,13 @@ export function AdminProjectMain({
           <Col className="d-flex flex-column align-items-end">
             <div>
               <small>
-                Created by: {project.createdBy.username} (
+                {t("created-by")}: {project.createdBy.username} (
                 {parseDate(project.createdAt)})
               </small>
             </div>
             <div>
               <small>
-                Updated by: {project.updatedBy.username} (
+                {t("updated-by")}: {project.updatedBy.username} (
                 {parseDate(project.updatedAt)})
               </small>
             </div>

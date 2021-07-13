@@ -15,14 +15,14 @@ export const Task = {
   }
 };
 Task.STATUS_TEXT = {
-  [Task.STATUS.DELETED]: "Deleted",
-  [Task.STATUS.UPDATING_ERROR]: "Updating Error",
-  [Task.STATUS.CREATING_ERROR]: "Crating Error",
-  [Task.STATUS.CREATING]: "Creating",
-  [Task.STATUS.UPDATING]: "Updating",
-  [Task.STATUS.HIDDEN]: "Hidden",
-  [Task.STATUS.READY]: "Ready",
-  [Task.STATUS.DONE]: "Done"
+  [Task.STATUS.DELETED]: "deleted",
+  [Task.STATUS.UPDATING_ERROR]: "updating-error",
+  [Task.STATUS.CREATING_ERROR]: "creating-error",
+  [Task.STATUS.CREATING]: "creating",
+  [Task.STATUS.UPDATING]: "updating",
+  [Task.STATUS.HIDDEN]: "hidden",
+  [Task.STATUS.READY]: "ready",
+  [Task.STATUS.DONE]: "done"
 };
 
 export const TaskAssignment = {
@@ -87,12 +87,12 @@ export const MediaSource = {
   }
 };
 MediaSource.STATUS_TEXT = {
-  [MediaSource.STATUS.UPDATING_ERROR]: "Updating Error",
-  [MediaSource.STATUS.CREATING_ERROR]: "Creating Error",
-  [MediaSource.STATUS.CREATING]: "Creating",
-  [MediaSource.STATUS.UPDATING]: "Updating",
-  [MediaSource.STATUS.HIDDEN]: "Hidden",
-  [MediaSource.STATUS.READY]: "Ready"
+  [MediaSource.STATUS.UPDATING_ERROR]: "updating-error",
+  [MediaSource.STATUS.CREATING_ERROR]: "creating-error",
+  [MediaSource.STATUS.CREATING]: "creating",
+  [MediaSource.STATUS.UPDATING]: "updating",
+  [MediaSource.STATUS.HIDDEN]: "hidden",
+  [MediaSource.STATUS.READY]: "ready"
 };
 
 export const MediaItemTag = {
@@ -120,8 +120,8 @@ JobTask.TYPE_TEXT = {
   [JobTask.TYPE.SCHEDULED]: "scheduled"
 };
 JobTask.STATUS_TEXT = {
-  [JobTask.STATUS.NOT_STARTED]: "Not started",
-  [JobTask.STATUS.ONGOING]: "Ongoing",
-  [JobTask.STATUS.OK]: "Finished",
-  [JobTask.STATUS.ERROR]: "Error"
+  [JobTask.STATUS.NOT_STARTED]: "not-started",
+  [JobTask.STATUS.ONGOING]: "ongoing",
+  [JobTask.STATUS.OK]: "finished",
+  [JobTask.STATUS.ERROR]: "error"
 };

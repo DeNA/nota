@@ -1,10 +1,12 @@
 import React from "react";
 import { Card, Nav, Container, Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { fetchMediaItemsTree } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import Loading from "../Loading";
 
 export function AdminProjectMediaSourceBranches({ resource: tree, loading }) {
+  const { t } = useTranslation();
   const total = React.useMemo(() => {
     return (tree || []).reduce((total, branch) => {
       return total + branch.files;
@@ -17,7 +19,7 @@ export function AdminProjectMediaSourceBranches({ resource: tree, loading }) {
       <Card.Header>
         <Nav className="justify-content-between">
           <Nav.Item>
-            <h3>Folders</h3>
+            <h3>{t("folders")}</h3>
           </Nav.Item>
         </Nav>
       </Card.Header>
@@ -25,10 +27,10 @@ export function AdminProjectMediaSourceBranches({ resource: tree, loading }) {
         <Container>
           <Row key="-1">
             <Col>
-              <h4>Path</h4>
+              <h4>{t("path")}</h4>
             </Col>
             <Col>
-              <h4>Media files</h4>
+              <h4>{t("media-files")}</h4>
             </Col>
           </Row>
           {(tree || [])
@@ -43,7 +45,7 @@ export function AdminProjectMediaSourceBranches({ resource: tree, loading }) {
             ))}
           <Row key="-2">
             <Col>
-              <h4>Total</h4>
+              <h4>{t("total")}</h4>
             </Col>
             <Col>
               <h4>{total}</h4>

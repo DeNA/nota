@@ -1,10 +1,12 @@
 import React from "react";
-import { Button, Card, Form, Nav, Container, Row, Col } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Nav, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { updateProject } from "../../lib/api";
 import history from "../../lib/history";
 import useInputForm, { string } from "../../lib/useInputForm";
 
 const AdminProjectEdit = function({ project, reloadProjectsList }) {
+  const { t } = useTranslation();
   const canSaveProject = ({ name }) => name;
 
   const saveProject = async function(values) {
@@ -38,7 +40,7 @@ const AdminProjectEdit = function({ project, reloadProjectsList }) {
             <Card.Header>
               <Nav className="justify-content-between">
                 <Nav.Item>
-                  <h3>Edit Project</h3>
+                  <h3>{t("edit-project")}</h3>
                 </Nav.Item>
                 <Nav.Item />
               </Nav>
@@ -46,17 +48,17 @@ const AdminProjectEdit = function({ project, reloadProjectsList }) {
             <Card.Body>
               <Form noValidate>
                 <Form.Group>
-                  <Form.Label>Project Name</Form.Label>
+                  <Form.Label>{t("project-name")}</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Project Name"
+                    placeholder={t("project-name")}
                     name="name"
                     value={values.name}
                     onChange={handleChange}
                     isInvalid={touched.name && errors.name}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Project Name is required
+                    {t("required-error", { field: t("project-name") })}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Form>
@@ -65,10 +67,10 @@ const AdminProjectEdit = function({ project, reloadProjectsList }) {
               <Nav className="justify-content-between">
                 <Nav.Item>
                   <Button variant="success" onClick={handleSubmit}>
-                    保存
+                    {t("save-button")}
                   </Button>{" "}
                   <Button variant="outline-secondary" onClick={history.goBack}>
-                    キャンセル
+                    {t("cancel-button")}
                   </Button>
                 </Nav.Item>
               </Nav>

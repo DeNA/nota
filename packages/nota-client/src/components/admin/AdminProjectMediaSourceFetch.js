@@ -3,6 +3,7 @@ import { Button, Card, Col, ListGroup, Nav, Row, Modal } from "react-bootstrap";
 import { parseDate } from "../../lib/utils";
 import { refreshMediaItems } from "../../lib/api";
 import { JobTask } from "../../lib/models";
+import { useTranslation } from "react-i18next";
 
 export function AdminProjectMediaSourceFetch({
   projectId,
@@ -10,8 +11,8 @@ export function AdminProjectMediaSourceFetch({
   fetchJobs = [],
   reload
 }) {
+  const { t } = useTranslation();
   const [showRefreshModal, setShowRefreshModal] = React.useState(false);
-
   const handleCloseModal = function() {
     setShowRefreshModal(false);
   };
@@ -33,14 +34,14 @@ export function AdminProjectMediaSourceFetch({
         <Card.Header>
           <Nav className="justify-content-between">
             <Nav.Item>
-              <span>Last Refreshes</span>
+              <span>{t("last-refreshes")}</span>
             </Nav.Item>
             <Nav.Item>
               <Button
                 variant="outline-success"
                 onClick={handleClickRefreshMediaItems}
               >
-                Refresh Now
+                {t("refresh-now")}
               </Button>
             </Nav.Item>
           </Nav>
@@ -55,16 +56,19 @@ export function AdminProjectMediaSourceFetch({
                 <Col>{JSON.stringify(job.config.result)}</Col>
                 <Col>
                   <div>
-                    <small>Created: {parseDate(job.createdAt)}</small>
-                  </div>
-                  <div>
                     <small>
-                      Started: {job.startedAt ? parseDate(job.startedAt) : "--"}
+                      {t("created")}: {parseDate(job.createdAt)}
                     </small>
                   </div>
                   <div>
                     <small>
-                      Finished:{" "}
+                      {t("started")}:{" "}
+                      {job.startedAt ? parseDate(job.startedAt) : "--"}
+                    </small>
+                  </div>
+                  <div>
+                    <small>
+                      {t("finished")}:{" "}
                       {job.finishedAt ? parseDate(job.finishedAt) : "--"}
                     </small>
                   </div>
@@ -76,19 +80,17 @@ export function AdminProjectMediaSourceFetch({
       </Card>
       <Modal show={showRefreshModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Refresh Media Items</Modal.Title>
+          <Modal.Title>{t("refresh-media-items")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This will add any new item in{" "}
-          <code>{mediaSource.mediaSourcePath}</code> to the task. It will not
-          delete any item even if it no longer exists remotely.
+          {t("refresh-media-items-1", { path: mediaSource.config.path })}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
-            Close
+            {t("close-button")}
           </Button>
           <Button variant="success" onClick={handleRefreshMediaItems}>
-            Refresh Media Items
+            {t("refresh-media-items")}
           </Button>
         </Modal.Footer>
       </Modal>

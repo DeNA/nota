@@ -3,8 +3,10 @@ import { Button, Col, Nav, Row, Card } from "react-bootstrap";
 import { ProjectGroup } from "../../lib/models";
 import GroupsEdit from "./GroupsEdit";
 import { updateProject } from "../../lib/api";
+import { useTranslation } from "react-i18next";
 
 function AdminProjectGroups({ project, reload }) {
+  const { t } = useTranslation();
   const annotatorGroups = project.groups
     .filter(group => group.type === ProjectGroup.TYPE.ANNOTATOR)
     .map(group => group.name);
@@ -57,12 +59,12 @@ function AdminProjectGroups({ project, reload }) {
   return (
     <Card className="w-100">
       <Card.Header>
-        <h3>Project Groups</h3>
+        <h3>{t("permission-groups")}</h3>
       </Card.Header>
       <Card.Body>
         <Row>
           <Col>
-            <h4>Administrator</h4>
+            <h4>{t("administrator")}</h4>
             <GroupsEdit
               disabled={updating}
               groups={updatedAdminGroups || adminGroups}
@@ -70,7 +72,7 @@ function AdminProjectGroups({ project, reload }) {
             />
           </Col>
           <Col>
-            <h4>Annotator</h4>
+            <h4>{t("annotator")}</h4>
             <GroupsEdit
               disabled={updating}
               groups={updatedAnnotatorGroups || annotatorGroups}
@@ -87,14 +89,14 @@ function AdminProjectGroups({ project, reload }) {
               onClick={handleSave}
               disabled={!hasChanged}
             >
-              Save
+              {t("save-button")}
             </Button>{" "}
             <Button
               variant="outline-secondary"
               onClick={handleCancel}
               disabled={!hasChanged}
             >
-              Cancel
+              {t("cancel-button")}
             </Button>
           </Nav.Item>
         </Nav>

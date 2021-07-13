@@ -10,6 +10,7 @@ import {
   ProgressBar,
   Row
 } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { fetchProjectAssignableUsers, fetchTask } from "../../lib/api";
@@ -23,6 +24,7 @@ import AdminProjectTaskFetch from "./AdminProjectTaskFetch";
 import AdminProjectTaskMaintenance from "./AdminProjectTaskMaintenance";
 
 export function AdminProjectTask({ resource, project, loading, doGet }) {
+  const { t } = useTranslation();
   const { task, assignableUsers } = resource || {
     task: null,
     assignableUsers: null
@@ -66,7 +68,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
           <Nav className="justify-content-between">
             <Nav.Item>
               <h3>
-                <Link to={`/admin/projects/${project.id}`}>Tasks</Link>
+                <Link to={`/admin/projects/${project.id}`}>{t("tasks")}</Link>
                 {" :: "}
                 <span>{task.name}</span>
               </h3>
@@ -75,7 +77,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
               <LinkContainer
                 to={`/admin/projects/${project.id}/tasks/${task.id}/edit`}
               >
-                <Button variant="outline-info">Edit</Button>
+                <Button variant="outline-info">{t("edit-button")}</Button>
               </LinkContainer>
             </Nav.Item>
           </Nav>
@@ -87,19 +89,19 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                 <Row>
                   <Col>
                     <Row>
-                      <Col className="col-3 text-right">Created by</Col>
+                      <Col className="col-3 text-right">{t("created-by")}</Col>
                       <Col>
                         {task.createdBy.username} ({parseDate(task.createdAt)})
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Updated by</Col>
+                      <Col className="col-3 text-right">{t("updated-by")}</Col>
                       <Col>
                         {task.createdBy.username} ({parseDate(task.createdAt)})
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Template</Col>
+                      <Col className="col-3 text-right">{t("template")}</Col>
                       <Col>
                         <Link
                           to={`/admin/projects/${project.id}/taskTemplates/${
@@ -111,7 +113,9 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Media Source</Col>
+                      <Col className="col-3 text-right">
+                        {t("media-source")}
+                      </Col>
                       <Col>
                         <Link
                           to={`/admin/projects/${project.id}/mediaSources/${
@@ -123,21 +127,21 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Media Path</Col>
+                      <Col className="col-3 text-right">{t("path")}</Col>
                       <Col>
                         <code>{task.mediaSourceOptions.path || "/"}</code>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Conditions</Col>
+                      <Col className="col-3 text-right">{t("conditions")}</Col>
                       <Col>
                         <small>
                           {task.mediaSourceOptions.excludeAlreadyUsed && (
                             <Row>
                               <Col className="col-3 text-right">
-                                Exclude Used
+                                {t("exclude-used")}
                               </Col>
-                              <Col>Yes</Col>
+                              <Col>{t("yes")}</Col>
                             </Row>
                           )}
                           {task.mediaSourceConditions
@@ -156,7 +160,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Status</Col>
+                      <Col className="col-3 text-right">{t("status")}</Col>
                       <Col className="d-flex flex-row align-items-center">
                         <Badge variant="secondary">
                           {task.done}/{task.total}
@@ -173,7 +177,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Assigned</Col>
+                      <Col className="col-3 text-right">{t("assigned")}</Col>
                       <Col className="d-flex flex-row align-items-center">
                         <Badge variant="secondary">
                           {task.total - task.assignable}/{task.total}
@@ -190,7 +194,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                     <Row>
                       <Col className="col-3 text-right">Status</Col>
                       <Col>
-                        <code>{Task.STATUS_TEXT[task.status]}</code>
+                        <code>{t(Task.STATUS_TEXT[task.status])}</code>
                       </Col>
                     </Row>
                   </Col>
@@ -202,9 +206,9 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
             </Row>
           </Container>
         </Card.Body>
-        <Card.Header>Assignments</Card.Header>
+        <Card.Header>{t("assignments")}</Card.Header>
         <ListGroup variant="flush">
-          <ListGroup.Item>Ongoing</ListGroup.Item>
+          <ListGroup.Item>{t("ongoing")}</ListGroup.Item>
           {ongoingAssignments.map(assignment => (
             <AdminProjectTaskAssignment
               key={assignment.id}
@@ -215,7 +219,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
               reload={handleReload}
             />
           ))}
-          <ListGroup.Item>Complete</ListGroup.Item>
+          <ListGroup.Item>{t("complete")}</ListGroup.Item>
           {completedAssignments.map(assignment => (
             <AdminProjectTaskAssignment
               key={assignment.id}

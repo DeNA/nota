@@ -9,8 +9,10 @@ import Loading from "../Loading";
 import AdminProjectMain from "./AdminProjectMain";
 import MeContext from "../MeContext";
 import AdminProjectNew from "./AdminProjectNew";
+import { useTranslation } from "react-i18next";
 
 export function AdminProjects({ resource: projects, loading, doGet }) {
+  const { t } = useTranslation();
   const me = React.useContext(MeContext);
   if (loading) {
     return <Loading global />;
@@ -49,7 +51,7 @@ export function AdminProjects({ resource: projects, loading, doGet }) {
                           <Nav.Item>
                             <LinkContainer to={`/admin/projects/${project.id}`}>
                               <Nav.Link className="text-white-50">
-                                Tasks
+                                {t("tasks")}
                               </Nav.Link>
                             </LinkContainer>
                           </Nav.Item>
@@ -58,7 +60,7 @@ export function AdminProjects({ resource: projects, loading, doGet }) {
                               to={`/admin/projects/${project.id}/taskTemplates`}
                             >
                               <Nav.Link className="text-white-50">
-                                Templates
+                                {t("templates")}
                               </Nav.Link>
                             </LinkContainer>
                           </Nav.Item>
@@ -67,7 +69,7 @@ export function AdminProjects({ resource: projects, loading, doGet }) {
                               to={`/admin/projects/${project.id}/mediaSources`}
                             >
                               <Nav.Link className="text-white-50">
-                                Media Sources
+                                {t("media-sources")}
                               </Nav.Link>
                             </LinkContainer>
                           </Nav.Item>
@@ -76,7 +78,7 @@ export function AdminProjects({ resource: projects, loading, doGet }) {
                               to={`/admin/projects/${project.id}/groups`}
                             >
                               <Nav.Link className="text-white-50">
-                                Groups
+                                {t("permission-groups")}
                               </Nav.Link>
                             </LinkContainer>
                           </Nav.Item>
@@ -88,7 +90,9 @@ export function AdminProjects({ resource: projects, loading, doGet }) {
                 {me.isAppAdmin && (
                   <div className="d-flex justify-content-center pb-2">
                     <LinkContainer to={`/admin/projects/new`}>
-                      <Button variant="outline-success">New Project</Button>
+                      <Button variant="outline-success">
+                        {t("new-project")}
+                      </Button>
                     </LinkContainer>
                   </div>
                 )}
