@@ -172,5 +172,14 @@
   "template-name": "テンプレート名",
   "template-description": "詳細",
   "template-definition": "テンプレート定義 (JSON)",
-  "JSON is invalid": "JSONにエラーがあります"
+  "JSON is invalid": "JSONにエラーがあります",
+  "annotator-task": "アノテーター/タスク",
+  "task-annotator": "タスク/アノテーター",
+  "today": "今日",
+  "project-task": "プロジェクト/タスク",
+  "login-method": "ログイン方法",
+  "app-admin-user": "アプリ管理者",
+  "super-admin-user": "全プロジェクト管理者",
+  "normal-user": "ユーザ",
+  "inactive-user": "無効・削除済み"
 }

@@ -172,5 +172,14 @@
   "template-name": "Template Name",
   "template-description": "Description",
   "template-definition": "Template definition (JSON)",
-  "JSON is invalid": "JSON has an error"
+  "JSON is invalid": "JSON has an error",
+  "annotator-task": "Annotator/Task",
+  "task-annotator": "Task/Annotator",
+  "today": "Today",
+  "project-task": "Project/Task",
+  "login-method": "Login Method",
+  "app-admin-user": "App Admin (Everything)",
+  "super-admin-user": "Admin (All projects+users)",
+  "normal-user": "Normal",
+  "inactive-user": "Inactive/Deleted"
 }

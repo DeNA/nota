@@ -1,14 +1,15 @@
-import React from "react";
-import { Col, Container, Row, Button, Nav } from "react-bootstrap";
 import moment from "moment";
+import React from "react";
+import { Button, Col, Container, Nav, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { withRouter } from "react-router";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
+import { Redirect, Route, Switch } from "react-router-dom";
+import history from "../../lib/history";
+import AdminReportAnnotatorsTasksReport from "./AdminReportAnnotatorsTasksReport";
+import "./AdminReportMain.css";
 import AdminReportStatusReport from "./AdminReportStatusReport";
 import AdminReportTasksAnnotatorsReport from "./AdminReportTasksAnnotatorsReport";
-import AdminReportAnnotatorsTasksReport from "./AdminReportAnnotatorsTasksReport";
-import { LinkContainer } from "react-router-bootstrap";
-import "./AdminReportMain.css";
-import history from "../../lib/history";
 
 const getParam = function(param, search = "") {
   const match = search.match(`[?&]${param}=([^&]+)`);
@@ -21,6 +22,7 @@ const getLocation = function(currentLocation, periodStart) {
 };
 
 const AdminReportMain = function({ match, location }) {
+  const { t } = useTranslation();
   const periodStartParam = getParam("start", location.search);
   let periodStart = moment(periodStartParam, "YYYYMMDD");
   const today = React.useRef(moment());
@@ -47,13 +49,15 @@ const AdminReportMain = function({ match, location }) {
     <Container fluid className="h-100 bg-light reports-main pt-3">
       <Row className="h-100">
         <Col className="h-100">
-          <h2>Report</h2>
+          <h2>{t("report")}</h2>
           <Row className="flex-row justify-content-between align-items-end">
             <Col>
               <Nav variant="tabs" activeKey={location.pathname}>
                 <Nav.Item>
                   <LinkContainer to={`/admin/report/status${location.search}`}>
-                    <Nav.Link eventKey="/admin/report/status">Status</Nav.Link>
+                    <Nav.Link eventKey="/admin/report/status">
+                      {t("project-task")}
+                    </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
                 <Nav.Item>
@@ -61,7 +65,7 @@ const AdminReportMain = function({ match, location }) {
                     to={`/admin/report/taskAnnotator${location.search}`}
                   >
                     <Nav.Link eventKey="/admin/report/taskAnnotator">
-                      Task / Annotator
+                      {t("task-annotator")}
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
@@ -70,7 +74,7 @@ const AdminReportMain = function({ match, location }) {
                     to={`/admin/report/annotatorTask${location.search}`}
                   >
                     <Nav.Link eventKey="/admin/report/annotatorTask">
-                      Annotator / Task
+                      {t("annotator-task")}
                     </Nav.Link>
                   </LinkContainer>
                 </Nav.Item>
@@ -83,7 +87,7 @@ const AdminReportMain = function({ match, location }) {
                 onClick={() => history.push(location.pathname)}
                 className="mr-3"
               >
-                Today
+                {t("today")}
               </Button>
               <Button
                 size="sm"

@@ -1,11 +1,13 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { updateUser } from "../../lib/api";
 import { User } from "../../lib/models";
 import MeContext from "../MeContext";
 import GroupsEdit from "./GroupsEdit";
 
 const AdminUsersUser = function({ user, reload }) {
+  const { t } = useTranslation();
   const [updating, setUpdating] = React.useState(false);
   const [updatedStatus, setUpdatedStatus] = React.useState(null);
   const [updatedUserGroups, setUpdatedUserGroups] = React.useState(null);
@@ -57,13 +59,13 @@ const AdminUsersUser = function({ user, reload }) {
           user.id === me.id
         }
       >
-        <option value={User.STATUS.NOT_READY_DELETED}>Inactive/Deleted</option>
-        <option value={User.STATUS.ACTIVE}>Normal User</option>
-        <option value={User.STATUS.SUPER_ADMIN}>
-          Admin User (All projects, users)
+        <option value={User.STATUS.NOT_READY_DELETED}>
+          {t("inactive-user")}
         </option>
+        <option value={User.STATUS.ACTIVE}>{t("normal-user")}</option>
+        <option value={User.STATUS.SUPER_ADMIN}>{t("super-admin-user")}</option>
         <option value={User.STATUS.APP_ADMIN} disabled={!me.isAppAdmin}>
-          App Admin
+          {t("app-admin-user")}
         </option>
       </Form.Control>
     );
@@ -90,7 +92,7 @@ const AdminUsersUser = function({ user, reload }) {
             variant={hasChanged ? "success" : "secondary"}
             onClick={handleSave}
           >
-            Save
+            {t("save-button")}
           </Button>{" "}
           <Button
             size="sm"
@@ -98,7 +100,7 @@ const AdminUsersUser = function({ user, reload }) {
             variant="secondary"
             onClick={handleCancel}
           >
-            Cancel
+            {t("cancel-button")}
           </Button>
         </td>
       </tr>

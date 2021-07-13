@@ -3,6 +3,7 @@ import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import { fetchReportTasksAnnotatorsReference } from "../../lib/api";
 import Loading from "../Loading";
 import AdminReportTasksAnnotatorsReportPeriod from "./AdminReportTasksAnnotatorsReportPeriod";
+import { useTranslation } from "react-i18next";
 
 const AdminReportTasksAnnotatorsReport = function({
   resource: tasksReference,
@@ -11,6 +12,7 @@ const AdminReportTasksAnnotatorsReport = function({
   dates,
   today
 }) {
+  const { t } = useTranslation();
   if (loading && !tasksReference) {
     return <Loading />;
   }
@@ -19,7 +21,7 @@ const AdminReportTasksAnnotatorsReport = function({
     <div className="report-container">
       <div className="report-column report-header-column">
         <div className="report-header report-header-row d-flex justify-content-center align-items-center">
-          Task / Annotator
+          {t("task-annotator")}
         </div>
         {tasksReference.map(taskReference => (
           <div
