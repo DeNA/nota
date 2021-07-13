@@ -23,12 +23,12 @@
   "complete": "Complete",
   "complete-2": "(Complete)",
   "show-complete": "Show complete assignments",
-  "id": "ID:",
+  "id": "ID",
   "unmark-complete": "Set as not complete",
   "mark-complate": "Set as complete",
   "return-ongoing-items": "Return remaining items",
   "go-to-annotation": "Start Annotation",
-  "progress": "Progress:",
+  "progress": "Progress",
   "image-filters": "Image Filters",
   "image-filters-1": "Brightness:",
   "options": "Options",
@@ -165,5 +165,7 @@
   "path-selection": "Path Selection",
   "no-path-selected": "No path selected",
   "count-items": "Count Items",
-  "create-task": "Create Task"
+  "create-task": "Create Task",
+  "task": "Task",
+  "not-assigned": "Not Assigned"
 }

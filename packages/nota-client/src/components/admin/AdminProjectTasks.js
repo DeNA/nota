@@ -1,8 +1,9 @@
 import React from "react";
 import { Button, Card, Nav, Table } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
-import { downloadTaskResults, fetchTasks } from "../../lib/api";
+import { fetchTasks } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import { Task } from "../../lib/models";
 import useIntervalReload from "../../lib/useIntervalReload";
@@ -15,6 +16,7 @@ export function AdminProjectTasks({
   doGet,
   params
 }) {
+  const { t } = useTranslation();
   const shouldReload =
     tasks &&
     tasks.some(task =>
@@ -23,13 +25,6 @@ export function AdminProjectTasks({
   useIntervalReload(() => {
     doGet(params);
   }, shouldReload);
-  const handleDownload = async function(taskId) {
-    await downloadTaskResults({
-      projectId: project.id,
-      taskId,
-      options: {}
-    });
-  };
 
   if (!tasks && loading) {
     return <Loading global />;
@@ -39,10 +34,10 @@ export function AdminProjectTasks({
     <Card className="w-100">
       <Card.Header>
         <Nav className="justify-content-between">
-          <h3>Tasks</h3>
+          <h3>{t("tasks")}</h3>
           <Nav.Item>
             <LinkContainer to={`/admin/projects/${project.id}/tasks/new`}>
-              <Button variant="outline-success">新規タスク</Button>
+              <Button variant="outline-success">{t("new-task")}</Button>
             </LinkContainer>
           </Nav.Item>
         </Nav>
@@ -51,14 +46,13 @@ export function AdminProjectTasks({
         <Table striped>
           <thead>
             <tr>
-              <th>Id</th>
-              <th>タスク</th>
-              <th>テンプレート</th>
-              <th>Status</th>
-              <th>Done</th>
-              <th>Not assigned</th>
-              <th>完了</th>
-              <th>アクション</th>
+              <th>{t("id")}</th>
+              <th>{t("task")}</th>
+              <th>{t("template")}</th>
+              <th>{t("status")}</th>
+              <th>{t("progress")}</th>
+              <th>{t("not-assigned")}</th>
+              <th>{t("done")}</th>
             </tr>
           </thead>
           <tbody>
@@ -89,16 +83,6 @@ export function AdminProjectTasks({
                 </td>
                 <td>{task.assignable}</td>
                 <td>{task.done === task.total ? "✅" : ""}</td>
-                <td>
-                  <Button
-                    size="sm"
-                    variant="outline-info"
-                    hidden
-                    onClick={() => handleDownload(task.id)}
-                  >
-                    ダウンロード
-                  </Button>
-                </td>
               </tr>
             ))}
           </tbody>
