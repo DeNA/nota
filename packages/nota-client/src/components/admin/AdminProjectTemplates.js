@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Card, Nav, Table } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { fetchTemplates } from "../../lib/api";
@@ -11,6 +12,7 @@ export function AdminProjectTemplates({
   project,
   loading
 }) {
+  const { t } = useTranslation();
   if (loading) {
     return <Loading global />;
   }
@@ -19,12 +21,12 @@ export function AdminProjectTemplates({
     <Card className="w-100">
       <Card.Header>
         <Nav className="justify-content-between">
-          <h3>Templates</h3>
+          <h3>{t("templates")}</h3>
           <Nav.Item>
             <LinkContainer
               to={`/admin/projects/${project.id}/taskTemplates/new`}
             >
-              <Button variant="outline-success">New Template</Button>
+              <Button variant="outline-success">{t("new-template")}</Button>
             </LinkContainer>
           </Nav.Item>
         </Nav>
@@ -33,9 +35,9 @@ export function AdminProjectTemplates({
         <Table striped>
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>Description</th>
+              <th>{t("id")}</th>
+              <th>{t("template-name")}</th>
+              <th>{t("description")}</th>
             </tr>
           </thead>
           <tbody>

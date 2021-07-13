@@ -167,5 +167,10 @@
   "count-items": "Count Items",
   "create-task": "Create Task",
   "task": "Task",
-  "not-assigned": "Not Assigned"
+  "not-assigned": "Not Assigned",
+  "new-template": "New Template",
+  "template-name": "Template Name",
+  "template-description": "Description",
+  "template-definition": "Template definition (JSON)",
+  "JSON is invalid": "JSON has an error"
 }

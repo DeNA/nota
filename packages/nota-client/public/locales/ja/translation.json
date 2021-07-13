@@ -167,5 +167,10 @@
   "count-items": "件数を確認する",
   "create-task": "タスク作成",
   "task": "タスク",
-  "not-assigned": "未アサイン"
+  "not-assigned": "未アサイン",
+  "new-template": "新規テンプレート",
+  "template-name": "テンプレート名",
+  "template-description": "詳細",
+  "template-definition": "テンプレート定義 (JSON)",
+  "JSON is invalid": "JSONにエラーがあります"
 }

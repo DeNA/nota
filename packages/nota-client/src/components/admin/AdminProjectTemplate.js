@@ -1,11 +1,12 @@
 import React from "react";
 import { Button, Card, Form, Nav } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { fetchTemplate, updateTemplate, persistTemplate } from "../../lib/api";
+import { fetchTemplate, persistTemplate, updateTemplate } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
+import history from "../../lib/history";
 import useInputForm, { string } from "../../lib/useInputForm";
 import Loading from "../Loading";
-import history from "../../lib/history";
 
 export function AdminProjectTemplate({
   isNew = false,
@@ -15,6 +16,7 @@ export function AdminProjectTemplate({
   doGet,
   params
 }) {
+  const { t } = useTranslation();
   const [updating, setUpdating] = React.useState(false);
   const saveTemplate = async function(values) {
     setUpdating(true);
@@ -34,7 +36,16 @@ export function AdminProjectTemplate({
   const formSchema = {
     name: string().required(),
     description: string().required(),
-    template: string().required()
+    template: string()
+      .required()
+      .addValidation(val => {
+        try {
+          JSON.parse(values.template);
+          return [null];
+        } catch (error) {
+          return ["JSON is invalid"];
+        }
+      })
   };
   const [
     { values, touched, errors },
@@ -59,10 +70,10 @@ export function AdminProjectTemplate({
           <Nav.Item>
             <h3>
               <Link to={`/admin/projects/${project.id}/taskTemplates`}>
-                Templates
+                {t("templates")}
               </Link>
               {" :: "}
-              <span>{isNew ? "New Template" : taskTemplate.name}</span>
+              <span>{isNew ? t("new-template") : taskTemplate.name}</span>
             </h3>
           </Nav.Item>
           <Nav.Item />
@@ -71,49 +82,50 @@ export function AdminProjectTemplate({
       <Card.Body>
         <Form noValidate>
           <Form.Group>
-            <Form.Label>Template Name</Form.Label>
+            <Form.Label>{t("template-name")}</Form.Label>
             <Form.Control
               disabled={updating}
               type="text"
-              placeholder="Template Name"
+              placeholder={t("template-name")}
               name="name"
               value={values.name}
               onChange={handleChange}
               isInvalid={touched.name && errors.name}
             />
             <Form.Control.Feedback type="invalid">
-              Template Name is required
+              {t("required-error", { field: t("template-name") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Description</Form.Label>
+            <Form.Label>{t("template-description")}</Form.Label>
             <Form.Control
               disabled={updating}
               as="textarea"
-              placeholder="Template Description"
+              placeholder={t("template-description")}
               name="description"
               value={values.description}
               onChange={handleChange}
               isInvalid={touched.description && errors.description}
             />
             <Form.Control.Feedback type="invalid">
-              Template description is required
+              {t("required-error", { field: t("template-description") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Template JSON</Form.Label>
+            <Form.Label>{t("template-definition")}</Form.Label>
             <Form.Control
               disabled={updating}
               as="textarea"
               rows={15}
-              placeholder="Template JSON"
               name="template"
               value={values.template}
               onChange={handleChange}
               isInvalid={touched.template && errors.template}
             />
             <Form.Control.Feedback type="invalid">
-              Template JSON is required
+              {errors.template?.[0] === "required"
+                ? t("required-error", { field: t("template-definition") })
+                : t(errors.template?.[0])}
             </Form.Control.Feedback>
           </Form.Group>
         </Form>
@@ -126,14 +138,14 @@ export function AdminProjectTemplate({
               onClick={handleSubmit}
               disabled={!hasChanged}
             >
-              Save
+              {t("save-button")}
             </Button>{" "}
             <Button
               variant="outline-secondary"
               onClick={isNew ? history.goBack : handleReset}
               disabled={!isNew && !hasChanged}
             >
-              Cancel
+              {t("cancel-button")}
             </Button>
           </Nav.Item>
         </Nav>
