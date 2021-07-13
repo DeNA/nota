@@ -15,7 +15,7 @@
     "mousetrap": "1.6.5",
     "open-iconic": "^1.1.1",
     "react": "16.13.1",
-    "react-bootstrap": "^1.0.0-beta.9",
+    "react-bootstrap": "^1.6.1",
     "react-datepicker": "^2.8.0",
     "react-dom": "16.13.1",
     "react-i18next": "^11.11.1",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@testing-library/react": "^9.3.2",
     "@types/jest": "23.3.7",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.6",
     "redux-devtools": "3.5.0",
     "semantic-ui-css": "2.4.1"
   },
