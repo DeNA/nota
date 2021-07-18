@@ -1,7 +1,5 @@
 import {
   ACTION_CREATE_ANNOTATION,
-  ACTION_SELECT_ANNOTATION,
-  ACTION_SELECT_ANNOTATION_USER,
   IMAGE_STATUS_DONE,
   IMAGE_STATUS_ONGOING,
   OPTION_FOCUS,
@@ -750,7 +748,7 @@ describe("imageAnnotations", () => {
     const select = selector(state).select;
     const result = imageAnnotations(state, select);
 
-    expect(result).toEqual([annotation2, annotation3, annotation4]);
+    expect(result).toMatchObject([annotation2, annotation3, annotation4]);
   });
 
   it("should return [] if image not found", () => {
@@ -776,7 +774,7 @@ describe("imageAnnotations", () => {
     const select = selector(state).select;
     const result = imageAnnotations(state, select, 1);
 
-    expect(result).toEqual([annotation1, annotation2]);
+    expect(result).toMatchObject([annotation1, annotation2]);
   });
 
   it("should skip missing annotations", () => {
@@ -789,7 +787,7 @@ describe("imageAnnotations", () => {
     const select = selector(state).select;
     const result = imageAnnotations(state, select);
 
-    expect(result).toEqual([annotation2]);
+    expect(result).toMatchObject([annotation2]);
   });
 });
 
