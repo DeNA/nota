@@ -33,7 +33,8 @@ export const ACTION_CREATE_ANNOTATION = "create_annotation";
 
 export const MEDIA_TYPE = {
   IMAGE: "IMAGE",
-  VIDEO: "VIDEO"
+  VIDEO: "VIDEO",
+  EPIPOLAR_IMAGE_SET: "EPIPOLAR_IMAGE_SET"
 };
 
 export const DEFAULT_ANNOTATION_COLOR = "rgba(200,255,100,1)";

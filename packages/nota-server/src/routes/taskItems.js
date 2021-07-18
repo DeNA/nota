@@ -74,17 +74,28 @@ const getTaskItemBinary = async function(req, res, next) {
       return;
     }
 
-    // GET SIZE FOR IMAGES
+    // IMAGE and EPIPOLAR_IMAGE_SET
+    const { mediaItemSuffix = "" } = req.params;
+    const { mediaSuffixSeparator = "_", mediaExtension = "" } =
+      template.mediaOptions || {};
+    const suffix = `${mediaSuffixSeparator}${mediaItemSuffix}${
+      mediaExtension ? "." + mediaExtension : ""
+    }`;
+    const imageSetExtension = `.${template.mediaExtensions[0] || ""}`;
+    const itemName = metadata.fileName.replace(imageSetExtension, "");
+    const fileName = mediaItemSuffix
+      ? itemName + suffix
+      : taskItem.mediaItem.name;
     const imageStream = await ds.readItem({
-      file: taskItem.mediaItem.name,
-      metadata
+      metadata: { ...metadata, fileName }
     });
 
     imageStream.on("error", err => {
       next(err);
     });
 
-    if (!imageMetadata.size) {
+    // GET SIZE FOR IMAGES
+    if (template.mediaType === "IMAGE" && !imageMetadata.size) {
       const dummy = new stream.PassThrough();
       const metaReader = sharp();
       metaReader.metadata();

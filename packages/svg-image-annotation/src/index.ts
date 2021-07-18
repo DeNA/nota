@@ -8,6 +8,7 @@ import {
 import SVGControls from "./controls";
 import Element from "./element";
 import ElementCreate from "./element-create";
+import EpipolarPoint from "./epipolar-point";
 import "./main.css";
 import Point from "./point";
 import PointCreate from "./point-create";
@@ -25,6 +26,8 @@ const createElement = (type: AnnotationType, parent: ImageAnnotation) => {
       return new Rect(parent);
     case "POLYGON":
       return new Polygon(parent);
+    case "EPIPOLAR_POINT":
+      return new EpipolarPoint(parent);
     default:
   }
 };
@@ -743,7 +746,7 @@ class ImageAnnotation {
       svg.appendChild(this.controls.getDomElement());
     }
   }
-  drawAnnotation(annotation: Annotation) {
+  drawAnnotation(annotation: NewAnnotation) {
     const { ready } = this.status;
 
     if (ready) {
@@ -822,7 +825,7 @@ class ImageAnnotation {
         }
       });
       Object.keys(this.annotationCache)
-        .filter(key => newCache[key])
+        .filter(key => !newCache[key])
         .forEach(key => this.annotationCache[key].destroy());
       this.annotationCache = newCache;
     }

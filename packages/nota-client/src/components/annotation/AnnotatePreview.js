@@ -7,6 +7,7 @@ import ImageListContainer from "./containers/ImageListContainer";
 import ProjectMenuContainer from "./containers/ProjectMenuContainer";
 import VideoContainer from "./containers/VideoContainer";
 import RetryErrorContainer from "./containers/RetryErrorContainer";
+import EpipolarImageContainer from "./containers/EpipolarImageContainer";
 // @ts-ignore
 import background from "./background.png";
 import { Segment } from "./semantic";
@@ -17,6 +18,8 @@ const AnnotatePreview = ({ mediaType }) => {
       ? ImageContainer
       : mediaType === MEDIA_TYPE.VIDEO
       ? VideoContainer
+      : mediaType === MEDIA_TYPE.EPIPOLAR_IMAGE_SET
+      ? EpipolarImageContainer
       : () => "UNSUPORTED MEDIA TYPE";
   return (
     <div className="Preview">
