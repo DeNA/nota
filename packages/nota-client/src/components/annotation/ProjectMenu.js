@@ -99,7 +99,7 @@ const ProjectMenu = ({
           </Dropdown.Item>
           <Dropdown.Item>
             <div>
-              <Icon name="zoom-out" /> {t("minimum-zoom")} {options.minScale}x
+              <Icon name="zoom-out" /> {t("zoom-minimum")} {options.minScale}x
             </div>
             <div>
               <input
@@ -116,7 +116,7 @@ const ProjectMenu = ({
           </Dropdown.Item>
           <Dropdown.Item>
             <div>
-              <Icon name="zoom-in" /> {t("maximum-zoom")} {options.maxScale}x
+              <Icon name="zoom-in" /> {t("zoom-maximum")} {options.maxScale}x
             </div>
             <div>
               <input
@@ -169,7 +169,7 @@ const ProjectMenu = ({
       </Dropdown>
       <div
         className={`labels-show ${labelsShow}`}
-        title={`Show labels`}
+        title={t("show-labels")}
         onClick={handleChangeLabelsShow}
       >
         <Icon name="tags" />
