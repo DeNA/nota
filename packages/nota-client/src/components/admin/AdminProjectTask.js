@@ -160,7 +160,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">{t("status")}</Col>
+                      <Col className="col-3 text-right">{t("progress")}</Col>
                       <Col className="d-flex flex-row align-items-center">
                         <Badge variant="secondary">
                           {task.done}/{task.total}

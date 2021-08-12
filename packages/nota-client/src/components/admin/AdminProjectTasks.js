@@ -77,7 +77,7 @@ export function AdminProjectTasks({
                     {task.template.name}
                   </Link>
                 </td>
-                <td>{Task.STATUS_TEXT[task.status]}</td>
+                <td>{t(Task.STATUS_TEXT[task.status])}</td>
                 <td>
                   {task.done}/{task.total}
                 </td>
