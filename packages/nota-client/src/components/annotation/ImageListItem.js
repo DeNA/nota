@@ -1,6 +1,7 @@
 import React from "react";
 import { Icon, Button } from "./semantic";
 import { Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const ImageListItem = function({
   item,
@@ -9,6 +10,7 @@ const ImageListItem = function({
   selectItem,
   position
 }) {
+  const { t } = useTranslation();
   const [showMetadata, setShowMetadata] = React.useState(false);
 
   return (
@@ -22,13 +24,13 @@ const ImageListItem = function({
           <div className="image-name">
             {position}
             {item.name}
-            {isComplete ? " (Complete)" : ""}
+            {isComplete ? ` ${t("complete-2")}` : ""}
           </div>
         </div>
         {item.externalMetadata && (
           <div
             className="metadata-toggle"
-            title="Show metadata"
+            title={t("show-metadata")}
             onClick={() => setShowMetadata(true)}
           >
             <Icon name={"tag"} />
@@ -36,7 +38,7 @@ const ImageListItem = function({
         )}
       </div>
       <Modal show={showMetadata} onHide={() => setShowMetadata(false)}>
-        <Modal.Header>Metadata for {item.name}</Modal.Header>
+        <Modal.Header>{t("metadata-title", { item })}</Modal.Header>
         <Modal.Body>
           <code style={{ whiteSpace: "pre" }}>
             {JSON.stringify(item.externalMetadata, null, 2)}
@@ -44,7 +46,7 @@ const ImageListItem = function({
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowMetadata(false)}>
-            Close
+            {t("close-button")}
           </Button>
         </Modal.Footer>
       </Modal>

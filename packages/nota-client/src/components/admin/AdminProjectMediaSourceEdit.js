@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Card, Form, Nav } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { fetchMediaSource, updateMediaSource } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
@@ -12,6 +13,7 @@ function AdminProjectMediaSourceEdit({
   project,
   loading
 }) {
+  const { t } = useTranslation();
   const canSaveMediaSource = ({ name, description }) => name && description;
 
   const saveMediaSource = async function(values) {
@@ -56,7 +58,9 @@ function AdminProjectMediaSourceEdit({
           <Nav className="justify-content-between">
             <Nav.Item>
               <h3>
-                <Link to={`/admin/projects/${project.id}`}>Media Sources</Link>
+                <Link to={`/admin/projects/${project.id}`}>
+                  {t("media-sources")}
+                </Link>
                 {" :: "}
                 <Link
                   to={`/admin/projects/${project.id}/mediaSources/${
@@ -66,7 +70,7 @@ function AdminProjectMediaSourceEdit({
                   {mediaSource.name}
                 </Link>
                 {" :: "}
-                <span>Edit</span>
+                <span>{t("edit")}</span>
               </h3>
             </Nav.Item>
             <Nav.Item />
@@ -75,31 +79,31 @@ function AdminProjectMediaSourceEdit({
         <Card.Body>
           <Form noValidate>
             <Form.Group>
-              <Form.Label>Media Source Name</Form.Label>
+              <Form.Label>{t("media-source-name")}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Media Source Name"
+                placeholder={t("media-source-name")}
                 name="name"
                 value={values.name}
                 onChange={handleChange}
                 isInvalid={touched.name && errors.name}
               />
               <Form.Control.Feedback type="invalid">
-                Media Name is required
+                {t("required-error", { field: t("media-source-name") })}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
-              <Form.Label>Description</Form.Label>
+              <Form.Label>{t("description")}</Form.Label>
               <Form.Control
                 as="textarea"
-                placeholder="Media Source Description"
+                placeholder={t("media-source-description")}
                 name="description"
                 value={values.description}
                 onChange={handleChange}
                 isInvalid={touched.description && errors.description}
               />
               <Form.Control.Feedback type="invalid">
-                Media Source description is required
+                {t("required-error", { field: t("media-source-description") })}
               </Form.Control.Feedback>
             </Form.Group>
           </Form>
@@ -108,13 +112,13 @@ function AdminProjectMediaSourceEdit({
           <Nav className="justify-content-between">
             <Nav.Item>
               <Button variant="success" onClick={handleSubmit}>
-                Save
+                {t("save-button")}
               </Button>{" "}
               <Button
                 variant="outline-secondary"
                 onClick={() => history.goBack()}
               >
-                Cancel
+                {t("cancel-button")}
               </Button>
             </Nav.Item>
             <Nav.Item />

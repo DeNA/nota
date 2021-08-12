@@ -11,8 +11,10 @@ import EpipolarImageContainer from "./containers/EpipolarImageContainer";
 // @ts-ignore
 import background from "./background.png";
 import { Segment } from "./semantic";
+import { useTranslation } from "react-i18next";
 
 const AnnotatePreview = ({ mediaType }) => {
+  const { t } = useTranslation();
   const MediaContainer =
     mediaType === MEDIA_TYPE.IMAGE
       ? ImageContainer
@@ -40,7 +42,7 @@ const AnnotatePreview = ({ mediaType }) => {
           background: `url(${background})`
         }}
       >
-        <RetryErrorContainer message="Could not load media. Wait a moment and try again">
+        <RetryErrorContainer message={t("load-media-error")}>
           <MediaContainer />
         </RetryErrorContainer>
       </Segment>

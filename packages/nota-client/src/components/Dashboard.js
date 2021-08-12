@@ -1,11 +1,13 @@
 import React from "react";
-import { Row, Col, Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { fetchAvailableTasks } from "../lib/api";
 import { apiContainerFactory } from "../lib/apiContainerFactory";
-import Loading from "./Loading";
 import DashboardProject from "./DashboardProject";
+import Loading from "./Loading";
 
 const Dashboard = function({ resource: projects, loading, doGet }) {
+  const { t } = useTranslation();
   if (loading && !projects) {
     return <Loading />;
   }
@@ -19,7 +21,7 @@ const Dashboard = function({ resource: projects, loading, doGet }) {
       {loading && <Loading />}
       <Row>
         <Col>
-          <h2>アノテーション</h2>
+          <h2>{t("annotation")}</h2>
           {projects.map(project => (
             <DashboardProject
               key={project.id}

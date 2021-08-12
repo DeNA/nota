@@ -7,6 +7,7 @@ import {
   InputGroup,
   Row
 } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import useHotkeys from "../../lib/useHotkeys";
 import Icon from "../Icon";
 import AnnotationLabel from "./AnnotationLabel";
@@ -28,6 +29,7 @@ import { videoControlsContext } from "./videoControls";
  * @param {{label: Nota.LabelVideoTimestamp, value?: number, editable: boolean, onChange: any}} props
  */
 const AnnotationLabelVideoTimestamp = props => {
+  const { t } = useTranslation();
   const {
     videoControls: { getTime, setTime, getDuration }
   } = useContext(videoControlsContext);
@@ -77,7 +79,7 @@ const AnnotationLabelVideoTimestamp = props => {
               className="d-flex justify-content-start align-items-center"
             >
               <div className="time-value-read-only">
-                {hasValue ? `${value} ms` : "--"}
+                {hasValue ? `${value} ${t("timestamp-ms")}` : "--"}
               </div>
             </Col>
             <Col md="auto">
@@ -87,7 +89,7 @@ const AnnotationLabelVideoTimestamp = props => {
                 variant="outline-info"
                 onClick={handleGoToTime}
               >
-                <Icon name="eye" /> Jump
+                <Icon name="eye" /> {t("timestamp-jump")}
               </Button>
             </Col>
           </Row>
@@ -107,7 +109,7 @@ const AnnotationLabelVideoTimestamp = props => {
                     variant="success"
                     onClick={handleSetTime}
                   >
-                    <Icon name="timer" /> Set
+                    <Icon name="timer" /> {t("timestamp-set")}
                     {label.hotkey ? ` (${label.hotkey})` : ""}
                   </Button>
                 </InputGroup.Prepend>
@@ -140,7 +142,7 @@ const AnnotationLabelVideoTimestamp = props => {
                 variant="outline-info"
                 onClick={handleGoToTime}
               >
-                <Icon name="eye" /> Jump
+                <Icon name="eye" /> {t("timestamp-jump")}
               </Button>
             </Col>
           </Row>

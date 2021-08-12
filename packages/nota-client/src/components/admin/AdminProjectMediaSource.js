@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Card, Col, Container, Nav, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { fetchMediaSource } from "../../lib/api";
@@ -16,6 +17,7 @@ export function AdminProjectMediaSource({
   loading,
   doGet
 }) {
+  const { t } = useTranslation();
   const handleReload = function() {
     doGet({ projectId: project.id, mediaSourceId: mediaSource.id });
   };
@@ -33,7 +35,7 @@ export function AdminProjectMediaSource({
             <Nav.Item>
               <h3>
                 <Link to={`/admin/projects/${project.id}/mediaSources`}>
-                  Media Sources
+                  {t("media-sources")}
                 </Link>
                 {" :: "}
                 <span>{mediaSource.name}</span>
@@ -45,7 +47,7 @@ export function AdminProjectMediaSource({
                   mediaSource.id
                 }/edit`}
               >
-                <Button variant="outline-info">Edit</Button>
+                <Button variant="outline-info">{t("edit-button")}</Button>
               </LinkContainer>
             </Nav.Item>
           </Nav>
@@ -57,51 +59,51 @@ export function AdminProjectMediaSource({
                 <Row>
                   <Col>
                     <Row>
-                      <Col className="col-3 text-right">Created by</Col>
+                      <Col className="col-3 text-right">{t("created-by")}</Col>
                       <Col>
                         {mediaSource.createdBy.username} (
                         {parseDate(mediaSource.createdAt)})
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Updated by</Col>
+                      <Col className="col-3 text-right">{t("updated-by")}</Col>
                       <Col>
                         {mediaSource.createdBy.username} (
                         {parseDate(mediaSource.createdAt)})
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Extensions</Col>
+                      <Col className="col-3 text-right">{t("extensions")}</Col>
                       <Col>
                         <code>{mediaSource.config.extensions.join(",")}</code>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Datasource</Col>
+                      <Col className="col-3 text-right">{t("datasource")}</Col>
                       <Col>
                         <code>{mediaSource.datasource}</code>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Bucket</Col>
+                      <Col className="col-3 text-right">{t("bucket")}</Col>
                       <Col>
                         <code>{mediaSource.config.bucket}</code>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Path</Col>
+                      <Col className="col-3 text-right">{t("path")}</Col>
                       <Col>
                         <code>{mediaSource.config.path}</code>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Export Path</Col>
+                      <Col className="col-3 text-right">{t("export-path")}</Col>
                       <Col>
                         <code>{mediaSource.config.exportPath}</code>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Filters</Col>
+                      <Col className="col-3 text-right">{t("filters")}</Col>
                       <Col>
                         <small>
                           {mediaSource.config.filters &&
@@ -114,7 +116,7 @@ export function AdminProjectMediaSource({
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Status</Col>
+                      <Col className="col-3 text-right">{t("status")}</Col>
                       <Col>
                         <code>
                           {MediaSource.STATUS_TEXT[mediaSource.status]}

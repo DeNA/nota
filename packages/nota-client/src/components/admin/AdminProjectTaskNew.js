@@ -1,5 +1,6 @@
 import React from "react";
 import { Badge, Button, Card, Col, Form, Nav, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
   countMediaItems,
@@ -15,6 +16,7 @@ import { Filters } from "./Filters";
 import MediaSourceItemsTree from "./MediaSourceItemsTree";
 
 function AdminProjectTaskNew({ resource, project, loading }) {
+  const { t } = useTranslation();
   const [count, setCount] = React.useState(null);
   const [filterConditions, setFilterConditions] = React.useState({});
   const [excludeAlreadyUsed, setExcludeAlreadyUsed] = React.useState(false);
@@ -135,9 +137,9 @@ function AdminProjectTaskNew({ resource, project, loading }) {
         <Nav className="justify-content-between">
           <Nav.Item>
             <h3>
-              <Link to={`/admin/projects/${project.id}`}>Tasks</Link>
+              <Link to={`/admin/projects/${project.id}`}>{t("tasks")}</Link>
               {" :: "}
-              <span>New Task</span>
+              <span>{t("new-task")}</span>
             </h3>
           </Nav.Item>
           <Nav.Item />
@@ -146,35 +148,35 @@ function AdminProjectTaskNew({ resource, project, loading }) {
       <Card.Body>
         <Form noValidate>
           <Form.Group>
-            <Form.Label>タスク名</Form.Label>
+            <Form.Label>{t("task-name")}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="タスク名"
+              placeholder={t("task-name")}
               name="name"
               value={values.name}
               onChange={handleChange}
               isInvalid={touched.name && errors.name}
             />
             <Form.Control.Feedback type="invalid">
-              タスク名は必須です
+              {t("required-error", { field: t("task-name") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>詳細</Form.Label>
+            <Form.Label>{t("task-description")}</Form.Label>
             <Form.Control
               as="textarea"
-              placeholder="詳細"
+              placeholder={t("task-description")}
               name="description"
               value={values.description}
               onChange={handleChange}
               isInvalid={touched.description && errors.description}
             />
             <Form.Control.Feedback type="invalid">
-              詳細は必須です
+              {t("required-error", { field: t("task-description") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>テンプレート</Form.Label>
+            <Form.Label>{t("template")}</Form.Label>
             <Form.Control
               as="select"
               value={values.templateId}
@@ -182,7 +184,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
               onChange={handleChange}
               isInvalid={touched.templateId && errors.templateId}
             >
-              <option value="">テンプレート...</option>
+              <option value="">{t("template")}...</option>
               {templates.map(template => (
                 <option key={template.id} value={template.id}>
                   {template.name}
@@ -190,7 +192,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
               ))}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              テンプレートは必須です
+              {t("required-error", { field: t("template") })}
             </Form.Control.Feedback>
           </Form.Group>
           {taskTemplate && (
@@ -198,7 +200,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
               <Row>
                 <Col>
                   <Form.Group>
-                    <Form.Label>データソース</Form.Label>
+                    <Form.Label>{t("datasource")}</Form.Label>
                     <Form.Control
                       as="select"
                       value={values.mediaSourceId}
@@ -206,7 +208,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                       onChange={handleChange}
                       isInvalid={touched.mediaSourceId && errors.mediaSourceId}
                     >
-                      <option value="">ソース...</option>
+                      <option value="">{t("datasource")}...</option>
                       {mediaSources.map(source => (
                         <option key={source.id} value={source.id}>
                           {source.name}
@@ -214,7 +216,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                       ))}
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
-                      ソースは必須です
+                      {t("required-error", { field: t("datasource") })}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
@@ -223,11 +225,11 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                     <Row>
                       <Col>
                         <Form.Group>
-                          <Form.Label>フォルダー選択</Form.Label>
+                          <Form.Label>{t("path-selection")}</Form.Label>
                           <Form.Control
                             type="text"
                             disabled
-                            placeholder="No folder selected"
+                            placeholder={t("no-path-selected")}
                             value={values.mediaSourceSelectedPath}
                             name="mediaSourceSelectedPath"
                             onChange={handleChange}
@@ -237,7 +239,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                             }
                           />
                           <Form.Control.Feedback type="invalid">
-                            フォルダーは必須です
+                            {t("required-error", { field: t("path") })}
                           </Form.Control.Feedback>
                         </Form.Group>
                         <MediaSourceItemsTree
@@ -257,7 +259,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                   <Col>
                     <Card>
                       <Card.Header className="cursor-pointer">
-                        Options
+                        {t("options")}
                       </Card.Header>
                       <Card.Body>
                         {filters && (
@@ -269,7 +271,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                         )}
                         <Form.Group as={Row}>
                           <Form.Label column sm={2}>
-                            Exclude already used
+                            {t("exclude-used")}
                           </Form.Label>
                           <Col sm={10}>
                             <Form.Check
@@ -286,10 +288,10 @@ function AdminProjectTaskNew({ resource, project, loading }) {
                             onClick={handleCountItems}
                             className="mr-2"
                           >
-                            Count Items
+                            {t("count-items")}
                           </Button>
                           <Badge pill variant="secondary">
-                            {count === null ? "--" : `${count} items`}
+                            {count === null ? "--" : `${count} ${t("items")}`}
                           </Badge>
                         </h3>
                       </Card.Body>
@@ -305,10 +307,10 @@ function AdminProjectTaskNew({ resource, project, loading }) {
         <Nav className="justify-content-between">
           <Nav.Item>
             <Button variant="success" onClick={handleSubmit}>
-              タスク作成
+              {t("create-task")}
             </Button>{" "}
             <Button variant="outline-secondary" onClick={history.goBack}>
-              キャンセル
+              {t("cancel-button")}
             </Button>
           </Nav.Item>
         </Nav>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Login from "../components/Login";
 import { fetchAuthenticators } from "../lib/api";
 import { login } from "../lib/auth";
 import logo from "../logo@2x.png";
 
 function LoginContainer({ redirect }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [authenticators, setAuthenticators] = useState(null);
@@ -59,13 +61,13 @@ function LoginContainer({ redirect }) {
         <>
           <img
             src={logo}
-            alt="Nota"
-            title="Nota"
+            alt={t("nota")}
+            title={t("nota")}
             width="30"
             height="30"
             className="mr-2"
           />
-          {"Nota - Sign in"}
+          {t("login-sign-in")}
         </>
       }
     />

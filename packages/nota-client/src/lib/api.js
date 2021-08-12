@@ -416,39 +416,6 @@ export async function exportTaskResults({ projectId, taskId, options = {} }) {
   });
 }
 
-export async function downloadTaskResults({ projectId, taskId, options = {} }) {
-  const query = [];
-  if (options.includeOngoing) {
-    query.push("includeOngoing=1");
-  }
-  if (options.name) {
-    query.push(`name=${options.name}`);
-  }
-  const response = await fetch(
-    `/api/projects/${projectId}/tasks/${taskId}/download?${query.join("&")}`,
-    {
-      method: "get"
-    }
-  );
-
-  const blob = await response.blob();
-  const date = new Date().toLocaleDateString();
-  const filename = `${taskId}_folder_${date}_${+new Date()}`;
-
-  const url = (window.URL || window.webkitURL).createObjectURL(blob);
-  const link = document.createElement("a");
-
-  if (link.download !== undefined) {
-    link.setAttribute("href", url);
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } else {
-    window.location.assign(url);
-  }
-}
-
 export async function resetTaskItem({ projectId, taskId, taskItemId }) {
   return await fetch(
     `/api/projects/${projectId}/tasks/${taskId}/taskItems/${taskItemId}/reset`,

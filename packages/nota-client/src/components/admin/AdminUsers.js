@@ -4,8 +4,10 @@ import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import { fetchUsers } from "../../lib/api";
 import Loading from "../Loading";
 import AdminUsersUser from "./AdminUsersUser";
+import { useTranslation } from "react-i18next";
 
 const AdminUsers = function({ resource: users, doGet, loading }) {
+  const { t } = useTranslation();
   if (loading && !users) {
     return <Loading global />;
   }
@@ -15,16 +17,16 @@ const AdminUsers = function({ resource: users, doGet, loading }) {
       {loading && <Loading />}
       <Row className="h-100">
         <Col className="h-100">
-          <h2>Users</h2>
+          <h2>{t("user-management")}</h2>
           <Table striped>
             <thead>
               <tr>
-                <th>Id</th>
-                <th>Username</th>
-                <th>Status</th>
-                <th>Login Method</th>
-                <th>Groups</th>
-                <th>Actions</th>
+                <th>{t("id")}</th>
+                <th>{t("login-username")}</th>
+                <th>{t("status")}</th>
+                <th>{t("login-method")}</th>
+                <th>{t("permission-groups")}</th>
+                <th />
               </tr>
             </thead>
             <tbody>

@@ -10,6 +10,7 @@ import {
 import { LinkContainer } from "react-router-bootstrap";
 import { TaskAssignment } from "../lib/models";
 import { updateTaskAssignment, returnUnfinishedTaskItems } from "../lib/api";
+import { useTranslation } from "react-i18next";
 
 const DashboardProjectTaskAssignment = function({
   project,
@@ -17,6 +18,7 @@ const DashboardProjectTaskAssignment = function({
   assignment,
   reload
 }) {
+  const { t } = useTranslation();
   const done = assignment.status === TaskAssignment.STATUS.DONE;
   const canBeSetAsComplete = !done && assignment.done === assignment.total;
   const handleSetAsComplete = async function() {
@@ -68,7 +70,9 @@ const DashboardProjectTaskAssignment = function({
       <Row className="align-items-center">
         <Col className="align-items-center d-flex flex-row">
           <div style={{ width: 50 }}>
-            <small>ID: {assignment.id}</small>
+            <small>
+              {t("id")} {assignment.id}
+            </small>
           </div>
           <ProgressBar
             style={{ height: 15 }}
@@ -84,7 +88,7 @@ const DashboardProjectTaskAssignment = function({
             assignment.total
           }`}</Badge>
         </Col>
-        <Col>{done && "完了"}</Col>
+        <Col>{done && t("complete")}</Col>
         <Col>
           {done && (
             <Button
@@ -92,12 +96,12 @@ const DashboardProjectTaskAssignment = function({
               variant="outline-secondary"
               onClick={handleSetAsNotComplete}
             >
-              未完了に戻す
+              {t("unmark-complete")}
             </Button>
           )}
           {canBeSetAsComplete && (
             <Button size="sm" variant="success" onClick={handleSetAsComplete}>
-              完了にする
+              {t("mark-complete")}
             </Button>
           )}
           {!done && !canBeSetAsComplete && (
@@ -106,7 +110,7 @@ const DashboardProjectTaskAssignment = function({
               variant="outline-secondary"
               onClick={handleReturnUnfinishedMediaItems}
             >
-              完了してない件数を戻す
+              {t("return-ongoing-items")}
             </Button>
           )}
         </Col>
@@ -114,7 +118,7 @@ const DashboardProjectTaskAssignment = function({
           <LinkContainer
             to={`/annotation/${project.id}/${task.id}/${assignment.id}`}
           >
-            <Button variant="info">アノテーションへ</Button>
+            <Button variant="info">{t("go-to-annotation")}</Button>
           </LinkContainer>
         </Col>
       </Row>

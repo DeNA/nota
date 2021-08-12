@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { fetchReportTasksReference } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import Loading from "../Loading";
@@ -11,6 +12,7 @@ const AdminReportStatusReport = function({
   dates,
   today
 }) {
+  const { t } = useTranslation();
   if (loading && !tasksReference) {
     return <Loading />;
   }
@@ -19,7 +21,7 @@ const AdminReportStatusReport = function({
     <div className="report-container">
       <div className="report-column report-header-column">
         <div className="report-header report-header-row d-flex justify-content-center align-items-center">
-          Project / Task
+          {t("project-task")}
         </div>
         {tasksReference.map(taskReference => (
           <div

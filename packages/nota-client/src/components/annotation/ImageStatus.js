@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Checkbox, Button } from "./semantic";
 
 const ImageStatus = ({
@@ -10,6 +11,7 @@ const ImageStatus = ({
   onDoneChange,
   onSetAsDone
 }) => {
+  const { t } = useTranslation();
   onSetAsDone(
     evt =>
       editable &&
@@ -22,7 +24,7 @@ const ImageStatus = ({
   const renderButton = () => {
     return (
       <Button
-        content="Complete IMAGE (↵)"
+        content={t("complete-image")}
         inverted
         fluid
         color="blue"
@@ -35,7 +37,7 @@ const ImageStatus = ({
     return (
       <Checkbox
         toggle
-        label="Complete IMAGE"
+        label={t("complete-image-2")}
         disabled={!editable}
         checked
         onChange={evt => onDoneChange(imageId, false)}

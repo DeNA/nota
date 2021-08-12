@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Card, Form, InputGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import Icon from "./Icon";
 import "./Login.css";
 
@@ -12,6 +13,7 @@ function Login({
   error,
   title
 }) {
+  const { t } = useTranslation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [selectedAuthenticator, setSelectedAuthenticator] = useState("");
@@ -39,7 +41,7 @@ function Login({
   return (
     <div className="content-login bg-secondary">
       <Card className="login bg-dark text-light">
-        <Card.Header>{title || "Sign in"}</Card.Header>
+        <Card.Header>{title || t("login-sign-in")}</Card.Header>
         <Card.Body style={{ backgroundColor: "rgba(255,255,255,0.7)" }}>
           <div className="sso-signin">
             {ssoAuthenticators.map(authenticator => {
@@ -53,7 +55,7 @@ function Login({
                   size="lg"
                   onClick={handleSSOLogin}
                 >
-                  {`Sign in with ${authenticator.label}`}
+                  {t("login-sso-button", { label: t(authenticator.label) })}
                 </Button>
               );
             })}
@@ -66,14 +68,12 @@ function Login({
                 className="local-signin-toggle"
               >
                 <Icon name={showLocal ? "caret-bottom" : "caret-right"} />
-                {" Other Accounts"}
+                {` ${t("login-other")}`}
               </div>
             )}
             {showLocal && (
               <>
-                {error && (
-                  <Alert variant="warning">Invalid Username or Password</Alert>
-                )}
+                {error && <Alert variant="warning">{t("login-error")}</Alert>}
                 <InputGroup size="sm">
                   <InputGroup.Prepend>
                     <InputGroup.Text>
@@ -90,7 +90,7 @@ function Login({
                   >
                     {authenticators.map(authenticator => (
                       <option key={authenticator.id} value={authenticator.id}>
-                        {authenticator.label}
+                        {t(authenticator.label)}
                       </option>
                     ))}
                   </Form.Control>
@@ -105,7 +105,7 @@ function Login({
                     type="text"
                     name="username"
                     id="username"
-                    placeholder="Username"
+                    placeholder={t("login-username")}
                     value={username}
                     onChange={handleChangeUsername}
                     disabled={loading}
@@ -121,7 +121,7 @@ function Login({
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="Password"
+                    placeholder={t("login-password")}
                     value={password}
                     onChange={handleChangePassword}
                     disabled={loading}
@@ -135,7 +135,7 @@ function Login({
                   disabled={loading}
                   size="sm"
                 >
-                  Sign in
+                  {t("login-local-button")}
                 </Button>
               </>
             )}

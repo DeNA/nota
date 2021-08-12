@@ -10,6 +10,7 @@ import {
   ToggleButton,
   ToggleButtonGroup
 } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { persistTaskAssignment } from "../lib/api";
 import history from "../lib/history";
 import { Task, TaskAssignment } from "../lib/models";
@@ -24,6 +25,7 @@ const ORDER = {
 };
 
 const DashboardProjectTask = function({ project, task, reload }) {
+  const { t } = useTranslation();
   const [updating, setUpdating] = React.useState(false);
   const [showComplete, setShowComplete] = React.useState(false);
   const [newAssignmentSize, setNewAssignmentSize] = React.useState("100");
@@ -56,7 +58,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
     if (newAssignment.id) {
       history.push(`/annotation/${project.id}/${task.id}/${newAssignment.id}`);
     } else {
-      window.alert("No available assignments");
+      window.alert(t("no-available-assignments"));
       await reload();
       setUpdating(false);
     }
@@ -80,13 +82,15 @@ const DashboardProjectTask = function({ project, task, reload }) {
           <Nav className="justify-content-between">
             <Nav.Item>
               <h3>
-                {task.status === Task.STATUS.HIDDEN && `[HIDDEN] `}{" "}
+                {task.status === Task.STATUS.HIDDEN && `${t("task-hidden")}`}{" "}
                 {project.name} - {task.name}
               </h3>
             </Nav.Item>
             <Nav.Item>
               <div className="mr-auto d-flex flex-column">
-                <div>残り: {task.assignable}</div>
+                <div>
+                  {t("remaining-items")} {task.assignable}
+                </div>
               </div>
             </Nav.Item>
           </Nav>
@@ -99,7 +103,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
             >
               <div className="d-flex justify-content-center flex-column">
                 <div className="text-center">
-                  <i>アサインされてるアノテーションありません</i>
+                  <i>{t("no-assignments")}</i>
                 </div>
                 <br />
                 <div className="d-flex justify-content-center flex-row pt-1">
@@ -111,7 +115,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
                       onChange={handleAssignmentSizeChange}
                     />
                     <InputGroup.Append>
-                      <InputGroup.Text>件</InputGroup.Text>
+                      <InputGroup.Text>{t("items")}</InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
                   <ToggleButtonGroup
@@ -123,13 +127,13 @@ const DashboardProjectTask = function({ project, task, reload }) {
                     onChange={handleRandomChange}
                   >
                     <ToggleButton variant="outline-dark" value={ORDER.RANDOM}>
-                      ランダム
+                      {t("random")}
                     </ToggleButton>
                     <ToggleButton
                       variant="outline-dark"
                       value={ORDER.SEQUENTIAL}
                     >
-                      連番
+                      {t("in-order")}
                     </ToggleButton>
                   </ToggleButtonGroup>
                   <Button
@@ -138,7 +142,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
                     variant="success"
                     onClick={handleGetNewAssignment}
                   >
-                    {project.name} - {task.name}の次のアノテーションを開始する
+                    {t("get-annotation-assignment", { project, task })}
                   </Button>
                 </div>
               </div>
@@ -157,7 +161,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
         <Card.Header className="text-secondary">
           <Nav className="justify-content-between">
             <Nav.Item>
-              完了{" "}
+              {t("complete")}{" "}
               <Badge pill variant="secondary">
                 {completedAssignments.length}
               </Badge>
@@ -166,7 +170,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
               <Form.Check
                 type="checkbox"
                 id={`show-complete-${task.id}`}
-                label="完了されてるアノテーションを表示"
+                label={t("show-complete")}
                 checked={showComplete}
                 onChange={toggleShowComplete}
               />

@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, Card, Col, ListGroup, Nav, Row, Modal } from "react-bootstrap";
-import { parseDate } from "../../lib/utils";
+import { Button, Card, Col, ListGroup, Modal, Nav, Row } from "react-bootstrap";
+import { Trans, useTranslation } from "react-i18next";
 import { refreshTaskItems } from "../../lib/api";
 import { JobTask } from "../../lib/models";
+import { parseDate } from "../../lib/utils";
 
 export function AdminProjectTaskFetch({
   projectId,
@@ -10,6 +11,7 @@ export function AdminProjectTaskFetch({
   fetchJobs = [],
   reload
 }) {
+  const { t } = useTranslation();
   const [showRefreshModal, setShowRefreshModal] = React.useState(false);
 
   const handleRefreshMediaItems = async function() {
@@ -33,11 +35,11 @@ export function AdminProjectTaskFetch({
         <Card.Header>
           <Nav className="justify-content-between">
             <Nav.Item>
-              <span>Last Refreshes</span>
+              <span>{t("last-refreshes")}</span>
             </Nav.Item>
             <Nav.Item>
               <Button variant="outline-success" onClick={handleClickRefresh}>
-                Refresh Now
+                {t("refresh-now")}
               </Button>
             </Nav.Item>
           </Nav>
@@ -47,21 +49,24 @@ export function AdminProjectTaskFetch({
             <ListGroup.Item key={job.id}>
               <Row className="align-items-center">
                 <Col>{job.id}</Col>
-                <Col>{JobTask.TYPE_TEXT[job.type]}</Col>
-                <Col>{JobTask.STATUS_TEXT[job.status]}</Col>
+                <Col>{t(JobTask.TYPE_TEXT[job.type])}</Col>
+                <Col>{t(JobTask.STATUS_TEXT[job.status])}</Col>
                 <Col>{JSON.stringify(job.config.result)}</Col>
                 <Col>
                   <div>
-                    <small>Created: {parseDate(job.createdAt)}</small>
-                  </div>
-                  <div>
                     <small>
-                      Started: {job.startedAt ? parseDate(job.startedAt) : "--"}
+                      {t("created")}: {parseDate(job.createdAt)}
                     </small>
                   </div>
                   <div>
                     <small>
-                      Finished:{" "}
+                      {t("started")}:{" "}
+                      {job.startedAt ? parseDate(job.startedAt) : "--"}
+                    </small>
+                  </div>
+                  <div>
+                    <small>
+                      {t("finished")}:{" "}
                       {job.finishedAt ? parseDate(job.finishedAt) : "--"}
                     </small>
                   </div>
@@ -73,19 +78,21 @@ export function AdminProjectTaskFetch({
       </Card>
       <Modal show={showRefreshModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Refresh Task Items</Modal.Title>
+          <Modal.Title>{t("refresh-task-items")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This will add any new item in <code>{task.mediaSourcePath}</code> to
-          the task. It will not delete any item even if it no longer exists
-          remotely.
+          <Trans
+            i18nKey="refresh-task-items-1"
+            values={{ task }}
+            components={{ code: <code /> }}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
-            Close
+            {t("close-button")}
           </Button>
           <Button variant="success" onClick={handleRefreshMediaItems}>
-            Refresh Task Items
+            {t("refresh-task-items")}
           </Button>
         </Modal.Footer>
       </Modal>
