@@ -82,7 +82,7 @@ const getTaskItemBinary = async function(req, res, next) {
       mediaExtension ? "." + mediaExtension : ""
     }`;
     const imageSetExtension = `.${template.mediaExtensions[0] || ""}`;
-    const itemName = metadata.fileName.replace(imageSetExtension, "");
+    const itemName = taskItem.mediaItem.name.replace(imageSetExtension, "");
     const fileName = mediaItemSuffix
       ? itemName + suffix
       : taskItem.mediaItem.name;
@@ -117,6 +117,59 @@ const getTaskItemBinary = async function(req, res, next) {
     res.setHeader("x-timestamp", Date.now());
     res.setHeader("x-sent", "true");
     imageStream.pipe(res);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getTaskItemBinarySidecar = async function(req, res, next) {
+  try {
+    const task = await Task.scope("forTaskItemBinary").findByPk(
+      res.locals.task.id
+    );
+    const taskItem = await TaskItem.scope("withMediaItemData").findByPk(
+      res.locals.taskItem.id
+    );
+
+    const ds = datasource(taskItem.mediaItem.mediaSource);
+    const template = task.taskTemplate.template;
+    const { predictionFileSuffix } = template.mediaOptions || {};
+
+    if (!predictionFileSuffix) {
+      const error = new Error("Bad request");
+      error.status = 400;
+      next(error);
+      return;
+    }
+    const fileName = `${taskItem.mediaItem.name}.${predictionFileSuffix}`;
+    const metadata = {
+      ...taskItem.mediaItem.metadata,
+      fileName,
+      importPathId: taskItem.mediaItem.mediaSource.id,
+      resource: taskItem.mediaItem.path
+    };
+
+    // Check for existence
+    const stat = await ds.statItem({ metadata });
+
+    if (!stat) {
+      const error = new Error("Not Found");
+      error.status = 404;
+      next(error);
+      return;
+    }
+
+    // Return file
+    const fileStream = await ds.readItem({ metadata });
+
+    fileStream.on("error", err => {
+      next(err);
+    });
+
+    res.setHeader("content-type", "application/json");
+    res.setHeader("x-timestamp", Date.now());
+    res.setHeader("x-sent", "true");
+    fileStream.pipe(res);
   } catch (err) {
     next(err);
   }
@@ -189,6 +242,7 @@ const resetTaskItem = async function(req, res, next) {
 
 module.exports = {
   getTaskItemBinary,
+  getTaskItemBinarySidecar,
   updateTaskItem,
   taskItemTemplate,
   resetTaskItem

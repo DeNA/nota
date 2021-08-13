@@ -2,6 +2,10 @@
   "parser": "jsonv2",
   "mediaType": "VIDEO",
   "mediaExtensions": ["mp4"],
+  "mediaOptions": {
+    "predictionFileSuffix": "prediction",
+    "predictions": ["prediction_1", "prediction_2"]
+  },
   "options": {
     "showReview": true
   },

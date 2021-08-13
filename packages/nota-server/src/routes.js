@@ -376,6 +376,10 @@ router.post(
 
 // Task Items
 router.get(
+  "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/taskItems/:taskItemId(\\d+)/binary-sidecar",
+  taskItemsApi.getTaskItemBinarySidecar
+);
+router.get(
   "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/taskItems/:taskItemId(\\d+)/binary/:mediaItemSuffix",
   taskItemsApi.getTaskItemBinary
 );
