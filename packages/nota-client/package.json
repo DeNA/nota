@@ -25,6 +25,7 @@
     "react-router-dom": "5.0.1",
     "react-scripts": "^4.0.1",
     "react-tiny-virtual-list": "2.2.0",
+    "react-vis": "^1.11.7",
     "redux": "4.0.1",
     "redux-saga": "1.1.1",
     "semantic-ui-react": "0.87.2",
