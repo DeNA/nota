@@ -155,6 +155,12 @@ export async function fetchTaskAssignment({
   );
 }
 
+export async function fetchTaskItemVis({ projectId, taskId, taskItemId }) {
+  return await fetch(
+    `/api/projects/${projectId}/tasks/${taskId}/taskItems/${taskItemId}/vis`
+  );
+}
+
 export async function persistTask({
   name,
   description,

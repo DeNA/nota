@@ -2,7 +2,7 @@ import React, { useContext, useRef } from "react";
 import "./AnnotatedVideo.css";
 import AnnotatedVideoSeekbar from "./AnnotatedVideoSeekbar";
 import { videoControlsContext } from "./videoControls";
-import VideoPredictionTimeline from "./VideoPredictionTimeline";
+import VideoTimelineVisualizationsContainer from "./containers/VideoTimelineVisualizationsContainer";
 
 const AnnotatedVideo = function({
   videoUri,
@@ -74,7 +74,7 @@ const AnnotatedVideo = function({
           onPreviousFrame10={onPreviousFrame10}
           onTogglePlay={onTogglePlay}
         />
-        <VideoPredictionTimeline />
+        <VideoTimelineVisualizationsContainer />
       </div>
     </>
   );

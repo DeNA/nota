@@ -376,8 +376,8 @@ router.post(
 
 // Task Items
 router.get(
-  "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/taskItems/:taskItemId(\\d+)/binary-sidecar",
-  taskItemsApi.getTaskItemBinarySidecar
+  "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/taskItems/:taskItemId(\\d+)/vis",
+  taskItemsApi.getTaskItemVis
 );
 router.get(
   "/projects/:projectId(\\d+)/tasks/:taskId(\\d+)/taskItems/:taskItemId(\\d+)/binary/:mediaItemSuffix",

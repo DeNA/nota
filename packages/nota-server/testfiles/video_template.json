@@ -3,8 +3,22 @@
   "mediaType": "VIDEO",
   "mediaExtensions": ["mp4"],
   "mediaOptions": {
-    "predictionFileSuffix": "prediction",
-    "predictions": ["prediction_1", "prediction_2"]
+    "timelineVis": [
+      {
+        "id": "prediction_1",
+        "label": "予測A",
+        "min": 0,
+        "max": 1,
+        "color": "red"
+      },
+      {
+        "id": "prediction_2",
+        "label": "予測B",
+        "min": 0,
+        "max": 1,
+        "color": "blue"
+      }
+    ]
   },
   "options": {
     "showReview": true

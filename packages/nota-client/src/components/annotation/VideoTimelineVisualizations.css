@@ -1,0 +1,15 @@
+.vis-container {
+  background-color: rgba(50, 50, 50, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 60px;
+  max-height: 60px;
+  width: 100%;
+}
+
+.vis-container .rv-crosshair__inner {
+  bottom: 0 !important;
+  top: auto !important;
+}

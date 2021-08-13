@@ -122,7 +122,7 @@ const getTaskItemBinary = async function(req, res, next) {
   }
 };
 
-const getTaskItemBinarySidecar = async function(req, res, next) {
+const getTaskItemVis = async function(req, res, next) {
   try {
     const task = await Task.scope("forTaskItemBinary").findByPk(
       res.locals.task.id
@@ -133,15 +133,16 @@ const getTaskItemBinarySidecar = async function(req, res, next) {
 
     const ds = datasource(taskItem.mediaItem.mediaSource);
     const template = task.taskTemplate.template;
-    const { predictionFileSuffix } = template.mediaOptions || {};
+    const { timelineVis } = template.mediaOptions || {};
 
-    if (!predictionFileSuffix) {
+    if (!timelineVis || !timelineVis.length) {
       const error = new Error("Bad request");
       error.status = 400;
       next(error);
       return;
     }
-    const fileName = `${taskItem.mediaItem.name}.${predictionFileSuffix}`;
+    const fileName = `${taskItem.mediaItem.name}.vis.json`;
+
     const metadata = {
       ...taskItem.mediaItem.metadata,
       fileName,
@@ -153,10 +154,7 @@ const getTaskItemBinarySidecar = async function(req, res, next) {
     const stat = await ds.statItem({ metadata });
 
     if (!stat) {
-      const error = new Error("Not Found");
-      error.status = 404;
-      next(error);
-      return;
+      return res.json({});
     }
 
     // Return file
@@ -242,7 +240,7 @@ const resetTaskItem = async function(req, res, next) {
 
 module.exports = {
   getTaskItemBinary,
-  getTaskItemBinarySidecar,
+  getTaskItemVis,
   updateTaskItem,
   taskItemTemplate,
   resetTaskItem

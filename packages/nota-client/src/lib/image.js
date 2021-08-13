@@ -1,27 +1,8 @@
 import { fetch } from "./api";
-
-const cache = {};
-const cacheKeys = [];
-const MAX_CACHE_SIZE = 100;
+import * as cache from "./cache";
 
 const getKey = (imageUri, boundaries) => {
   return `${imageUri}--${JSON.stringify(boundaries)}`;
-};
-
-const addToCache = (key, value) => {
-  if (cache[key] === undefined) {
-    cacheKeys.push(key);
-  }
-  cache[key] = value;
-
-  while (cacheKeys.length > MAX_CACHE_SIZE) {
-    const oldKey = cacheKeys.shift();
-    delete cache[oldKey];
-  }
-};
-
-const deleteFromCache = key => {
-  delete cache[key];
 };
 
 const calculateCropBoundaries = function(
@@ -103,15 +84,15 @@ const cropImage = (image, boundaries) => {
 export const cropImageToDataString = async (imageUri, boundaries) => {
   const key = getKey(imageUri, boundaries || {});
   const promise =
-    cache[key] ||
+    cache.get(key) ||
     new Promise(async (resolve, reject) => {
       if (imageUri === null) {
         reject(new Error("imageUri is required"));
       }
 
-      const imageDataPromise = cache[imageUri] || fetch(imageUri);
+      const imageDataPromise = cache.get(imageUri) || fetch(imageUri);
       try {
-        addToCache(imageUri, imageDataPromise);
+        cache.add(imageUri, imageDataPromise);
         const imageData = await imageDataPromise;
 
         const image = new Image();
@@ -132,18 +113,18 @@ export const cropImageToDataString = async (imageUri, boundaries) => {
 
         image.src = imageData;
       } catch (err) {
-        deleteFromCache(imageUri);
+        cache.remove(imageUri);
         reject(err);
       }
     });
 
-  addToCache(key, promise);
+  cache.add(key, promise);
   try {
     const imageData = await promise;
 
     return imageData;
   } catch (err) {
-    deleteFromCache(key);
+    cache.remove(key);
     throw err;
   }
 };
