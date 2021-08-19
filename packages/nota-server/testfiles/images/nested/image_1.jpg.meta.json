@@ -1,6 +1,6 @@
 {
   "stringFilter": "bar",
   "nested": { "stringFilter": "buzz" },
-  "fizz": "buzz",
-  "integerFilter": 333
+  "foo": "bar",
+  "integerFilter": 111
 }

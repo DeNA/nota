@@ -272,23 +272,21 @@ module.exports = function(sequelize) {
 
       let added = 0;
 
-      for (const file of refresh ? newMediaFiles : mediaFiles) {
+      for (const mediaFile of refresh ? newMediaFiles : mediaFiles) {
+        // Check for meta json file
         let meta;
-        const metaFileName = file.metadata.fileName + ".meta.json";
-
-        const metaFileExists = await ds.statItem({
-          metadata: {
-            importPathId: this.id,
-            resource: file.metadata.resource,
-            fileName: metaFileName
-          }
-        });
+        const metaFileName = mediaFile.metadata.fileName + ".meta.json";
+        const metaFileExists = files.find(
+          file =>
+            file.name === metaFileName &&
+            file.metadata.resource === mediaFile.metadata.resource
+        );
 
         if (metaFileExists) {
           const metaFileReadStream = await ds.readItem({
             metadata: {
               importPathId: this.id,
-              resource: file.metadata.resource,
+              resource: mediaFile.metadata.resource,
               fileName: metaFileName
             }
           });
@@ -302,11 +300,11 @@ module.exports = function(sequelize) {
         }
 
         const mediaItem = await this.createMediaItem({
-          name: file.name,
-          path: file.metadata.resource,
+          name: mediaFile.name,
+          path: mediaFile.metadata.resource,
           metadata: {
-            ...file.metadata,
-            name: file.name,
+            ...mediaFile.metadata,
+            name: mediaFile.name,
             externalMetadata: meta
           },
           status: sequelize.models.MediaItem.STATUS.OK,
