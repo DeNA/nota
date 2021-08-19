@@ -14,11 +14,11 @@
     "moment": "^2.24.0",
     "mousetrap": "1.6.5",
     "open-iconic": "^1.1.1",
-    "react": "16.13.1",
+    "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-cool-dimensions": "^2.0.7",
     "react-datepicker": "^2.8.0",
-    "react-dom": "16.13.1",
+    "react-dom": "^17.0.2",
     "react-i18next": "^11.11.1",
     "react-redux": "5.0.7",
     "react-router": "5.0.1",
@@ -33,8 +33,10 @@
     "svg-image-annotation": "file:../svg-image-annotation"
   },
   "devDependencies": {
-    "@testing-library/react": "^9.3.2",
-    "@types/jest": "23.3.7",
+    "@juggle/resize-observer": "^3.3.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
     "bootstrap": "^4.6",
     "redux-devtools": "3.5.0",
     "semantic-ui-css": "2.4.1"

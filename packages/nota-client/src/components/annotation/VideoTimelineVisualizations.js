@@ -99,39 +99,41 @@ function VideoTimelineVisualizations({
     <div ref={observe} className="vis-container">
       <Loading loading={loading} />
       {showGraph ? (
-        <XYPlot
-          width={width}
-          height={height}
-          margin={{ left: 3, right: 3, top: 5, bottom: 5 }}
-          xDomain={[0, getDuration()]}
-          yDomain={[min, max]}
-          onClick={handleOnClick}
-        >
-          {lines.map((line, i) => (
-            <LineSeries
-              key={line.id}
-              className={line.id}
-              color={line.color}
-              data={line.data}
-              onNearestX={i === 0 ? handleOnNearestX : null}
+        <div className="timeline-chart" data-testid="timeline-chart">
+          <XYPlot
+            width={width}
+            height={height}
+            margin={{ left: 3, right: 3, top: 5, bottom: 5 }}
+            xDomain={[0, getDuration()]}
+            yDomain={[min, max]}
+            onClick={handleOnClick}
+          >
+            {lines.map((line, i) => (
+              <LineSeries
+                key={line.id}
+                className={line.id}
+                color={line.color}
+                data={line.data}
+                onNearestX={i === 0 ? handleOnNearestX : null}
+              />
+            ))}
+            <Crosshair
+              values={tooltip}
+              itemsFormat={values => {
+                return values.map(d => ({
+                  title: d.label,
+                  value: d.y
+                }));
+              }}
+              titleFormat={values => {
+                return {
+                  title: "ms",
+                  value: values[0].x
+                };
+              }}
             />
-          ))}
-          <Crosshair
-            values={tooltip}
-            itemsFormat={values => {
-              return values.map(d => ({
-                title: d.label,
-                value: d.y
-              }));
-            }}
-            titleFormat={values => {
-              return {
-                title: "ms",
-                value: values[0].x
-              };
-            }}
-          />
-        </XYPlot>
+          </XYPlot>
+        </div>
       ) : (
         <div>{t("vis-not-found")}</div>
       )}
