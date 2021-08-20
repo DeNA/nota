@@ -95,7 +95,7 @@ module.exports = function(sequelize) {
       // Prepare auto-create annotations
       const annotationsDefinition = taskTemplate.template.annotations || [];
       const autoCreateAnnotations = annotationsDefinition.filter(
-        annotationDefinition =>
+        (annotationDefinition) =>
           annotationDefinition.options &&
           annotationDefinition.options.autoCreate
       );
@@ -104,7 +104,7 @@ module.exports = function(sequelize) {
       // Create items
       for (const mediaItem of importItems) {
         // auto-create annotations
-        const annotations = autoCreateAnnotations.map(annotation => ({
+        const annotations = autoCreateAnnotations.map((annotation) => ({
           labelsName: annotation.name,
           labels: annotationDefaultLabels(annotation.labels)
         }));
@@ -112,7 +112,7 @@ module.exports = function(sequelize) {
         // Check for sidecar json file annotations
         const jsonFileName = mediaItem.name + ".json";
         const jsonFileExists = files.find(
-          file =>
+          (file) =>
             file.name === jsonFileName &&
             file.metadata.resource === mediaItem.path
         );
@@ -141,7 +141,7 @@ module.exports = function(sequelize) {
           {
             mediaItemId: mediaItem.id,
             status: sequelize.models.TaskItem.STATUS.NOT_DONE,
-            annotations: annotations.map(annotation => ({
+            annotations: annotations.map((annotation) => ({
               ...annotation,
               createdBy: this.createdBy
             })),
@@ -367,7 +367,7 @@ ${onlyOngoingSubquery}`,
     const mediaItems = await this.getTaskItems(query);
 
     return mediaItems
-      .map(mediaItem => {
+      .map((mediaItem) => {
         mediaItem.notaUrl = [
           config.nota.host || "",
           "annotation",
@@ -380,7 +380,7 @@ ${onlyOngoingSubquery}`,
         const [parsedFileName, parsedFile] = p.serialize(mediaItem);
         return parsedFile ? [parsedFileName, parsedFile] : null;
       })
-      .filter(image => image !== null);
+      .filter((image) => image !== null);
   };
 
   Task.prototype.getLastExportJobs = async function() {

@@ -45,6 +45,11 @@ const DEFAULT_FILES = {
     metadata: { importPathId: 1, resource: "a", fileName: "1.jpg" },
     value: "binary"
   },
+  "a/1.jpg.json": {
+    name: "1.jpg.json",
+    metadata: { importPathId: 1, resource: "a", fileName: "1.jpg.json" },
+    value: `{"annotations":[{"type":"typeA","labels":{"foo":"bar"},"boundaries":{"type":"RECTANGLE","top":10,"bottom":10,"left":10,"right":10}}]}`
+  },
   "a/1.jpg.meta.json": {
     name: "1.jpg.meta.json",
     metadata: {
