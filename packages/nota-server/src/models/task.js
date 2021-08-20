@@ -67,14 +67,13 @@ module.exports = function(sequelize) {
 
       // When refreshing a task, filter only new items
       if (refresh) {
-        for (const mediaItem of mediaItems) {
-          const taskItems = await this.getTaskItems({
-            where: {
-              mediaItemId: mediaItem.id
-            }
-          });
+        const allTaskItems = await this.getTaskItems({
+          attributes: ["id", "mediaItemId"],
+          raw: true
+        });
 
-          if (!taskItems.length) {
+        for (const mediaItem of mediaItems) {
+          if (!allTaskItems.find(ti => ti.mediaItemId === mediaItem.id)) {
             newMediaItems.push(mediaItem);
           }
         }
