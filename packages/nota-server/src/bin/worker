@@ -7,7 +7,7 @@ const CONCURRENCY = 1;
 
 notaJobQueues[JobTask.TASK_NAME.MEDIA_SOURCE_FETCH].process(
   CONCURRENCY,
-  `${__dirname}/../services/mediaSourceFetch.js`
+  `${__dirname}/../services/mediaSourceFetchService.js`
 );
 notaJobQueues[JobTask.TASK_NAME.TASK_FETCH].process(
   CONCURRENCY,

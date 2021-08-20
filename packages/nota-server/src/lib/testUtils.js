@@ -713,7 +713,7 @@ module.exports = {
     createProject,
     createTaskTemplate,
     createTask,
-
+    createMediaSource,
     generateTestData: async () => {
       try {
         const data = await generateTestData();
