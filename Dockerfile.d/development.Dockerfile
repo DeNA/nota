@@ -1,4 +1,4 @@
-FROM node:10.16.0-stretch@sha256:5f2e8ae1cda95e68b99475218786cf0f62ef8f368b4c6821518ac805438cc0fc
+FROM node:14-stretch@sha256:b19c3c12733345aed5c0d7a2d38c6beed69609293f97ec55a18e4934fe582777
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
