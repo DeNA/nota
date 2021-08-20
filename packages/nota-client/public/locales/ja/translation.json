@@ -181,5 +181,6 @@
   "app-admin-user": "アプリ管理者",
   "super-admin-user": "全プロジェクト管理者",
   "normal-user": "ユーザ",
-  "inactive-user": "無効・削除済み"
+  "inactive-user": "無効・削除済み",
+  "vis-not-found": "表示するデータがありません"
 }

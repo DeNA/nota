@@ -1,8 +1,8 @@
 import { fireEvent } from "@testing-library/react";
-import { mousetrap } from "../../lib/useHotkeys";
 import React, { useContext, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
+import { mousetrap } from "../../lib/useHotkeys";
 import AnnotationLabelVideoTimestamp from "./AnnotationLabelVideoTimestamp";
 import VideoControlsProvider, { videoControlsContext } from "./videoControls";
 
@@ -104,7 +104,7 @@ describe("AnnotationLabelVideoTimestamp", () => {
     const { video, onChange } = setup({ value: 321, editable: false });
 
     expect(container.querySelector(".time-value-read-only").innerHTML).toBe(
-      "321 ms"
+      "321 timestamp-ms"
     );
   });
   it("should set time when button is clicked", () => {
@@ -198,7 +198,7 @@ describe("AnnotationLabelVideoTimestamp", () => {
     video.current.currentTime = 3;
 
     expect(container.querySelector(".time-value-read-only").innerHTML).toBe(
-      "1500 ms"
+      "1500 timestamp-ms"
     );
     act(() => {
       mousetrap.trigger("m");
@@ -206,7 +206,7 @@ describe("AnnotationLabelVideoTimestamp", () => {
 
     expect(onChange).toHaveBeenCalledTimes(0);
     expect(container.querySelector(".time-value-read-only").innerHTML).toBe(
-      "1500 ms"
+      "1500 timestamp-ms"
     );
   });
   it("should set time when direct input", () => {

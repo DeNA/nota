@@ -5,6 +5,7 @@ import {
   SELECT_IMAGE
 } from "../actions";
 import { MEDIA_TYPE } from "../constants";
+import { getVis } from "../lib/binaryVis";
 import { cropImageToDataString } from "../lib/image";
 import { selector } from "../lib/selector";
 import { saveChanges } from "./saveChanges";
@@ -29,15 +30,38 @@ function* saga(action) {
     );
     yield put(selectImageAnnotation(annotationId, action.imageId));
 
-    // Eager load images
+    // Eager load
     const template = db.select("folderTemplate");
-    if (template.mediaType !== MEDIA_TYPE.IMAGE) {
-      return;
-    }
+    const { timelineVis = [] } = db.select("folderTemplateMediaOptions");
     const currentIndex = state.imageList.findIndex(
       image => image.id === action.imageId
     );
-    if (currentIndex > -1) {
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    // Video Timeline Visualizations
+    if (template.mediaType === MEDIA_TYPE.VIDEO && timelineVis.length > 0) {
+      const projectId = state.taskAssignment?.data?.project?.id;
+      const taskId = state.taskAssignment?.data?.task?.id;
+
+      if (!projectId || !taskId) {
+        return;
+      }
+
+      // Previous video
+      state.imageList[currentIndex - 1] &&
+        getVis(projectId, taskId, state.imageList[currentIndex - 1].id);
+      // Current video
+      state.imageList[currentIndex] &&
+        getVis(projectId, taskId, state.imageList[currentIndex].id);
+      // Next video
+      state.imageList[currentIndex + 1] &&
+        getVis(projectId, taskId, state.imageList[currentIndex + 1].id);
+
+      // Images
+    } else if (template.mediaType === MEDIA_TYPE.IMAGE) {
       for (let i = -1; i < 3; i++) {
         state.imageList[currentIndex + i] &&
           cropImageToDataString(
