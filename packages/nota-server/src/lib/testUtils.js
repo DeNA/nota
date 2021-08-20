@@ -142,7 +142,7 @@ const createTask = async ({
   mediaSourceId = 1,
   mediaSourceConfig = {
     options: { path: "files1", excludeAlreadyUsed: true, limit: 5000 },
-    conditions: { filter_string: "foo", filter_integer: [0, 10] }
+    conditions: { filter_string: ["foo"], filter_integer: [0, 10] }
   },
   status = 100,
   createdBy = 1,
@@ -371,7 +371,33 @@ const generateTestData = async function() {
   const template1 = await createTaskTemplate({
     name: "template_1",
     projectId: project1.id,
-    template: { parser: "json", foo: "bar" }
+    template: {
+      parser: "json",
+      foo: "bar",
+      annotations: [
+        {
+          name: "media_test",
+          label: "MediaLabelsTest",
+          type: "MEDIA_LABELS",
+          options: {
+            autoCreate: true,
+            undeletable: true
+          },
+          labels: [
+            {
+              name: "frame",
+              label: "Frame",
+              type: "TEXT_INPUT",
+              options: {
+                required: true,
+                regExp: "^[0-9]*$",
+                description: "Insert the frame number"
+              }
+            }
+          ]
+        }
+      ]
+    }
   });
   const template2 = await createTaskTemplate({
     name: "template_2",
@@ -713,7 +739,7 @@ module.exports = {
     createProject,
     createTaskTemplate,
     createTask,
-
+    createMediaSource,
     generateTestData: async () => {
       try {
         const data = await generateTestData();

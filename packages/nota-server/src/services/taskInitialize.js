@@ -1,7 +1,6 @@
-const processorFactory = require("../lib/notaJobQueueProcessorFactory");
-const { Task, JobTask } = require("../models");
+const { Task } = require("../models");
 
-const processor = processorFactory(JobTask.TASK_NAME.TASK_FETCH, async function(
+const taskInitialize = async function(
   jobTask,
   done
 ) {
@@ -21,6 +20,6 @@ const processor = processorFactory(JobTask.TASK_NAME.TASK_FETCH, async function(
   }
 
   done({ added });
-});
+}
 
-module.exports = processor;
+module.exports = taskInitialize;

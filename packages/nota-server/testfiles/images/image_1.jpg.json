@@ -1,0 +1,17 @@
+{
+  "annotations": [
+    {
+      "type": "person",
+      "labels": {
+        "gender": "male"
+      },
+      "boundaries": {
+        "left": 10,
+        "top": 10,
+        "right": 50,
+        "bottom": 50,
+        "type": "RECTANGLE"
+      }
+    }
+  ]
+}

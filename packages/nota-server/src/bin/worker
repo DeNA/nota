@@ -7,11 +7,11 @@ const CONCURRENCY = 1;
 
 notaJobQueues[JobTask.TASK_NAME.MEDIA_SOURCE_FETCH].process(
   CONCURRENCY,
-  `${__dirname}/../services/mediaSourceFetch.js`
+  `${__dirname}/../services/mediaSourceFetchService.js`
 );
 notaJobQueues[JobTask.TASK_NAME.TASK_FETCH].process(
   CONCURRENCY,
-  `${__dirname}/../services/taskInitialize.js`
+  `${__dirname}/../services/taskInitializeService.js`
 );
 notaJobQueues[JobTask.TASK_NAME.TASK_EXPORT].process(
   CONCURRENCY,
