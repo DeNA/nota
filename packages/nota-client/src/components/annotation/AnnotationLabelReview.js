@@ -1,8 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import AnnotationLabelSingleSelectionReview from "./AnnotationLabelSingleSelectionReview";
 import AnnotationLabelVideoTimestampReview from "./AnnotationLabelVideoTimestampReview";
 
 const AnnotationLabelReview = props => {
+  const { t } = useTranslation();
   const { labels, values, annotationId } = props;
 
   /**
@@ -25,7 +27,9 @@ const AnnotationLabelReview = props => {
         const value = values[label.name];
         return (
           <div key={label.name}>
-            <span>{value !== undefined ? (value ? "Yes" : "No") : "--"}</span>
+            <span>
+              {value !== undefined ? (value ? t("yes") : t("no")) : "--"}
+            </span>
           </div>
         );
       case "TEXT_INPUT":

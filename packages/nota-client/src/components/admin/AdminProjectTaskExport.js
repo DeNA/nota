@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Button, Card, Col, ListGroup, Nav, Row, Modal } from "react-bootstrap";
-import { parseDate } from "../../lib/utils";
+import { Button, Card, Col, ListGroup, Modal, Nav, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { exportTaskResults } from "../../lib/api";
 import { JobTask, Task } from "../../lib/models";
+import { parseDate } from "../../lib/utils";
 import Icon from "../Icon";
 
 export function AdminProjectTaskExport({
@@ -11,6 +12,7 @@ export function AdminProjectTaskExport({
   exportJobs = [],
   reload
 }) {
+  const { t } = useTranslation();
   const [showExportModal, setShowExportModal] = useState(false);
   const handleExportAll = () => handleExport(Task.EXPORT_TARGET.ALL);
   const handleExportNew = () =>
@@ -37,11 +39,11 @@ export function AdminProjectTaskExport({
         <Card.Header>
           <Nav className="justify-content-between">
             <Nav.Item>
-              <span>Last Exports</span>
+              <span>{t("last-exports")}</span>
             </Nav.Item>
             <Nav.Item>
               <Button variant="outline-info" onClick={handleClickExport}>
-                Export Now
+                {t("export-now")}
               </Button>
             </Nav.Item>
           </Nav>
@@ -51,8 +53,8 @@ export function AdminProjectTaskExport({
             <ListGroup.Item key={job.id}>
               <Row className="align-items-center">
                 <Col sm="1">{job.id}</Col>
-                <Col sm="1">{JobTask.TYPE_TEXT[job.type]}</Col>
-                <Col sm="2">{JobTask.STATUS_TEXT[job.status]}</Col>
+                <Col sm="1">{t(JobTask.TYPE_TEXT[job.type])}</Col>
+                <Col sm="2">{t(JobTask.STATUS_TEXT[job.status])}</Col>
                 <Col sm="4">
                   {job.config.result && job.config.result.file ? (
                     <a
@@ -77,16 +79,19 @@ export function AdminProjectTaskExport({
                 </Col>
                 <Col sm="3">
                   <div>
-                    <small>Created: {parseDate(job.createdAt)}</small>
-                  </div>
-                  <div>
                     <small>
-                      Started: {job.startedAt ? parseDate(job.startedAt) : "--"}
+                      {t("created")}: {parseDate(job.createdAt)}
                     </small>
                   </div>
                   <div>
                     <small>
-                      Finished:{" "}
+                      {t("started")}:{" "}
+                      {job.startedAt ? parseDate(job.startedAt) : "--"}
+                    </small>
+                  </div>
+                  <div>
+                    <small>
+                      {t("finished")}:{" "}
                       {job.finishedAt ? parseDate(job.finishedAt) : "--"}
                     </small>
                   </div>
@@ -98,24 +103,22 @@ export function AdminProjectTaskExport({
       </Card>
       <Modal show={showExportModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Export Task Results</Modal.Title>
+          <Modal.Title>{t("export-task-results")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          This will export completed Task Items to the defined export path
-        </Modal.Body>
+        <Modal.Body>{t("export-task-results-1")}</Modal.Body>
         <Modal.Footer>
           <Button
             className="mr-5"
             variant="secondary"
             onClick={handleCloseModal}
           >
-            Close
+            {t("close-button")}
           </Button>
           <Button variant="outline-success" onClick={handleExportNew}>
-            Export NEW, UPDATED Items
+            {t("export-task-results-2")}
           </Button>
           <Button variant="outline-success" onClick={handleExportAll}>
-            Export ALL Items
+            {t("export-task-results-3")}
           </Button>
         </Modal.Footer>
       </Modal>

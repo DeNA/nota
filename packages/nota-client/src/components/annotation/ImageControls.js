@@ -3,6 +3,7 @@ import { Dropdown } from "./semantic";
 import { DEFAULT_ANNOTATION_COLOR } from "../../constants";
 import Icon from "../Icon";
 import { videoControlsContext } from "./videoControls";
+import { useTranslation } from "react-i18next";
 
 const ImageControls = function({
   annotationTemplates,
@@ -16,6 +17,7 @@ const ImageControls = function({
   hasAnnotations,
   ...props
 }) {
+  const { t } = useTranslation();
   const {
     videoControls: { getTime }
   } = useContext(videoControlsContext);
@@ -93,7 +95,7 @@ const ImageControls = function({
             <Dropdown title="Actions" icon="setting" pointing="top right">
               <Dropdown.Menu>
                 <Dropdown.Item onClick={handleConfirmClear}>
-                  <div>Reset Image Annotations</div>
+                  <div>{t("reset-annotations")}</div>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

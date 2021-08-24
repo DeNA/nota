@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import Icon from "../Icon";
 import "./AnnotatedVideo.css";
 
@@ -44,6 +45,7 @@ const AnnotatedVideoSeekbar = function({
   onPreviousFrame10,
   onTogglePlay
 }) {
+  const { t } = useTranslation();
   const [seeking, setSeeking] = useState(false);
   const [playUntil, setPlayUntil] = useState(+Infinity);
   const progressContainer = useRef();
@@ -226,7 +228,8 @@ const AnnotatedVideoSeekbar = function({
             size="sm"
             onClick={handlePlay}
           >
-            <Icon name={playing ? `media-pause` : `media-play`} /> Play/Pause
+            <Icon name={playing ? `media-pause` : `media-play`} />{" "}
+            {t("toggle-play")}
           </Button>
           <Button
             variant="light"

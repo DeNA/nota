@@ -1,5 +1,6 @@
 import React from "react";
 import { Alert, Button, Card, Form, InputGroup, Nav } from "react-bootstrap";
+import { useTranslation, Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 import { persistMediaSource } from "../../lib/api";
 import history from "../../lib/history";
@@ -13,7 +14,7 @@ const AdminProjectMediaSourceNew = function({ project }) {
     extensions,
     bucket
   }) => name && description && type && extensions && bucket;
-
+  const { t } = useTranslation();
   const saveMediaSource = async function(values) {
     if (!canSaveMediaSource(values)) return;
 
@@ -69,9 +70,9 @@ const AdminProjectMediaSourceNew = function({ project }) {
           <Nav.Item>
             <h3>
               <Link to={`/admin/projects/${project.id}/mediaSources`}>
-                Media Sources
+                {t("media-sources")}
               </Link>
-              {" :: New Media Source"}
+              {" :: " + t("new-media-source")}
             </h3>
           </Nav.Item>
           <Nav.Item />
@@ -80,45 +81,45 @@ const AdminProjectMediaSourceNew = function({ project }) {
       <Card.Body>
         <Form noValidate>
           <Form.Group>
-            <Form.Label>Media Source Name</Form.Label>
+            <Form.Label>{t("media-source-name")}</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Media Source Name"
+              placeholder={t("media-source-name")}
               name="name"
               value={values.name}
               onChange={handleChange}
               isInvalid={touched.name && errors.name}
             />
             <Form.Control.Feedback type="invalid">
-              Media Name is required
+              {t("required-error", { field: t("media-source-name") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Description</Form.Label>
+            <Form.Label>{t("media-source-description")}</Form.Label>
             <Form.Control
               as="textarea"
-              placeholder="Media Source Description"
+              placeholder={t("media-source-description")}
               name="description"
               value={values.description}
               onChange={handleChange}
               isInvalid={touched.description && errors.description}
             />
             <Form.Control.Feedback type="invalid">
-              Media Source description is required
+              {t("required-error", { field: t("media-source-description") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Metadata Filters (JSON)</Form.Label>
+            <Form.Label>{t("metadata-filters")} (JSON)</Form.Label>
             <Form.Control
               as="textarea"
-              placeholder="Metadata Filters"
+              placeholder={t("metadata-filters")}
               name="filters"
               value={values.filters}
               onChange={handleChange}
               isInvalid={touched.filters && errors.filters}
             />
             <Form.Text className="text-muted">
-              Example
+              {t("example")}
               <br />
               <code>
                 {`[`}
@@ -136,11 +137,11 @@ const AdminProjectMediaSourceNew = function({ project }) {
               </code>
             </Form.Text>
             <Form.Control.Feedback type="invalid">
-              Filters is invalid
+              {t("invalid-error", { field: t("metadata-filters") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Allowed file extensions (comma separated)</Form.Label>
+            <Form.Label>{t("allowed-extensions")}</Form.Label>
             <Form.Control
               type="text"
               placeholder="jpg,png"
@@ -150,44 +151,44 @@ const AdminProjectMediaSourceNew = function({ project }) {
               isInvalid={touched.extensions && errors.extensions}
             />
             <Form.Control.Feedback type="invalid">
-              Media Name is required
+              {t("required-error", { field: t("allowed-extensions") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Datasource Type</Form.Label>
+            <Form.Label>{t("datasource-type")}</Form.Label>
             <Form.Control
               disabled
               type="text"
-              placeholder="Datasource Type"
+              placeholder={t("datasource-type")}
               name="type"
               value={values.type}
               isInvalid={touched.type && errors.type}
             />
             <Form.Control.Feedback type="invalid">
-              Datasource Type is required
+              {t("required-error", { field: t("datasource-type") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
-            <Form.Label>S3 bucket</Form.Label>
+            <Form.Label>{t("s3-bucket")}</Form.Label>
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>s3://</InputGroup.Text>
               </InputGroup.Prepend>
               <Form.Control
                 type="text"
-                placeholder="bucket-name"
+                placeholder={t("bucket-name")}
                 name="bucket"
                 value={values.bucket}
                 onChange={handleChange}
                 isInvalid={touched.bucket && errors.bucket}
               />
               <Form.Control.Feedback type="invalid">
-                Bucket is required
+                {t("required-error", { field: t("s3-bucket") })}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
           <Form.Group>
-            <Form.Label>Media Files Path</Form.Label>
+            <Form.Label>{t("path")}</Form.Label>
             <Form.Control
               type="text"
               placeholder="path/to/root/folder"
@@ -197,7 +198,7 @@ const AdminProjectMediaSourceNew = function({ project }) {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Export Path</Form.Label>
+            <Form.Label>{t("export-path")}</Form.Label>
             <Form.Control
               type="text"
               placeholder="path/to/export/folder"
@@ -211,25 +212,30 @@ const AdminProjectMediaSourceNew = function({ project }) {
       <Card.Footer>
         {canSaveMediaSource(values) && (
           <Alert variant="info">
-            All <code>{values.extensions}</code> files under{" "}
-            <code>
-              s3://{values.bucket}/{values.path}
-            </code>{" "}
-            will be indexed
+            <Trans
+              i18nKey="media-source-check-1"
+              values={{ values }}
+              components={{
+                code: <code />
+              }}
+            />
             <br />
-            Annotation data will be exported to{" "}
-            <code>
-              s3://{values.bucket}/{values.exportPath}
-            </code>
+            <Trans
+              i18nKey="media-source-check-2"
+              values={{ values }}
+              components={{
+                code: <code />
+              }}
+            />
           </Alert>
         )}
         <Nav className="justify-content-between">
           <Nav.Item>
             <Button variant="success" onClick={handleSubmit}>
-              Create Media Source
+              {t("create-media-source")}
             </Button>{" "}
             <Button variant="outline-secondary" onClick={history.goBack}>
-              Cancel
+              {t("cancel-button")}
             </Button>
           </Nav.Item>
         </Nav>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   OPTION_FOCUS,
   OPTION_LABEL_SHOW_ALWAYS,
@@ -21,6 +22,7 @@ const ProjectMenu = ({
   totalItems,
   completeItems
 }) => {
+  const { t } = useTranslation();
   const { labelsShow = OPTION_LABEL_SHOW_HOVER } = options;
   const handleChangeLabelsShow = function() {
     let newLabelsShow;
@@ -60,22 +62,24 @@ const ProjectMenu = ({
                 <span>{task}</span>
                 <br />
                 <span>
-                  Complete: {completeItems}/{totalItems}
+                  {t("progress")} {completeItems}/{totalItems}
                 </span>
               </div>
             }
           />
-          <Dropdown.Item onClick={handleCloseTask}>Close Task</Dropdown.Item>
+          <Dropdown.Item onClick={handleCloseTask}>
+            {t("close-task")}
+          </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Header content="Image Filters" />
+          <Dropdown.Header content={t("image-filters")} />
           <Dropdown.Item>
             <ImageFiltersContainer />
           </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Header content="Options" />
+          <Dropdown.Header content={t("options")} />
           <Dropdown.Item>
             <div>
-              <Icon name="signal" /> Zoom sensibility:{" "}
+              <Icon name="signal" /> {t("zoom-sensibility")}{" "}
               {options.zoomSensibility * 5}
             </div>
             <div>
@@ -95,7 +99,7 @@ const ProjectMenu = ({
           </Dropdown.Item>
           <Dropdown.Item>
             <div>
-              <Icon name="zoom-out" /> Minimum zoom: {options.minScale}x
+              <Icon name="zoom-out" /> {t("zoom-minimum")} {options.minScale}x
             </div>
             <div>
               <input
@@ -112,7 +116,7 @@ const ProjectMenu = ({
           </Dropdown.Item>
           <Dropdown.Item>
             <div>
-              <Icon name="zoom-in" /> Maximum zoom: {options.maxScale}x
+              <Icon name="zoom-in" /> {t("zoom-maximum")} {options.maxScale}x
             </div>
             <div>
               <input
@@ -129,8 +133,8 @@ const ProjectMenu = ({
           </Dropdown.Item>
           <Dropdown.Item>
             <div>
-              <Icon name="resize-both" /> Zoom in (ctrl+click):{" "}
-              {options.maxScaleClick}x
+              <Icon name="resize-both" /> {t("zoom-in")} {options.maxScaleClick}
+              x
             </div>
             <div>
               <input
@@ -146,14 +150,14 @@ const ProjectMenu = ({
             </div>
           </Dropdown.Item>
           <Dropdown.Item>
-            After Creation:{" "}
+            {t("after-creation")}{" "}
             <Dropdown
               inline
               options={[
-                { text: "Do Nothing", value: OPTION_NOOP },
-                { text: "Select First Item", value: OPTION_FOCUS },
+                { text: t("after-creation-1"), value: OPTION_NOOP },
+                { text: t("after-creation-2"), value: OPTION_FOCUS },
                 {
-                  text: "Popup and Select First Item",
+                  text: t("after-creation-3"),
                   value: OPTION_POPUP_FOCUS
                 }
               ]}
@@ -165,7 +169,7 @@ const ProjectMenu = ({
       </Dropdown>
       <div
         className={`labels-show ${labelsShow}`}
-        title={`Show labels`}
+        title={t("show-labels")}
         onClick={handleChangeLabelsShow}
       >
         <Icon name="tags" />

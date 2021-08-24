@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Checkbox, Button } from "./semantic";
 
 const AnnotationLabelStatus = ({
@@ -11,6 +12,7 @@ const AnnotationLabelStatus = ({
   canBeSetAsDone,
   taskItemId
 }) => {
+  const { t } = useTranslation();
   onSetAsDone(evt => {
     if (editable && annotationId !== null && !done && canBeSetAsDone) {
       onDoneChange(taskItemId, annotationId, true);
@@ -22,7 +24,7 @@ const AnnotationLabelStatus = ({
       <Button
         fluid
         inverted
-        content="Complete Annotation (↵)"
+        content={t("complete-annotation")}
         color="olive"
         disabled={!editable}
         onClick={evt => onDoneChange(taskItemId, annotationId, true)}
@@ -33,7 +35,7 @@ const AnnotationLabelStatus = ({
     return (
       <Checkbox
         toggle
-        label="Complete Annotation"
+        label={t("complete-annotation-1")}
         checked
         disabled={!editable}
         onChange={evt => onDoneChange(taskItemId, annotationId, false)}

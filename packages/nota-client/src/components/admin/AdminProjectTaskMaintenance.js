@@ -5,6 +5,7 @@ import { performTaskMaintenance } from "../../lib/api";
 import { JobTask } from "../../lib/models";
 import useInputForm, { string } from "../../lib/useInputForm";
 import { Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 function AdminProjectTaskMaintenance({
   projectId,
@@ -12,6 +13,7 @@ function AdminProjectTaskMaintenance({
   fetchJobs = [],
   reload
 }) {
+  const { t } = useTranslation();
   const [showNewMaintenanceModal, setShowNewMaintenanceModal] = React.useState(
     false
   );
@@ -83,11 +85,11 @@ function AdminProjectTaskMaintenance({
         <Card.Header>
           <Nav className="justify-content-between">
             <Nav.Item>
-              <span>Last Task Maintenance</span>
+              <span>{t("last-task-maintenances")}</span>
             </Nav.Item>
             <Nav.Item>
               <Button variant="outline-success" onClick={handleClickNew}>
-                New Task Maintenance...
+                {t("new-task-maintenance")}
               </Button>
             </Nav.Item>
           </Nav>
@@ -97,21 +99,24 @@ function AdminProjectTaskMaintenance({
             <ListGroup.Item key={job.id}>
               <Row className="align-items-center">
                 <Col>{job.id}</Col>
-                <Col>{JobTask.TYPE_TEXT[job.type]}</Col>
-                <Col>{JobTask.STATUS_TEXT[job.status]}</Col>
+                <Col>{t(JobTask.TYPE_TEXT[job.type])}</Col>
+                <Col>{t(JobTask.STATUS_TEXT[job.status])}</Col>
                 <Col>{JSON.stringify(job.config.result)}</Col>
                 <Col>
                   <div>
-                    <small>Created: {parseDate(job.createdAt)}</small>
-                  </div>
-                  <div>
                     <small>
-                      Started: {job.startedAt ? parseDate(job.startedAt) : "--"}
+                      {t("created")}: {parseDate(job.createdAt)}
                     </small>
                   </div>
                   <div>
                     <small>
-                      Finished:{" "}
+                      {t("started")}:{" "}
+                      {job.startedAt ? parseDate(job.startedAt) : "--"}
+                    </small>
+                  </div>
+                  <div>
+                    <small>
+                      {t("finished")}:{" "}
                       {job.finishedAt ? parseDate(job.finishedAt) : "--"}
                     </small>
                   </div>
@@ -123,12 +128,12 @@ function AdminProjectTaskMaintenance({
       </Card>
       <Modal show={showNewMaintenanceModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Task Maintenance</Modal.Title>
+          <Modal.Title>{t("task-maintenance")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form noValidate>
             <Form.Group>
-              <Form.Label>Annotation</Form.Label>
+              <Form.Label>{t("task-maintenance-1")}</Form.Label>
               <Form.Control
                 as="select"
                 value={values.annotations}
@@ -136,21 +141,14 @@ function AdminProjectTaskMaintenance({
                 onChange={handleChange}
                 isInvalid={touched.annotations && errors.annotations}
               >
-                <option value="NO_ACTION">完了を外さない</option>
-                <option value="UNDO_ALL">
-                  全てのアノテーションの完了を外す
-                </option>
-                <option value="UNDO_BY_NAME">
-                  特定の種類のアノテーションの完了を外す
-                </option>
+                <option value="NO_ACTION">{t("task-maintenance-2")}</option>
+                <option value="UNDO_ALL">{t("task-maintenance-3")}</option>
+                <option value="UNDO_BY_NAME">{t("task-maintenance-4")}</option>
               </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                Annotationは必須です
-              </Form.Control.Feedback>
             </Form.Group>
             {values.annotations === "UNDO_BY_NAME" ? (
               <Form.Group>
-                <Form.Label>Annotation Name List</Form.Label>
+                <Form.Label>{t("task-maintenance-5")}</Form.Label>
                 <Form.Control
                   as="select"
                   ref={annotationNamesSelect}
@@ -175,13 +173,10 @@ function AdminProjectTaskMaintenance({
                     </option>
                   ))}
                 </Form.Control>
-                <Form.Control.Feedback type="invalid">
-                  Annotationは必須です
-                </Form.Control.Feedback>
               </Form.Group>
             ) : null}
             <Form.Group>
-              <Form.Label>Task Item</Form.Label>
+              <Form.Label>{t("task-maintenance-6")}</Form.Label>
               <Form.Control
                 as="select"
                 value={values.taskItems}
@@ -189,17 +184,12 @@ function AdminProjectTaskMaintenance({
                 onChange={handleChange}
                 isInvalid={touched.taskItems && errors.taskItems}
               >
-                <option value="UNDO_ONGOING">
-                  上で外したアノテーションがあるのみ完了を外す
-                </option>
-                <option value="UNDO_ALL">タスクの全件の完了を外す</option>
+                <option value="UNDO_ONGOING">{t("task-maintenance-7")}</option>
+                <option value="UNDO_ALL">{t("task-maintenance-8")}</option>
               </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                Task Itemは必須です
-              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
-              <Form.Label>Task Assignment</Form.Label>
+              <Form.Label>{t("task-maintenance-9")}</Form.Label>
               <Form.Control
                 as="select"
                 value={values.taskAssignments}
@@ -207,26 +197,19 @@ function AdminProjectTaskMaintenance({
                 onChange={handleChange}
                 isInvalid={touched.taskAssignments && errors.taskAssignments}
               >
-                <option value="NO_ACTION">完了を外さない</option>
-                <option value="UNDO_ONGOING">
-                  上で外した画像・動画があるのみ完了を外す
-                </option>
-                <option value="UNDO_ALL">
-                  アサインタスクの全件の完了を外す
-                </option>
+                <option value="NO_ACTION">{t("task-maintenance-10")}</option>
+                <option value="UNDO_ONGOING">{t("task-maintenance-11")}</option>
+                <option value="UNDO_ALL">{t("task-maintenance-12")}</option>
               </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                Task Assignmentは必須です
-              </Form.Control.Feedback>
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
-            Close
+            {t("close-button")}
           </Button>
           <Button variant="success" onClick={handleSubmit}>
-            Perform Task Maintenance
+            {t("perform-task-maintenance")}
           </Button>
         </Modal.Footer>
       </Modal>

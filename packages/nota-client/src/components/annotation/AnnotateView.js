@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import AnnotatePreview from "./containers/AnnotatePreviewContainer";
 import AnnotationLabelViewContainer from "./containers/AnnotationLabelViewContainer";
 import ImageStatusContainer from "./containers/ImageStatusContainer";
@@ -9,10 +10,11 @@ const AnnotateView = ({
   annotationLabelsPaneWidth,
   isDirty
 }) => {
+  const { t } = useTranslation();
   const handleUnload = event => {
     if (isDirty) {
       event.preventDefault();
-      event.returnValue = `There are unsaved changes. Are you sure you want to leave?`;
+      event.returnValue = t("unsaved-changes-warning");
     }
   };
   React.useEffect(() => {

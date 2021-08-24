@@ -8,6 +8,7 @@ import {
   ProgressBar,
   Row
 } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { returnUnfinishedTaskItems, updateTaskAssignment } from "../../lib/api";
 import { Project, TaskAssignment } from "../../lib/models";
@@ -20,6 +21,7 @@ export function AdminProjectTaskAssignment({
   assignableUsers,
   reload
 }) {
+  const { t } = useTranslation();
   const [newAssignedUser, setNewAssignedUser] = React.useState("");
   const done = assignment.status === TaskAssignment.STATUS.DONE;
   const canBeSetAsComplete = !done && assignment.done === assignment.total;
@@ -82,7 +84,9 @@ export function AdminProjectTaskAssignment({
         <Col className="align-items-center d-flex flex-row">
           <div style={{ width: 50 }}>
             <Link to={`/annotation/${project.id}/${task.id}/${assignment.id}`}>
-              <small>ID: {assignment.id}</small>
+              <small>
+                {t("id")} {assignment.id}
+              </small>
             </Link>
           </div>
           <Badge variant="secondary">{`${assignment.done}/${
@@ -113,12 +117,12 @@ export function AdminProjectTaskAssignment({
               variant="outline-secondary"
               onClick={handleSetAsNotComplete}
             >
-              未完了に戻す
+              {t("unmark-complete")}
             </Button>
           )}
           {canBeSetAsComplete && (
             <Button size="sm" variant="success" onClick={handleSetAsComplete}>
-              完了にする
+              {t("mark-complete")}
             </Button>
           )}
           {!done && !canBeSetAsComplete && (
@@ -127,7 +131,7 @@ export function AdminProjectTaskAssignment({
               variant="outline-secondary"
               onClick={handleReturnUnfinishedMediaItems}
             >
-              完了してない件数を戻す
+              {t("return-ongoing-items")}
             </Button>
           )}
         </Col>
@@ -137,6 +141,7 @@ export function AdminProjectTaskAssignment({
             <div className="d-flex flex-row">
               <FormControl
                 as="select"
+                style={{ width: "auto", flexGrow: 1 }}
                 size="sm"
                 value={newAssignedUser}
                 name="newAssignedUser"
@@ -177,7 +182,7 @@ export function AdminProjectTaskAssignment({
                 onClick={handleSaveNewAssignedUser}
                 variant="outline-success"
               >
-                Save
+                {t("save-button")}
               </Button>
             </div>
           )}

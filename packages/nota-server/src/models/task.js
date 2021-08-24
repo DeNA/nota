@@ -42,6 +42,7 @@ module.exports = function(sequelize) {
       const p = parser(taskTemplate.template.parser);
       const { options, conditions } = this.mediaSourceConfig;
 
+      // Retrieve all media items
       const mediaItemIds = await mediaSource.searchMediaItemIds(
         {
           path: options.path || "",
@@ -64,33 +65,56 @@ module.exports = function(sequelize) {
 
       const newMediaItems = [];
 
+      // When refreshing a task, filter only new items
       if (refresh) {
-        for (const mediaItem of mediaItems) {
-          const taskItems = await this.getTaskItems({
-            where: {
-              mediaItemId: mediaItem.id
-            }
-          });
+        const allTaskItems = await this.getTaskItems({
+          attributes: ["id", "mediaItemId"],
+          raw: true
+        });
 
-          if (!taskItems.length) {
+        for (const mediaItem of mediaItems) {
+          if (!allTaskItems.find(ti => ti.mediaItemId === mediaItem.id)) {
             newMediaItems.push(mediaItem);
           }
         }
       }
 
+      const importItems = refresh ? newMediaItems : mediaItems;
+
+      // List files from the source for checking json sidecar existence
+      const files = importItems.length
+        ? await ds.listItems({
+            resource: {
+              pathId: mediaSource.id,
+              file: options.path || ""
+            }
+          })
+        : [];
+
+      // Prepare auto-create annotations
+      const annotationsDefinition = taskTemplate.template.annotations || [];
+      const autoCreateAnnotations = annotationsDefinition.filter(
+        (annotationDefinition) =>
+          annotationDefinition.options &&
+          annotationDefinition.options.autoCreate
+      );
       let added = 0;
 
-      for (const mediaItem of refresh ? newMediaItems : mediaItems) {
-        let annotations = [];
-        const jsonFileName = mediaItem.name + ".json";
+      // Create items
+      for (const mediaItem of importItems) {
+        // auto-create annotations
+        const annotations = autoCreateAnnotations.map((annotation) => ({
+          labelsName: annotation.name,
+          labels: annotationDefaultLabels(annotation.labels)
+        }));
 
-        const jsonFileExists = await ds.statItem({
-          metadata: {
-            importPathId: mediaSource.id,
-            resource: mediaItem.path,
-            fileName: jsonFileName
-          }
-        });
+        // Check for sidecar json file annotations
+        const jsonFileName = mediaItem.name + ".json";
+        const jsonFileExists = files.find(
+          (file) =>
+            file.name === jsonFileName &&
+            file.metadata.resource === mediaItem.path
+        );
 
         if (jsonFileExists) {
           const jsonFileReadStream = await ds.readItem({
@@ -108,14 +132,15 @@ module.exports = function(sequelize) {
 
           const json = JSON.parse(jsonFileContents);
           const imageData = p.parse(json);
-          annotations = imageData.annotations || [];
+          annotations.push(...(imageData.annotations || []));
         }
 
+        // Create item
         await this.createTaskItem(
           {
             mediaItemId: mediaItem.id,
             status: sequelize.models.TaskItem.STATUS.NOT_DONE,
-            annotations: annotations.map(annotation => ({
+            annotations: annotations.map((annotation) => ({
               ...annotation,
               createdBy: this.createdBy
             })),
@@ -128,53 +153,17 @@ module.exports = function(sequelize) {
         added++;
       }
 
-      const annotationsDefinition = taskTemplate.template.annotations || [];
-      const autoCreateAnnotations = annotationsDefinition.filter(
-        annotationDefinition =>
-          annotationDefinition.options &&
-          annotationDefinition.options.autoCreate
-      );
-
-      for (let i = 0; i < autoCreateAnnotations.length; i++) {
-        const subquery = sequelize.dialect.QueryGenerator.selectQuery(
-          sequelize.models.Annotation.tableName,
-          {
-            attributes: ["task_item_id"],
-            where: {
-              labels_name: autoCreateAnnotations[i].name
-            }
-          }
-        ).slice(0, -1);
-        const taskItems = await this.getTaskItems({
-          attributes: ["id"],
-          where: {
-            id: {
-              [Op.notIn]: sequelize.literal(`(${subquery})`)
-            },
-            status: sequelize.models.TaskItem.STATUS.NOT_DONE
-          }
-        });
-
-        for (let j = 0; j < taskItems.length; j++) {
-          await taskItems[j].createAnnotation({
-            labelsName: autoCreateAnnotations[i].name,
-            labels: annotationDefaultLabels(autoCreateAnnotations[i].labels),
-            createdBy: this.createdBy
-          });
-        }
-      }
-
-      if (!refresh) {
+      if (!refresh || this.status !== Task.STATUS.READY) {
         this.status = Task.STATUS.READY;
         await this.save();
       }
       return added;
     } catch (error) {
       logger.error(error);
-      if (!refresh) {
-        this.status = Task.STATUS.CREATING_ERROR;
-        await this.save();
-      }
+      this.status = refresh
+        ? Task.STATUS.UPDATING_ERROR
+        : Task.STATUS.CREATING_ERROR;
+      await this.save();
     }
   };
 
@@ -377,7 +366,7 @@ ${onlyOngoingSubquery}`,
     const mediaItems = await this.getTaskItems(query);
 
     return mediaItems
-      .map(mediaItem => {
+      .map((mediaItem) => {
         mediaItem.notaUrl = [
           config.nota.host || "",
           "annotation",
@@ -390,7 +379,7 @@ ${onlyOngoingSubquery}`,
         const [parsedFileName, parsedFile] = p.serialize(mediaItem);
         return parsedFile ? [parsedFileName, parsedFile] : null;
       })
-      .filter(image => image !== null);
+      .filter((image) => image !== null);
   };
 
   Task.prototype.getLastExportJobs = async function() {

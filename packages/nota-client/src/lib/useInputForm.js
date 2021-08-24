@@ -54,6 +54,10 @@ const validator = function(type) {
     required: function() {
       addValidation(required);
       return this;
+    },
+    addValidation: function(validation) {
+      addValidation(validation);
+      return this;
     }
   };
 };

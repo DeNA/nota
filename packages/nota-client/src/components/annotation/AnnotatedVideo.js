@@ -2,6 +2,7 @@ import React, { useContext, useRef } from "react";
 import "./AnnotatedVideo.css";
 import AnnotatedVideoSeekbar from "./AnnotatedVideoSeekbar";
 import { videoControlsContext } from "./videoControls";
+import VideoTimelineVisualizationsContainer from "./containers/VideoTimelineVisualizationsContainer";
 
 const AnnotatedVideo = function({
   videoUri,
@@ -37,15 +38,6 @@ const AnnotatedVideo = function({
     <>
       <div className="annotated-video" onFocus={evt => evt.target.blur()}>
         <div className="spacer" />
-        <div className="annotated-video-controls">
-          <input type="button" onClick={() => skipFrames(-10)} value="<<<" />
-          <input type="button" onClick={() => skipFrames(-5)} value="<<" />
-          <input type="button" onClick={() => skipFrames(-1)} value="<" />{" "}
-          <input type="button" onClick={togglePlay} value="Play/Pause" />{" "}
-          <input type="button" onClick={() => skipFrames(1)} value=">" />
-          <input type="button" onClick={() => skipFrames(5)} value=">>" />
-          <input type="button" onClick={() => skipFrames(10)} value=">>>" />
-        </div>
         <div className="annotated-video-container">
           <video
             key={videoUri}
@@ -82,6 +74,7 @@ const AnnotatedVideo = function({
           onPreviousFrame10={onPreviousFrame10}
           onTogglePlay={onTogglePlay}
         />
+        <VideoTimelineVisualizationsContainer />
       </div>
     </>
   );

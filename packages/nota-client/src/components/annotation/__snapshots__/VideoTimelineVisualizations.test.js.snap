@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VideoTimeLineVisualizations render message when no matching vis 1`] = `
+<DocumentFragment>
+  <div
+    class="vis-container"
+  >
+    <div>
+      vis-not-found
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`VideoTimeLineVisualizations render nothing without data 1`] = `<DocumentFragment />`;
+
+exports[`VideoTimeLineVisualizations render timeline correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="vis-container"
+  >
+    <div
+      class="d-flex justify-content-center align-items-center"
+      style="height: 100%; background-color: rgba(0, 0, 0, 0.1); position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 10000;"
+    >
+      <div
+        class="spinner-border"
+      />
+    </div>
+    <div>
+      vis-not-found
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`VideoTimeLineVisualizations render timeline correctly 2`] = `
+<DocumentFragment>
+  <div
+    class="vis-container"
+  >
+    <div
+      class="timeline-chart"
+      data-testid="timeline-chart"
+    >
+      <div
+        class="rv-xy-plot "
+        style="width: 0px; height: 0px;"
+      >
+        <svg
+          class="rv-xy-plot__inner"
+          height="0"
+          width="0"
+        >
+          <path
+            class="rv-xy-plot__series rv-xy-plot__series--line test_timeline"
+            d="M-6,-10Z"
+            style="opacity: 1; stroke: red;"
+            transform="translate(3,5)"
+          />
+          <path
+            class="rv-xy-plot__series rv-xy-plot__series--line test_timeline_2"
+            d="M-6,0Z"
+            style="opacity: 1; stroke: green;"
+            transform="translate(3,5)"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -8,6 +8,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import useIntervalReload from "../../lib/useIntervalReload";
 import MeContext from "../MeContext";
+import { useTranslation } from "react-i18next";
 
 export function AdminProjectMediaSources({
   resource: mediaSources,
@@ -16,6 +17,7 @@ export function AdminProjectMediaSources({
   doGet,
   params
 }) {
+  const { t } = useTranslation();
   const me = React.useContext(MeContext);
   const shouldReload =
     mediaSources &&
@@ -35,13 +37,15 @@ export function AdminProjectMediaSources({
     <Card className="w-100">
       <Card.Header>
         <Nav className="justify-content-between">
-          <h3>Media Sources</h3>
+          <h3>{t("media-sources")}</h3>
           <Nav.Item>
             {me.isAppAdmin && (
               <LinkContainer
                 to={`/admin/projects/${project.id}/mediaSources/new`}
               >
-                <Button variant="outline-success">New Media Source</Button>
+                <Button variant="outline-success">
+                  {t("new-media-source")}
+                </Button>
               </LinkContainer>
             )}
           </Nav.Item>
@@ -51,12 +55,12 @@ export function AdminProjectMediaSources({
         <Table striped>
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Source</th>
-              <th>Path</th>
-              <th>Description</th>
+              <th>{t("id")}</th>
+              <th>{t("name")}</th>
+              <th>{t("status")}</th>
+              <th>{t("datasource")}</th>
+              <th>{t("path")}</th>
+              <th>{t("description")}</th>
             </tr>
           </thead>
           <tbody>
@@ -80,7 +84,7 @@ export function AdminProjectMediaSources({
                     {mediaSource.name}
                   </Link>
                 </td>
-                <td>{MediaSource.STATUS_TEXT[mediaSource.status]}</td>
+                <td>{t(MediaSource.STATUS_TEXT[mediaSource.status])}</td>
                 <td>{mediaSource.datasource}</td>
                 <td>
                   <code>
