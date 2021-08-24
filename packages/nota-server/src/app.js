@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const compression = require("compression");
 const { accessLogger, errorLogger } = require("./lib/logger");
+const version = require("./lib/version");
 
 const app = express();
 
@@ -43,6 +44,11 @@ app.use("/api", auth.token, router, function(req, res, next) {
   } else {
     next();
   }
+});
+
+// Version
+app.use("/version", function(req, res, next) {
+  res.json({ version: version() });
 });
 
 // Healthcheck

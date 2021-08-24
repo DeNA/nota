@@ -3,7 +3,13 @@
 const { notaJobQueues } = require("../lib/notaJobQueue");
 const notaJobScheduler = require("../lib/notaJobScheduler");
 const { JobTask } = require("../models");
+const { logger } = require("../lib/logger");
+const version = require("../lib/version");
 const CONCURRENCY = 1;
+
+logger.info({
+  message: `Starting nota worker version: ${version()}`
+})
 
 notaJobQueues[JobTask.TASK_NAME.MEDIA_SOURCE_FETCH].process(
   CONCURRENCY,

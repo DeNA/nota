@@ -3,7 +3,8 @@
     "target": "es2018",
     "module": "commonjs",
     "checkJs": true,
-    "jsx": "react"
+    "jsx": "react",
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "build", "built"]
 }
