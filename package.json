@@ -21,7 +21,8 @@
     "test:server": "cd packages/nota-server && npm test",
     "test:client": "cd packages/nota-client && npm test",
     "postinstall": "lerna exec -- npm install",
-    "release": "lerna version",
+    "release_minor": "lerna version minor --force-publish -m \"chore(release): publish %s\" --no-changelog --no-commit-hooks --no-push",
+    "release_patch": "lerna version patch --force-publish -m \"chore(release): publish %s\" --no-changelog --no-commit-hooks --no-push",
     "resetdb": "cd packages/nota-server && npm run resetdb",
     "seed": "cd packages/nota-server && npm run seed",
     "createLocalUser": "node scripts/createLocalUser.js"
