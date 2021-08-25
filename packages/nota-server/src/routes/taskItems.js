@@ -75,13 +75,13 @@ const getTaskItemBinary = async function(req, res, next) {
     }
 
     // IMAGE and EPIPOLAR_IMAGE_SET
+    const { mediaOptions = {}, mediaExtensions = [] } = template;
     const { mediaItemSuffix = "" } = req.params;
-    const { mediaSuffixSeparator = "_", mediaExtension = "" } =
-      template.mediaOptions || {};
+    const { mediaSuffixSeparator = "_", mediaExtension = "" } = mediaOptions;
     const suffix = `${mediaSuffixSeparator}${mediaItemSuffix}${
       mediaExtension ? "." + mediaExtension : ""
     }`;
-    const imageSetExtension = `.${template.mediaExtensions[0] || ""}`;
+    const imageSetExtension = `.${mediaExtensions[0] || ""}`;
     const itemName = taskItem.mediaItem.name.replace(imageSetExtension, "");
     const fileName = mediaItemSuffix
       ? itemName + suffix
