@@ -1,6 +1,7 @@
 # Nota
-
 ![nota](docs/images/nota_logo.png)
+
+![Build](https://github.com/DeNA/nota/actions/workflows/test.yml/badge.svg)
 
 Nota is a web application that allows to label and annotate images and videos for use in machine learning. It was created by [DeNA Co., Ltd](https://dena.com) in 2017. It was realeased as Open Source in March 2021.
 
