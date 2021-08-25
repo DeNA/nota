@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const { QueueScheduler, Worker } = require("bullmq");
-const { getRedisClient } = require("../../common/lib/redisClient");
+const { notaJobQueues } = require("../lib/notaJobQueue");
+const notaJobScheduler = require("../lib/notaJobScheduler");
 const { JobTask } = require("../models");
 const { logger } = require("../lib/logger");
 const version = require("../lib/version");
@@ -9,12 +9,7 @@ const CONCURRENCY = 1;
 
 logger.info({
   message: `Starting nota worker version: ${version()}`
-});
-
-// MEDIA_SOURCE_FETCH
-const mediaSourceFetchWorker = new Worker(
-  
-)
+})
 
 notaJobQueues[JobTask.TASK_NAME.MEDIA_SOURCE_FETCH].process(
   CONCURRENCY,
