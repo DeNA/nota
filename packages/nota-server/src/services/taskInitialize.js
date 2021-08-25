@@ -1,9 +1,6 @@
 const { Task } = require("../models");
 
-const taskInitialize = async function(
-  jobTask,
-  done
-) {
+const taskInitialize = async function(jobTask, logger) {
   const taskId = jobTask.resourceId;
   const data = jobTask.config.data;
   const userId = jobTask.createdBy;
@@ -19,7 +16,7 @@ const taskInitialize = async function(
     await task.save();
   }
 
-  done({ added });
-}
+  return { added };
+};
 
 module.exports = taskInitialize;

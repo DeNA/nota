@@ -1,27 +1,23 @@
-const processorFactory = require("../lib/notaJobQueueProcessorFactory");
-const { Task, JobTask } = require("../models");
+const { Task } = require("../models");
 
-const processor = processorFactory(
-  JobTask.TASK_NAME.TASK_MAINTENANCE,
-  async function(jobTask, done) {
-    const taskId = jobTask.resourceId;
-    const data = jobTask.config.data;
-    const userId = jobTask.createdBy;
+const taskMaintenance = async function(jobTask, logger) {
+  const taskId = jobTask.resourceId;
+  const data = jobTask.config.data;
+  const userId = jobTask.createdBy;
 
-    if (!taskId || !userId || !data) {
-      throw new Error("taskId and userId are required");
-    }
-    const task = await Task.findByPk(taskId);
-    let result;
-
-    if (data.type === "STATUS_RESET") {
-      result = await task.statusReset(data.options);
-    } else {
-      throw new Error(`unsuported maintenance type: ${data.type}`);
-    }
-
-    done(result);
+  if (!taskId || !userId || !data) {
+    throw new Error("taskId and userId are required");
   }
-);
+  const task = await Task.findByPk(taskId);
+  let result;
 
-module.exports = processor;
+  if (data.type === "STATUS_RESET") {
+    result = await task.statusReset(data.options);
+  } else {
+    throw new Error(`unsuported maintenance type: ${data.type}`);
+  }
+
+  return result;
+};
+
+module.exports = taskMaintenance;

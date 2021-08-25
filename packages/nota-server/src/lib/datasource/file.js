@@ -110,7 +110,6 @@ const statItem = async function({ importPaths }, { metadata = {} }) {
     metadata.resource,
     metadata.fileName
   ]);
-  console.log(fullPath);
 
   try {
     const stat = await fs.stat(fullPath);

@@ -1,5 +1,5 @@
 const { Queue } = require("bullmq");
-const logger = require("../lib/logger");
+const { logger } = require("../lib/logger");
 const { getRedisClient } = require("../lib/redisClient");
 
 const MAX_JOBS_TO_KEEP = 100;

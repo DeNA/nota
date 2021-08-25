@@ -1,7 +1,7 @@
 const { Queue } = require("bullmq");
 const { JobTask } = require("../models");
 const redlock = require("../lib/lock");
-const logger = require("../lib/logger");
+const { logger } = require("../lib/logger");
 const notaScheduler = require("./notaScheduler");
 const { getRedisClient } = require("../lib/redisClient");
 
@@ -9,7 +9,7 @@ const LOCK_TTL = 1000;
 const LOCK_RENEW_INTERVAL = 500;
 const MAX_JOBS_TO_KEEP = 100;
 
-const notaService = function(name, processor, scheduler) {
+const notaService = function(name, task, processor, scheduler) {
   let queue;
   const processorHandler = async function(job) {
     const loggerHandler = function(level, message, meta = {}) {
@@ -21,10 +21,10 @@ const notaService = function(name, processor, scheduler) {
 
     try {
       logger.info(`STARTED JOB`, { service: name, jobId: job.id });
-      jobTask = await JobTask.findByPk(job.data.serviceJobId);
+      jobTask = await JobTask.findByPk(job.data.jobTaskId);
 
       if (!jobTask) {
-        throw new Error(`JobTask ${job.data.serviceJobId} not found`);
+        throw new Error(`JobTask ${job.data.jobTaskId} not found`);
       }
 
       lock = await redlock.lock(
@@ -48,11 +48,7 @@ const notaService = function(name, processor, scheduler) {
       jobTask.status = JobTask.STATUS.ONGOING;
       await jobTask.save();
 
-      const result = await processor(
-        jobTask.resourceId,
-        jobTask.data,
-        loggerHandler
-      );
+      const result = await processor(jobTask, loggerHandler);
 
       jobTask.config = { ...jobTask.config, result };
       jobTask.result = { result };
@@ -69,6 +65,7 @@ const notaService = function(name, processor, scheduler) {
       if (jobTask) {
         jobTask.status = JobTask.STATUS.ERROR;
         jobTask.config = { ...jobTask.config, error: error.message };
+        await jobTask.save();
       }
     } finally {
       logger.info(`FINISHED JOB`, { service: name, jobId: job.id });
@@ -107,14 +104,17 @@ const notaService = function(name, processor, scheduler) {
     get _processor() {
       return processorHandler;
     },
-    async add(
-      task,
-      { projectId, resourceId, data, userId, type = JobTask.TYPE.ADHOC }
-    ) {
+    async add({
+      projectId,
+      resourceId,
+      data,
+      userId,
+      type = JobTask.TYPE.ADHOC
+    }) {
       const jobTask = await JobTask.create({
         projectId,
         resourceId,
-        task: JobTask.TASK[task],
+        task,
         type,
         status: JobTask.STATUS.NOT_STARTED,
         config: { data },

@@ -1,7 +1,7 @@
 const { compareIds, compareByKey } = require("../lib/utils");
 const datasource = require("../lib/datasource");
-const { MediaSource, JobTask } = require("../models");
-const notaJobQueue = require("../lib/notaJobQueue");
+const { MediaSource } = require("../models");
+const mediaSourceFetchService = require("../services/mediaSourceFetchService");
 
 const mediaSourcesTemplate = function(mediaSources) {
   return mediaSources.sort(compareIds).map(mediaSourceTemplate);
@@ -134,7 +134,7 @@ const createMediaSource = async function(req, res, next) {
       updatedBy: req.user.id
     });
 
-    await notaJobQueue.add(JobTask.TASK_NAME.MEDIA_SOURCE_FETCH, {
+    await mediaSourceFetchService.add({
       projectId: res.locals.project.id,
       resourceId: mediaSource.id,
       data: { refresh: false },
@@ -150,7 +150,7 @@ const createMediaSource = async function(req, res, next) {
 
 const refreshMediaItems = async function(req, res, next) {
   try {
-    await notaJobQueue.add(JobTask.TASK_NAME.MEDIA_SOURCE_FETCH, {
+    await mediaSourceFetchService.add({
       projectId: res.locals.project.id,
       resourceId: res.locals.mediaSource.id,
       data: { refresh: true },
