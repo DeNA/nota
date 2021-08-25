@@ -42,7 +42,7 @@ These are the instructions for running Nota using Docker Compose for development
 
 ### Requirements
 
-- node >= 10.x
+- node >= 14.x
 - MySQL >= 5.7
 - redis >= 5.0
 
@@ -90,7 +90,6 @@ After a user is created, an administrator can manage all the users from the UI.
 
 ## Limitations
 
-- Application text is not yet localized. Some text appears in Japanese.
 - No Local User management UI. We use SAML authentication, and local users have only beed used for development so no UI for user creation, password change, etc exists. It is possible to create local users using the script noted above.
 - No local filesystem source setup UI. We use mainly S3 as the backend for our images and videos, and local filesystem is only used for development and test. Seed data provides an already setup local filesystem path (`packages/nota-server/testfiles`) with some dummy files for development and testing. It is possible to add local sources directly into the database.
 
