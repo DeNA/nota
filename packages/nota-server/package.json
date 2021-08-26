@@ -13,8 +13,8 @@
     "start": "cd src && ../node_modules/.bin/pm2-dev ecosystem.json --env dev",
     "start:web": "cd src && pm2-runtime ecosystem.json --only nota",
     "start:worker": "cd src && pm2-runtime ecosystem.json --only nota-worker",
-    "test": "NODE_ENV=test node_modules/.bin/jest --forceExit --runInBand",
-    "test:staged": "NODE_ENV=test node_modules/.bin/jest --findRelatedTests --forceExit --runInBand",
+    "test": "NODE_ENV=test node_modules/.bin/jest --detectOpenHandles --runInBand",
+    "test:staged": "NODE_ENV=test node_modules/.bin/jest --findRelatedTests --detectOpenHandles --runInBand",
     "resetdb": "sequelize db:drop; sequelize db:create && sequelize db:migrate",
     "seed": "sequelize db:seed:all"
   },
