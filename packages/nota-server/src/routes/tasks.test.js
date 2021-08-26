@@ -98,7 +98,7 @@ describe("/api/projects/:projectId/tasks", () => {
         .send();
 
       expect(response.status).toBe(200);
-      expect(response.body.length).toBe(4);
+      expect(response.body.length).toBe(7);
       expect(response.body[0].id).toBe(data.tasks.task1.id);
       expect(response.body[1].id).toBe(data.tasks.task2.id);
       expect(response.body[2].id).toBe(data.tasks.task3.id);
@@ -114,7 +114,7 @@ describe("/api/projects/:projectId/tasks", () => {
         .send();
 
       expect(response.status).toBe(200);
-      expect(response.body.length).toBe(4);
+      expect(response.body.length).toBe(7);
       expect(response.body[0].id).toBe(data.tasks.task1.id);
       expect(response.body[1].id).toBe(data.tasks.task2.id);
       expect(response.body[2].id).toBe(data.tasks.task3.id);

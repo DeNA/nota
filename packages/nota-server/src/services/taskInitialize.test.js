@@ -358,7 +358,7 @@ describe("taskInitialize", () => {
         status: 0,
         taskAssignment: null,
         taskAssignmentId: null,
-        taskId: 5
+        taskId
       }
     ]);
   });

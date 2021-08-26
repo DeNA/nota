@@ -245,7 +245,7 @@ describe("mediaSourceFetch", () => {
       },
       {
         createdBy: 1,
-        mediaSourceId: 4,
+        mediaSourceId: mediaSource.id,
         metadata: {
           externalMetadata: {
             filter_string: "aaaa"

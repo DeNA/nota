@@ -285,6 +285,36 @@ describe("/api/projects", () => {
             name: "task_2",
             status: 100,
             total: 0
+          },
+          {
+            assignable: 0,
+            assignments: [],
+            description: "description",
+            done: 0,
+            id: 5,
+            name: "task_5_no_fetch_schedule_config",
+            status: 100,
+            total: 0
+          },
+          {
+            assignable: 0,
+            assignments: [],
+            description: "description",
+            done: 0,
+            id: 7,
+            name: "task_5_no_missing_schedule_config",
+            status: 100,
+            total: 0
+          },
+          {
+            assignable: 0,
+            assignments: [],
+            description: "description",
+            done: 0,
+            id: 6,
+            name: "task_6_no_missing_schedule_config",
+            status: 100,
+            total: 0
           }
         ]
       });
@@ -302,7 +332,7 @@ describe("/api/projects", () => {
         id: 1,
         name: "project_1"
       });
-      expect(response.body[0].tasks.length).toBe(3);
+      expect(response.body[0].tasks.length).toBe(6);
       expect(response.body[0].tasks[0].id).toBe(data.tasks.task1.id);
       expect(response.body[0].tasks[1].id).toBe(data.tasks.task2.id);
       expect(response.body[0].tasks[2].id).toBe(data.tasks.task4.id);
