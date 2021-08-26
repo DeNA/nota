@@ -44,15 +44,19 @@ const notaService = function(name, task, processor, scheduler) {
         }
       }, LOCK_RENEW_INTERVAL);
 
-      jobTask.startedAt = new Date();
-      jobTask.status = JobTask.STATUS.ONGOING;
-      await jobTask.save();
+      await jobTask.update({
+        startedAt: new Date(),
+        status: JobTask.STATUS.ONGOING
+      });
 
       const result = await processor(jobTask, loggerHandler);
 
-      jobTask.config = { ...jobTask.config, result };
-      jobTask.result = { result };
-      jobTask.status = JobTask.STATUS.OK;
+      await jobTask.update({
+        config: { ...jobTask.config, result },
+        result: { result },
+        finishedAt: new Date(),
+        status: JobTask.STATUS.OK
+      });
     } catch (error) {
       logger.error(`FAILED JOB`, {
         service: name,
@@ -63,16 +67,14 @@ const notaService = function(name, task, processor, scheduler) {
       });
 
       if (jobTask) {
-        jobTask.status = JobTask.STATUS.ERROR;
-        jobTask.config = { ...jobTask.config, error: error.message };
-        await jobTask.save();
+        await jobTask.update({
+          config: { ...jobTask.config, error: error.message },
+          finishedAt: new Date(),
+          status: JobTask.STATUS.ERROR
+        });
       }
     } finally {
       logger.info(`FINISHED JOB`, { service: name, jobId: job.id });
-      if (jobTask) {
-        jobTask.finishedAt = new Date();
-        await jobTask.save();
-      }
 
       clearInterval(lockInterval);
 

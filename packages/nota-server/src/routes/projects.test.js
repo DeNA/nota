@@ -588,7 +588,6 @@ describe("/api/projects", () => {
         .send({ status: Project.STATUS.NOT_READY, groups: [] });
 
       expect(response.status).toBe(500);
-      console.error(response.body);
       expect(response.body.message).toBeTruthy();
 
       spy.mockRestore();

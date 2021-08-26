@@ -1,5 +1,5 @@
-const packages = require("../../package.json");
+const packageJson = require("../../package.json");
 
 module.exports = function() {
-  return packages.version;
+  return packageJson.version;
 };
