@@ -73,6 +73,7 @@
       "src/models/*.js",
       "src/routes/*.js",
       "src/lib/**/*.js",
+      "src/services/*.js",
       "!<rootDir>/node_modules/"
     ],
     "collectCoverage": true,

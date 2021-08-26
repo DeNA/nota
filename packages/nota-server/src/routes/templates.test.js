@@ -1,4 +1,4 @@
-jest.mock("../lib/notaJobQueue");
+jest.mock("../services/notaService");
 
 const request = require("supertest");
 const app = require("../app");

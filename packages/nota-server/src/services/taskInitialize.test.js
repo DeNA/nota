@@ -53,7 +53,7 @@ afterAll(() => {
   ds()._resetFilesForTest();
 });
 
-describe("mediaSourceFetch", () => {
+describe("taskInitialize", () => {
   let task;
   let taskId;
   beforeAll(async () => {
@@ -81,143 +81,133 @@ describe("mediaSourceFetch", () => {
       createdBy: 1
     };
 
-    await new Promise(async (resolve) => {
-      taskInitialize(jobTask, async (result) => {
-        expect(result).toEqual({ added: 5 });
+    const result = await taskInitialize(jobTask);
+    expect(result).toEqual({ added: 5 });
 
-        const taskItemsAfter = await task.getTaskItems({
-          include: [
-            {
-              attributes: [
-                "id",
-                "boundaries",
-                "labels",
-                "labelsName",
-                "status"
-              ],
-              model: Annotation
-            }
-          ]
-        });
-        expect(taskItemsAfter).toMatchObject([
-          {
-            completedAt: null,
-            completedBy: null,
-            createdBy: 1,
-            id: 7,
-            mediaItemId: 11,
-            status: 0,
-            taskAssignment: null,
-            taskAssignmentId: null,
-            taskId,
-            annotations: [
-              {
-                id: 1,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              },
-              {
-                boundaries: {
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                  top: 10,
-                  type: "RECTANGLE"
-                },
-                id: 2,
-                labels: {
-                  labels: {
-                    foo: "bar"
-                  }
-                },
-                labelsName: "typeA",
-                status: 0
-              }
-            ]
-          },
-          {
-            completedAt: null,
-            completedBy: null,
-            createdBy: 1,
-            id: 8,
-            mediaItemId: 7,
-            status: 0,
-            taskAssignment: null,
-            taskAssignmentId: null,
-            taskId,
-            annotations: [
-              {
-                id: 3,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            completedAt: null,
-            completedBy: null,
-            createdBy: 1,
-            id: 9,
-            mediaItemId: 8,
-            status: 0,
-            taskAssignment: null,
-            taskAssignmentId: null,
-            taskId,
-            annotations: [
-              {
-                id: 4,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            completedAt: null,
-            completedBy: null,
-            createdBy: 1,
-            id: 10,
-            mediaItemId: 9,
-            status: 0,
-            taskAssignment: null,
-            taskAssignmentId: null,
-            taskId,
-            annotations: [
-              {
-                id: 5,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            completedAt: null,
-            completedBy: null,
-            createdBy: 1,
-            id: 11,
-            mediaItemId: 10,
-            status: 0,
-            taskAssignment: null,
-            taskAssignmentId: null,
-            taskId,
-            annotations: [
-              {
-                id: 6,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          }
-        ]);
-
-        resolve(true);
-      });
+    const taskItemsAfter = await task.getTaskItems({
+      include: [
+        {
+          attributes: ["id", "boundaries", "labels", "labelsName", "status"],
+          model: Annotation
+        }
+      ]
     });
+    expect(taskItemsAfter).toMatchObject([
+      {
+        completedAt: null,
+        completedBy: null,
+        createdBy: 1,
+        id: 7,
+        mediaItemId: 11,
+        status: 0,
+        taskAssignment: null,
+        taskAssignmentId: null,
+        taskId,
+        annotations: [
+          {
+            id: 1,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          },
+          {
+            boundaries: {
+              bottom: 10,
+              left: 10,
+              right: 10,
+              top: 10,
+              type: "RECTANGLE"
+            },
+            id: 2,
+            labels: {
+              labels: {
+                foo: "bar"
+              }
+            },
+            labelsName: "typeA",
+            status: 0
+          }
+        ]
+      },
+      {
+        completedAt: null,
+        completedBy: null,
+        createdBy: 1,
+        id: 8,
+        mediaItemId: 7,
+        status: 0,
+        taskAssignment: null,
+        taskAssignmentId: null,
+        taskId,
+        annotations: [
+          {
+            id: 3,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        completedAt: null,
+        completedBy: null,
+        createdBy: 1,
+        id: 9,
+        mediaItemId: 8,
+        status: 0,
+        taskAssignment: null,
+        taskAssignmentId: null,
+        taskId,
+        annotations: [
+          {
+            id: 4,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        completedAt: null,
+        completedBy: null,
+        createdBy: 1,
+        id: 10,
+        mediaItemId: 9,
+        status: 0,
+        taskAssignment: null,
+        taskAssignmentId: null,
+        taskId,
+        annotations: [
+          {
+            id: 5,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        completedAt: null,
+        completedBy: null,
+        createdBy: 1,
+        id: 11,
+        mediaItemId: 10,
+        status: 0,
+        taskAssignment: null,
+        taskAssignmentId: null,
+        taskId,
+        annotations: [
+          {
+            id: 6,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      }
+    ]);
   });
+
   test("run correctly refresh", async () => {
     // Add extra media items
     // @ts-ignore
@@ -251,137 +241,126 @@ describe("mediaSourceFetch", () => {
       createdBy: 1
     };
 
-    await new Promise(async (resolve) => {
-      taskInitialize(jobTask, async (result) => {
-        expect(result).toEqual({ added: 1 });
+    const result = await taskInitialize(jobTask);
+    expect(result).toEqual({ added: 1 });
 
-        const taskItemsAfter = await task.getTaskItems({
-          include: [
-            {
-              attributes: [
-                "id",
-                "boundaries",
-                "labels",
-                "labelsName",
-                "status"
-              ],
-              model: Annotation
-            }
-          ]
-        });
-        expect(taskItemsAfter).toMatchObject([
-          {
-            id: 7,
-            annotations: [
-              {
-                id: 1,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              },
-              {
-                boundaries: {
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                  top: 10,
-                  type: "RECTANGLE"
-                },
-                id: 2,
-                labels: {
-                  labels: {
-                    foo: "bar"
-                  }
-                },
-                labelsName: "typeA",
-                status: 0
-              }
-            ]
-          },
-          {
-            id: 8,
-            annotations: [
-              {
-                id: 3,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            id: 9,
-            annotations: [
-              {
-                id: 4,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            id: 10,
-            annotations: [
-              {
-                id: 5,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            id: 11,
-            annotations: [
-              {
-                id: 6,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              }
-            ]
-          },
-          {
-            annotations: [
-              {
-                boundaries: undefined,
-                id: 7,
-                labels: {},
-                labelsName: "media_test",
-                status: 0
-              },
-              {
-                boundaries: {
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
-                  top: 20,
-                  type: "RECTANGLE"
-                },
-                id: 8,
-                labels: {
-                  labels: {
-                    foo: "bar"
-                  }
-                },
-                labelsName: "typeA",
-                status: 0
-              }
-            ],
-            completedAt: null,
-            completedBy: null,
-            id: 12,
-            mediaItemId: 12,
-            status: 0,
-            taskAssignment: null,
-            taskAssignmentId: null,
-            taskId: 5
-          }
-        ]);
-
-        resolve(true);
-      });
+    const taskItemsAfter = await task.getTaskItems({
+      include: [
+        {
+          attributes: ["id", "boundaries", "labels", "labelsName", "status"],
+          model: Annotation
+        }
+      ]
     });
+    expect(taskItemsAfter).toMatchObject([
+      {
+        id: 7,
+        annotations: [
+          {
+            id: 1,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          },
+          {
+            boundaries: {
+              bottom: 10,
+              left: 10,
+              right: 10,
+              top: 10,
+              type: "RECTANGLE"
+            },
+            id: 2,
+            labels: {
+              labels: {
+                foo: "bar"
+              }
+            },
+            labelsName: "typeA",
+            status: 0
+          }
+        ]
+      },
+      {
+        id: 8,
+        annotations: [
+          {
+            id: 3,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        id: 9,
+        annotations: [
+          {
+            id: 4,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        id: 10,
+        annotations: [
+          {
+            id: 5,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        id: 11,
+        annotations: [
+          {
+            id: 6,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          }
+        ]
+      },
+      {
+        annotations: [
+          {
+            boundaries: undefined,
+            id: 7,
+            labels: {},
+            labelsName: "media_test",
+            status: 0
+          },
+          {
+            boundaries: {
+              bottom: 20,
+              left: 20,
+              right: 20,
+              top: 20,
+              type: "RECTANGLE"
+            },
+            id: 8,
+            labels: {
+              labels: {
+                foo: "bar"
+              }
+            },
+            labelsName: "typeA",
+            status: 0
+          }
+        ],
+        completedAt: null,
+        completedBy: null,
+        id: 12,
+        mediaItemId: 12,
+        status: 0,
+        taskAssignment: null,
+        taskAssignmentId: null,
+        taskId: 5
+      }
+    ]);
   });
 });

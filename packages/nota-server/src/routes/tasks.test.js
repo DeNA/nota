@@ -1,12 +1,13 @@
-jest.mock("../lib/notaJobQueue");
+jest.mock("../services/notaService");
 jest.mock("../lib/datasource");
 
 const request = require("supertest");
 const app = require("../app");
 const { db } = require("../lib/testUtils");
 const { Task, TaskAssignment, JobTask, Project } = require("../models");
-const notaJobQueue = require("../lib/notaJobQueue");
 const datasource = require("../lib/datasource");
+const jobInitializeService = require("../services/taskInitializeService");
+const taskExportService = require("../services/taskExportService");
 
 let data;
 
@@ -379,7 +380,7 @@ describe("/api/projects/:projectId/tasks", () => {
     });
 
     test("Should queue task creation job (super admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(jobInitializeService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks`)
@@ -413,7 +414,6 @@ describe("/api/projects/:projectId/tasks", () => {
       });
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_FETCH,
         {
           data: { refresh: false },
           projectId: 1,
@@ -929,7 +929,7 @@ describe("/api/projects/:projectId/tasks", () => {
     });
 
     test("Should queue task refresh job (super admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(jobInitializeService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/refreshTaskItems`)
@@ -942,7 +942,6 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.status).toBe(204);
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_FETCH,
         {
           data: { refresh: true },
           projectId: 1,
@@ -954,7 +953,7 @@ describe("/api/projects/:projectId/tasks", () => {
       spy.mockRestore();
     });
     test("Should queue task refresh job (app admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(jobInitializeService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/refreshTaskItems`)
@@ -965,7 +964,6 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.status).toBe(204);
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_FETCH,
         {
           data: { refresh: true },
           projectId: 1,
@@ -977,7 +975,7 @@ describe("/api/projects/:projectId/tasks", () => {
       spy.mockRestore();
     });
     test("Should queue task refresh job (project admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(jobInitializeService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/refreshTaskItems`)
@@ -988,7 +986,6 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.status).toBe(204);
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_FETCH,
         {
           data: { refresh: true },
           projectId: 1,
@@ -1048,7 +1045,7 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.body).toEqual({});
     });
     test("should return 5xx if error happens", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(jobInitializeService, "add");
       spy.mockImplementationOnce(() => {
         throw new Error();
       });
@@ -1072,7 +1069,7 @@ describe("/api/projects/:projectId/tasks", () => {
     });
 
     test("Should queue task export job (super admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/export`)
@@ -1090,7 +1087,6 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.body.message).toBeTruthy();
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_EXPORT,
         {
           data: {
             target: Task.EXPORT_TARGET.ALL,
@@ -1106,7 +1102,7 @@ describe("/api/projects/:projectId/tasks", () => {
       spy.mockRestore();
     });
     test("Should queue task export job (app admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/export`)
@@ -1121,7 +1117,6 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.body.message).toBeTruthy();
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_EXPORT,
         {
           data: {
             target: Task.EXPORT_TARGET.NEW_AND_UPDATED,
@@ -1137,7 +1132,7 @@ describe("/api/projects/:projectId/tasks", () => {
       spy.mockRestore();
     });
     test("Should queue task export job (project admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
 
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/export`)
@@ -1149,7 +1144,6 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.body.message).toBeTruthy();
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
-        JobTask.TASK_NAME.TASK_EXPORT,
         {
           data: {
             target: Task.EXPORT_TARGET.ALL,
@@ -1166,7 +1160,7 @@ describe("/api/projects/:projectId/tasks", () => {
     });
 
     test("Should not queue task export job (annotator)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/export`)
         .set("Content-type", "application/json")
@@ -1182,7 +1176,7 @@ describe("/api/projects/:projectId/tasks", () => {
     });
 
     test("Should not queue task export job (different admin)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/export`)
         .set("Content-type", "application/json")
@@ -1198,7 +1192,7 @@ describe("/api/projects/:projectId/tasks", () => {
     });
 
     test("Should not queue task export job (normal)", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
       const response = await request(app)
         .post(`/api/projects/1/tasks/${data.tasks.task1.id}/export`)
         .set("Content-type", "application/json")
@@ -1222,7 +1216,7 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(response.body).toEqual({});
     });
     test("should return 5xx if error happens", async () => {
-      const spy = jest.spyOn(notaJobQueue, "add");
+      const spy = jest.spyOn(taskExportService, "add");
       spy.mockImplementationOnce(() => {
         throw new Error();
       });
