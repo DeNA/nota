@@ -81,10 +81,10 @@ const mocks = {
 
     return Readable.from(file.value);
   }),
-  writeItem: jest.fn(),
+  writeItem: jest.fn(() => "/path/to/test/export.tar.gz"),
   getDownloadUrl: jest.fn(({ fileName }) => fileName),
   _getFilesForTest: () => files,
-  _setFilesForTest: (newFiles) => {
+  _setFilesForTest: newFiles => {
     files = newFiles;
   },
   _resetFilesForTest: () => {

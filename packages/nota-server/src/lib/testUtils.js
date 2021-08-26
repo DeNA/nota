@@ -10,7 +10,8 @@ const {
   MediaItem,
   MediaSource,
   TaskItem,
-  JobTask
+  JobTask,
+  sequelize
 } = require("../models");
 const authUtils = require("./authUtils");
 const { spawn } = require("child-process-promise");
@@ -234,19 +235,33 @@ const createTaskItem = async ({
   taskAssignmentId = null,
   status = 0,
   createdBy = 1,
-  updatedBy = 1
+  updatedBy = 1,
+  createdAt = null,
+  updatedAt = null
 }) => {
-  const mediaItem = await TaskItem.create({
+  const taskItem = await TaskItem.create({
     name,
     mediaItemId,
     taskId,
     taskAssignmentId,
     status,
     createdBy,
-    updatedBy
+    updatedBy,
+    createdAt,
+    updatedAt
   });
 
-  return mediaItem.get({ plain: true });
+  // https://github.com/sequelize/sequelize/issues/3759
+  if (updatedAt) {
+    await sequelize.query(
+      `
+      UPDATE task_items SET updated_at='${updatedAt}' WHERE id=${taskItem.id}
+    `,
+      { type: sequelize.QueryTypes.UPDATE }
+    );
+  }
+
+  return taskItem.get({ plain: true });
 };
 
 const createJobTask = async ({
@@ -259,7 +274,9 @@ const createJobTask = async ({
   startedAt = null,
   finishedAt = null,
   createdBy = 1,
-  updatedBy = 1
+  updatedBy = 1,
+  createdAt = null,
+  updatedAt = null
 }) => {
   const jobTask = await JobTask.create({
     projectId,
@@ -271,7 +288,9 @@ const createJobTask = async ({
     startedAt,
     finishedAt,
     createdBy,
-    updatedBy
+    updatedBy,
+    createdAt,
+    updatedAt
   });
 
   return jobTask.get({ plain: true });
@@ -665,7 +684,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment1.id,
     status: TaskItem.STATUS.DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-02 00:00:00"
   });
   const taskItem2 = await createTaskItem({
     mediaItemId: mediaItem2.id,
@@ -673,7 +694,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment1.id,
     status: TaskItem.STATUS.DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-10 00:00:00"
   });
   const taskItem3 = await createTaskItem({
     mediaItemId: mediaItem3.id,
@@ -681,7 +704,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment2.id,
     status: TaskItem.STATUS.NOT_DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-02 00:00:00"
   });
   const taskItem4 = await createTaskItem({
     mediaItemId: mediaItem4.id,
@@ -689,7 +714,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment2.id,
     status: TaskItem.STATUS.NOT_DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-10 00:00:00"
   });
   const taskItem5 = await createTaskItem({
     mediaItemId: mediaItem5.id,
@@ -762,7 +789,8 @@ const generateTestData = async function() {
     status: JobTask.STATUS.NOT_STARTED,
     config: { data: { target: 2, includeOngoing: false } },
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport2 = await createJobTask({
     projectId: task1.projectId,
@@ -773,7 +801,8 @@ const generateTestData = async function() {
     config: { data: { target: 2, includeOngoing: false } },
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
-    startedAt: "2019-01-01T00:00:00.000Z"
+    startedAt: "2019-01-01T00:00:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport3 = await createJobTask({
     projectId: task1.projectId,
@@ -788,7 +817,8 @@ const generateTestData = async function() {
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
     startedAt: "2019-01-02T00:00:00.000Z",
-    finishedAt: "2019-01-02T00:01:00.000Z"
+    finishedAt: "2019-01-02T00:01:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport4 = await createJobTask({
     projectId: task2.projectId,
@@ -803,7 +833,8 @@ const generateTestData = async function() {
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
     startedAt: "2019-01-03T00:00:00.000Z",
-    finishedAt: "2019-01-03T00:01:00.000Z"
+    finishedAt: "2019-01-03T00:01:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport5 = await createJobTask({
     projectId: task2.projectId,
@@ -818,7 +849,8 @@ const generateTestData = async function() {
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
     startedAt: "2019-01-03T00:00:00.000Z",
-    finishedAt: "2019-01-03T00:01:00.000Z"
+    finishedAt: "2019-01-03T00:01:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   return {
     users: {
