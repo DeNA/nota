@@ -8,8 +8,7 @@ const { TaskTemplate } = require("../models");
 let data;
 
 beforeAll(async () => {
-  await db.resetTestDb();
-  data = await db.generateTestData();
+  data = await db.resetTestDb();
 });
 
 describe("/api/projects/:projectId/templates", () => {

@@ -79,9 +79,14 @@
     "collectCoverage": true,
     "transform": {},
     "maxConcurrency": 1,
+    "maxWorkers": 1,
     "setupFilesAfterEnv": [
       "./testSetup.js"
     ],
-    "clearMocks": true
+    "globalSetup": "./testGlobalSetup.js",
+    "clearMocks": true,
+    "roots": [
+      "./src"
+    ]
   }
 }

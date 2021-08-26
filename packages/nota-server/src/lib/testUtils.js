@@ -14,20 +14,32 @@ const {
 } = require("../models");
 const authUtils = require("./authUtils");
 const { spawn } = require("child-process-promise");
-// const fs = require("fs");
-// const config = require("../config");
+const fs = require("fs");
+const config = require("../config");
+const DB_FILE = config.db.storage;
+const DB_CLEAN_FILE = DB_FILE + ".tmp";
+const DB_DATA_JSON = DB_FILE + ".tmp.json";
 
-const resetTestDb = async () => {
+const setupDb = async () => {
   const options = { stdio: "inherit" };
   const sequelize = "node_modules/.bin/sequelize";
   try {
     // fs.unlinkSync("./" + config.db.storage);
     await spawn(sequelize, ["db:migrate:undo:all"]);
     await spawn(sequelize, ["db:migrate"]);
+    const data = await generateTestData();
+    fs.writeFileSync(DB_DATA_JSON, JSON.stringify(data));
+    fs.copyFileSync(DB_FILE, DB_CLEAN_FILE);
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
+};
+
+const resetTestDb = async () => {
+  fs.copyFileSync(DB_CLEAN_FILE, DB_FILE);
+  const data = require(DB_DATA_JSON);
+  return data;
 };
 
 const createProject = async ({
@@ -734,19 +746,12 @@ const generateTestData = async function() {
 
 module.exports = {
   db: {
+    setupDb,
     resetTestDb,
     createUser,
     createProject,
     createTaskTemplate,
     createTask,
-    createMediaSource,
-    generateTestData: async () => {
-      try {
-        const data = await generateTestData();
-        return data;
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    createMediaSource
   }
 };

@@ -8,8 +8,7 @@ const { Project } = require("../models");
 let data;
 
 beforeAll(async () => {
-  await db.resetTestDb();
-  data = await db.generateTestData();
+  data = await db.resetTestDb();
 });
 
 describe("/api/projects", () => {
@@ -347,8 +346,7 @@ describe("/api/projects", () => {
       };
     });
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should create project (app admin)", async () => {
@@ -441,8 +439,7 @@ describe("/api/projects", () => {
 
   describe("PUT /:id", () => {
     beforeEach(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
     test("Admin should be able to update project name", async () => {
       const response = await request(app)

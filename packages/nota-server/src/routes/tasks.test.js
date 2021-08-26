@@ -12,8 +12,7 @@ const taskExportService = require("../services/taskExportService");
 let data;
 
 beforeAll(async () => {
-  await db.resetTestDb();
-  data = await db.generateTestData();
+  data = await db.resetTestDb();
 });
 
 describe("/api/projects/:projectId/tasks", () => {
@@ -375,8 +374,7 @@ describe("/api/projects/:projectId/tasks", () => {
       };
     });
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should queue task creation job (super admin)", async () => {
@@ -536,8 +534,7 @@ describe("/api/projects/:projectId/tasks", () => {
   });
   describe("PUT /:id", () => {
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should be able to update name/description/status (super admin)", async () => {
@@ -768,8 +765,7 @@ describe("/api/projects/:projectId/tasks", () => {
   });
   describe("DELETE /:id", () => {
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should be able to delete task (super admin)", async () => {
@@ -924,8 +920,7 @@ describe("/api/projects/:projectId/tasks", () => {
   });
   describe("POST /:id/refreshTaskItems", () => {
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should queue task refresh job (super admin)", async () => {
@@ -1064,8 +1059,7 @@ describe("/api/projects/:projectId/tasks", () => {
 
   describe("POST /:id/export", () => {
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should queue task export job (super admin)", async () => {

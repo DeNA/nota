@@ -25,8 +25,7 @@ const createTask = async function({
 };
 
 beforeAll(async () => {
-  await db.resetTestDb();
-  data = await db.generateTestData();
+  data = await db.resetTestDb();
   // @ts-ignore
   ds()._resetFilesForTest();
   mediaSource = await db.createMediaSource({
