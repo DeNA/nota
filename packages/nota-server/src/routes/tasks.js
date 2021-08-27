@@ -1,8 +1,10 @@
 const { compareIds } = require("../lib/utils");
 const { MediaSource, Task, TaskAssignment, JobTask } = require("../models");
-const notaJobQueue = require("../lib/notaJobQueue");
 const { absolutePath } = require("../lib/datasource/utils");
 const datasource = require("../lib/datasource");
+const taskInitializeService = require("../services/taskInitializeService");
+const taskExportService = require("../services/taskExportService");
+const taskMaintenanceService = require("../services/taskMaintenanceService");
 
 const taskResponseTemplate = function(task) {
   return {
@@ -139,7 +141,7 @@ const createTask = async function(req, res, next) {
       updatedBy: req.user.id
     });
 
-    await notaJobQueue.add(JobTask.TASK_NAME.TASK_FETCH, {
+    await taskInitializeService.add({
       projectId: res.locals.project.id,
       resourceId: task.id,
       data: { refresh: false },
@@ -220,7 +222,7 @@ const deleteTask = async function(req, res, next) {
 
 const refreshTaskItems = async function(req, res, next) {
   try {
-    await notaJobQueue.add(JobTask.TASK_NAME.TASK_FETCH, {
+    await taskInitializeService.add({
       projectId: res.locals.project.id,
       resourceId: res.locals.task.id,
       data: { refresh: true },
@@ -265,7 +267,7 @@ const taskMaintenance = async function(req, res, next) {
   }
 
   try {
-    await notaJobQueue.add(JobTask.TASK_NAME.TASK_MAINTENANCE, {
+    await taskMaintenanceService.add({
       projectId: res.locals.project.id,
       resourceId: res.locals.task.id,
       data: { type, options },
@@ -285,7 +287,7 @@ const exportTask = async function(req, res, next) {
       includeOngoing = true,
       name
     } = req.body;
-    await notaJobQueue.add(JobTask.TASK_NAME.TASK_EXPORT, {
+    await taskExportService.add({
       projectId: res.locals.project.id,
       resourceId: res.locals.task.id,
       data: { target, includeOngoing, name },

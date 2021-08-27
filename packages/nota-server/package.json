@@ -13,8 +13,8 @@
     "start": "cd src && ../node_modules/.bin/pm2-dev ecosystem.json --env dev",
     "start:web": "cd src && pm2-runtime ecosystem.json --only nota",
     "start:worker": "cd src && pm2-runtime ecosystem.json --only nota-worker",
-    "test": "NODE_ENV=test node_modules/.bin/jest --forceExit --runInBand",
-    "test:staged": "NODE_ENV=test node_modules/.bin/jest --findRelatedTests --forceExit --runInBand",
+    "test": "NODE_ENV=test node_modules/.bin/jest --detectOpenHandles --runInBand",
+    "test:staged": "NODE_ENV=test node_modules/.bin/jest --findRelatedTests --detectOpenHandles --runInBand",
     "resetdb": "sequelize db:drop; sequelize db:create && sequelize db:migrate",
     "seed": "sequelize db:seed:all"
   },
@@ -24,7 +24,7 @@
     "axios": "^0.21.1",
     "bcryptjs": "2.4.3",
     "body-parser": "1.18.3",
-    "bull": "^3.10.0",
+    "bullmq": "^1.42.1",
     "compression": "1.7.4",
     "cookie-parser": "1.4.4",
     "cron-parser": "^2.13.0",
@@ -45,6 +45,7 @@
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "passport-saml": "^3.1.1",
+    "redlock": "^4.2.0",
     "sequelize": "5.21.2",
     "serve-favicon": "2.5.0",
     "sharp": "0.29.0",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
+    "@types/redlock": "^4.0.2",
     "child-process-promise": "^2.2.1",
     "concurrently": "^5.3.0",
     "jest": "^27.0.6",
@@ -71,14 +73,20 @@
       "src/models/*.js",
       "src/routes/*.js",
       "src/lib/**/*.js",
+      "src/services/*.js",
       "!<rootDir>/node_modules/"
     ],
     "collectCoverage": true,
     "transform": {},
     "maxConcurrency": 1,
+    "maxWorkers": 1,
     "setupFilesAfterEnv": [
       "./testSetup.js"
     ],
-    "clearMocks": true
+    "globalSetup": "./testGlobalSetup.js",
+    "clearMocks": true,
+    "roots": [
+      "./src"
+    ]
   }
 }

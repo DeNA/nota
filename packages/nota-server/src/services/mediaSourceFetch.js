@@ -1,6 +1,6 @@
 const { MediaSource } = require("../models");
 
-const mediaSourceFetch = async function(jobTask, done) {
+const mediaSourceFetch = async function(jobTask, logger) {
   const mediaSourceId = jobTask.resourceId;
   const data = jobTask.config.data;
   const userId = jobTask.createdBy;
@@ -16,7 +16,7 @@ const mediaSourceFetch = async function(jobTask, done) {
     await mediaSource.save();
   }
 
-  done({ added });
+  return { added };
 };
 
 module.exports = mediaSourceFetch;

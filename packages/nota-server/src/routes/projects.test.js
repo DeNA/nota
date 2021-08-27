@@ -1,4 +1,4 @@
-jest.mock("../lib/notaJobQueue");
+jest.mock("../services/notaService");
 
 const request = require("supertest");
 const app = require("../app");
@@ -8,8 +8,7 @@ const { Project } = require("../models");
 let data;
 
 beforeAll(async () => {
-  await db.resetTestDb();
-  data = await db.generateTestData();
+  data = await db.resetTestDb();
 });
 
 describe("/api/projects", () => {
@@ -286,6 +285,36 @@ describe("/api/projects", () => {
             name: "task_2",
             status: 100,
             total: 0
+          },
+          {
+            assignable: 0,
+            assignments: [],
+            description: "description",
+            done: 0,
+            id: 5,
+            name: "task_5_no_fetch_schedule_config",
+            status: 100,
+            total: 0
+          },
+          {
+            assignable: 0,
+            assignments: [],
+            description: "description",
+            done: 0,
+            id: 7,
+            name: "task_5_no_missing_schedule_config",
+            status: 100,
+            total: 0
+          },
+          {
+            assignable: 0,
+            assignments: [],
+            description: "description",
+            done: 0,
+            id: 6,
+            name: "task_6_no_missing_schedule_config",
+            status: 100,
+            total: 0
           }
         ]
       });
@@ -303,7 +332,7 @@ describe("/api/projects", () => {
         id: 1,
         name: "project_1"
       });
-      expect(response.body[0].tasks.length).toBe(3);
+      expect(response.body[0].tasks.length).toBe(6);
       expect(response.body[0].tasks[0].id).toBe(data.tasks.task1.id);
       expect(response.body[0].tasks[1].id).toBe(data.tasks.task2.id);
       expect(response.body[0].tasks[2].id).toBe(data.tasks.task4.id);
@@ -347,8 +376,7 @@ describe("/api/projects", () => {
       };
     });
     afterAll(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
 
     test("Should create project (app admin)", async () => {
@@ -441,8 +469,7 @@ describe("/api/projects", () => {
 
   describe("PUT /:id", () => {
     beforeEach(async () => {
-      await db.resetTestDb();
-      data = await db.generateTestData();
+      data = await db.resetTestDb();
     });
     test("Admin should be able to update project name", async () => {
       const response = await request(app)
@@ -561,7 +588,6 @@ describe("/api/projects", () => {
         .send({ status: Project.STATUS.NOT_READY, groups: [] });
 
       expect(response.status).toBe(500);
-      console.error(response.body);
       expect(response.body.message).toBeTruthy();
 
       spy.mockRestore();

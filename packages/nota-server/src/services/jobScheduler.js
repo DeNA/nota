@@ -1,9 +1,10 @@
-const { logger } = require("../lib/logger");
 const { Op } = require("sequelize");
 const { Task, MediaSource, JobTask } = require("../models");
 const parser = require("cron-parser");
 const moment = require("moment");
-const notaJobQueue = require("../lib/notaJobQueue");
+const taskInitializeService = require("./taskInitializeService");
+const taskExportService = require("./taskExportService");
+const mediaSourceFetchService = require("./mediaSourceFetchService");
 
 const shouldJobBeExecuted = function(lastExecutionTimestamp, cron) {
   if (!cron) {
@@ -51,7 +52,7 @@ const mediaSourceFetchScheduler = async function() {
     }
 
     if (execute) {
-      await notaJobQueue.add(JobTask.TASK_NAME.MEDIA_SOURCE_FETCH, {
+      await mediaSourceFetchService.add({
         projectId: mediaSource.projectId,
         resourceId: mediaSource.id,
         type: JobTask.TYPE.SCHEDULED,
@@ -98,7 +99,7 @@ const taskFetchScheduler = async function() {
     }
 
     if (execute) {
-      await notaJobQueue.add(JobTask.TASK_NAME.TASK_FETCH, {
+      await taskInitializeService.add({
         projectId: task.projectId,
         resourceId: task.id,
         type: JobTask.TYPE.SCHEDULED,
@@ -151,7 +152,7 @@ const taskExportScheduler = async function() {
     }
 
     if (execute) {
-      await notaJobQueue.add(JobTask.TASK_NAME.TASK_EXPORT, {
+      await taskExportService.add({
         projectId: task.projectId,
         resourceId: task.id,
         type: JobTask.TYPE.SCHEDULED,
@@ -168,32 +169,15 @@ const taskExportScheduler = async function() {
   }
 };
 
-const processor = async function(data, done) {
-  logger.info({
-    logType: "service",
-    message: "nota-job-scheduler processing started"
-  });
+const jobScheduler = async function(logger) {
+  // MEDIA_SOURCE_FETCH
+  await mediaSourceFetchScheduler();
 
-  try {
-    // MEDIA_SOURCE_FETCH
-    await mediaSourceFetchScheduler();
+  // TASK_FETCH
+  await taskFetchScheduler();
 
-    // TASK_FETCH
-    await taskFetchScheduler();
-
-    // TASK_EXPORT
-    await taskExportScheduler();
-
-    done();
-  } catch (error) {
-    logger.error(error);
-    done(error);
-  } finally {
-    logger.info({
-      logType: "service",
-      message: "nota-job-scheduler processing finished"
-    });
-  }
+  // TASK_EXPORT
+  await taskExportScheduler();
 };
 
-module.exports = processor;
+module.exports = jobScheduler;

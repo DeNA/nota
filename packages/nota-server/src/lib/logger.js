@@ -1,9 +1,14 @@
 const winston = require("winston");
 const expressWinston = require("express-winston");
 
+// Silence logs output in tests
+const consoleOptions = {
+  silent: process.env.NODE_ENV === "test"
+};
+
 module.exports = {
   accessLogger: expressWinston.logger({
-    transports: [new winston.transports.Console()],
+    transports: [new winston.transports.Console(consoleOptions)],
     format: winston.format.combine(
       winston.format.timestamp(),
       winston.format.json()
@@ -19,7 +24,7 @@ module.exports = {
     }
   }),
   errorLogger: expressWinston.errorLogger({
-    transports: [new winston.transports.Console()],
+    transports: [new winston.transports.Console(consoleOptions)],
     format: winston.format.combine(
       winston.format.timestamp(),
       winston.format.json()
@@ -34,7 +39,7 @@ module.exports = {
     }
   }),
   logger: winston.createLogger({
-    transports: [new winston.transports.Console()],
+    transports: [new winston.transports.Console(consoleOptions)],
     format: winston.format.combine(
       winston.format.timestamp(),
       winston.format.json()

@@ -10,24 +10,38 @@ const {
   MediaItem,
   MediaSource,
   TaskItem,
-  JobTask
+  Annotation,
+  JobTask,
+  sequelize
 } = require("../models");
 const authUtils = require("./authUtils");
 const { spawn } = require("child-process-promise");
-// const fs = require("fs");
-// const config = require("../config");
+const fs = require("fs");
+const config = require("../config");
+const DB_FILE = config.db.storage;
+const DB_CLEAN_FILE = DB_FILE + ".tmp";
+const DB_DATA_JSON = DB_FILE + ".tmp.json";
 
-const resetTestDb = async () => {
+const setupDb = async () => {
   const options = { stdio: "inherit" };
   const sequelize = "node_modules/.bin/sequelize";
   try {
     // fs.unlinkSync("./" + config.db.storage);
     await spawn(sequelize, ["db:migrate:undo:all"]);
     await spawn(sequelize, ["db:migrate"]);
+    const data = await generateTestData();
+    fs.writeFileSync(DB_DATA_JSON, JSON.stringify(data));
+    fs.copyFileSync(DB_FILE, DB_CLEAN_FILE);
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
+};
+
+const resetTestDb = async () => {
+  fs.copyFileSync(DB_CLEAN_FILE, DB_FILE);
+  const data = require(DB_DATA_JSON);
+  return data;
 };
 
 const createProject = async ({
@@ -96,6 +110,8 @@ const createMediaSource = async ({
   projectId = 1,
   datasource = "file",
   status = MediaSource.STATUS.READY,
+  isFetchScheduled = false,
+  fetchSchedule = null,
   config = {},
   createdBy = 1,
   updatedBy = 1
@@ -106,6 +122,8 @@ const createMediaSource = async ({
     projectId,
     datasource,
     status,
+    isFetchScheduled,
+    fetchSchedule,
     config,
     createdBy,
     updatedBy
@@ -145,6 +163,10 @@ const createTask = async ({
     conditions: { filter_string: ["foo"], filter_integer: [0, 10] }
   },
   status = 100,
+  isFetchScheduled = false,
+  fetchSchedule = null,
+  isExportScheduled = false,
+  exportSchedule = null,
   createdBy = 1,
   updatedBy = 1
 }) => {
@@ -156,6 +178,10 @@ const createTask = async ({
     mediaSourceId,
     mediaSourceConfig,
     status,
+    isFetchScheduled,
+    fetchSchedule,
+    isExportScheduled,
+    exportSchedule,
     createdBy,
     updatedBy
   });
@@ -210,19 +236,55 @@ const createTaskItem = async ({
   taskAssignmentId = null,
   status = 0,
   createdBy = 1,
-  updatedBy = 1
+  updatedBy = 1,
+  createdAt = null,
+  updatedAt = null
 }) => {
-  const mediaItem = await TaskItem.create({
+  const taskItem = await TaskItem.create({
     name,
     mediaItemId,
     taskId,
     taskAssignmentId,
     status,
     createdBy,
+    updatedBy,
+    createdAt,
+    updatedAt
+  });
+
+  // https://github.com/sequelize/sequelize/issues/3759
+  if (updatedAt) {
+    await sequelize.query(
+      `
+      UPDATE task_items SET updated_at='${updatedAt}' WHERE id=${taskItem.id}
+    `,
+      { type: sequelize.QueryTypes.UPDATE }
+    );
+  }
+
+  return taskItem.get({ plain: true });
+};
+
+const createAnnotation = async ({
+  taskItemId = 1,
+  boundaries = null,
+  labels = null,
+  labelsName = "test",
+  status = 0,
+  createdBy = 1,
+  updatedBy = 1
+}) => {
+  const annotation = await Annotation.create({
+    taskItemId,
+    boundaries,
+    labels,
+    labelsName,
+    status,
+    createdBy,
     updatedBy
   });
 
-  return mediaItem.get({ plain: true });
+  return annotation.get({ plain: true });
 };
 
 const createJobTask = async ({
@@ -235,7 +297,9 @@ const createJobTask = async ({
   startedAt = null,
   finishedAt = null,
   createdBy = 1,
-  updatedBy = 1
+  updatedBy = 1,
+  createdAt = null,
+  updatedAt = null
 }) => {
   const jobTask = await JobTask.create({
     projectId,
@@ -247,7 +311,9 @@ const createJobTask = async ({
     startedAt,
     finishedAt,
     createdBy,
-    updatedBy
+    updatedBy,
+    createdAt,
+    updatedAt
   });
 
   return jobTask.get({ plain: true });
@@ -356,7 +422,12 @@ const generateTestData = async function() {
     projectId: project1.id,
     datasource: "file",
     status: MediaSource.STATUS.READY,
-    config: {}
+    config: {},
+    isFetchScheduled: true,
+    fetchSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    }
   });
   const mediaSource3 = await createMediaSource({
     name: "media_source 3",
@@ -364,7 +435,32 @@ const generateTestData = async function() {
     projectId: project2.id,
     datasource: "file",
     status: MediaSource.STATUS.READY,
-    config: {}
+    config: {},
+    isFetchScheduled: true,
+    fetchSchedule: {
+      lastExecution: Date.now() + 1000 * 60 * 60,
+      config: { cron: "* */3 * * *", userId: 1 }
+    }
+  });
+  const mediaSource4 = await createMediaSource({
+    name: "media_source 4",
+    description: "media_source 4 no fetch schedule",
+    projectId: project2.id,
+    datasource: "file",
+    status: MediaSource.STATUS.READY,
+    config: {},
+    isFetchScheduled: true,
+    fetchSchedule: null
+  });
+  const mediaSource5 = await createMediaSource({
+    name: "media_source 5",
+    description: "media_source 5 missing config fetch schedule",
+    projectId: project2.id,
+    datasource: "file",
+    status: MediaSource.STATUS.READY,
+    config: {},
+    isFetchScheduled: true,
+    fetchSchedule: { lastExecution: 1, config: {} }
   });
 
   // task_templates
@@ -437,7 +533,17 @@ const generateTestData = async function() {
     mediaSourceConfig: { options: { path: "files1" } },
     status: 100,
     createdBy: adminUser.id,
-    updatedBy: adminUser.id
+    updatedBy: adminUser.id,
+    isFetchScheduled: true,
+    isExportScheduled: true,
+    fetchSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    },
+    exportSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    }
   });
   const task3 = await createTask({
     name: "task_3_done",
@@ -447,7 +553,17 @@ const generateTestData = async function() {
     mediaSourceConfig: { options: { path: "files1" } },
     status: 500,
     createdBy: adminUser.id,
-    updatedBy: adminUser.id
+    updatedBy: adminUser.id,
+    isFetchScheduled: true,
+    isExportScheduled: true,
+    fetchSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    },
+    exportSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    }
   });
   const task4 = await createTask({
     name: "task_4_hidden",
@@ -457,7 +573,65 @@ const generateTestData = async function() {
     mediaSourceConfig: { options: { path: "files1" } },
     status: 50,
     createdBy: adminUser.id,
-    updatedBy: adminUser.id
+    updatedBy: adminUser.id,
+    isFetchScheduled: true,
+    isExportScheduled: true,
+    fetchSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    },
+    exportSchedule: {
+      lastExecution: 1,
+      config: { cron: "* */3 * * *", userId: 1 }
+    }
+  });
+  const task5 = await createTask({
+    name: "task_5_no_fetch_schedule_config",
+    projectId: project1.id,
+    taskTemplateId: template1.id,
+    mediaSourceId: mediaSource1.id,
+    mediaSourceConfig: { options: { path: "files1" } },
+    status: 100,
+    createdBy: adminUser.id,
+    updatedBy: adminUser.id,
+    isFetchScheduled: true,
+    isExportScheduled: true,
+    fetchSchedule: null,
+    exportSchedule: null
+  });
+  const task6 = await createTask({
+    name: "task_6_no_missing_schedule_config",
+    projectId: project1.id,
+    taskTemplateId: template1.id,
+    mediaSourceId: mediaSource1.id,
+    mediaSourceConfig: { options: { path: "files1" } },
+    status: 100,
+    createdBy: adminUser.id,
+    updatedBy: adminUser.id,
+    isFetchScheduled: true,
+    isExportScheduled: true,
+    fetchSchedule: {},
+    exportSchedule: { lastExecution: 1, config: {} }
+  });
+  const task7 = await createTask({
+    name: "task_5_no_missing_schedule_config",
+    projectId: project1.id,
+    taskTemplateId: template1.id,
+    mediaSourceId: mediaSource1.id,
+    mediaSourceConfig: { options: { path: "files1" } },
+    status: 100,
+    createdBy: adminUser.id,
+    updatedBy: adminUser.id,
+    isFetchScheduled: true,
+    isExportScheduled: true,
+    fetchSchedule: {
+      lastExecution: Date.now() + 1000 * 60 * 60,
+      config: { cron: "* */3 * * *", userId: 1 }
+    },
+    exportSchedule: {
+      lastExecution: Date.now() + 1000 * 60 * 60,
+      config: { cron: "* */3 * * *", userId: 1 }
+    }
   });
 
   //taskAssignments
@@ -533,7 +707,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment1.id,
     status: TaskItem.STATUS.DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-02 00:00:00"
   });
   const taskItem2 = await createTaskItem({
     mediaItemId: mediaItem2.id,
@@ -541,7 +717,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment1.id,
     status: TaskItem.STATUS.DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-10 00:00:00"
   });
   const taskItem3 = await createTaskItem({
     mediaItemId: mediaItem3.id,
@@ -549,7 +727,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment2.id,
     status: TaskItem.STATUS.NOT_DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-02 00:00:00"
   });
   const taskItem4 = await createTaskItem({
     mediaItemId: mediaItem4.id,
@@ -557,7 +737,9 @@ const generateTestData = async function() {
     taskAssignmentId: taskAssignment2.id,
     status: TaskItem.STATUS.NOT_DONE,
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-01 00:00:00",
+    updatedAt: "2019-01-10 00:00:00"
   });
   const taskItem5 = await createTaskItem({
     mediaItemId: mediaItem5.id,
@@ -630,7 +812,8 @@ const generateTestData = async function() {
     status: JobTask.STATUS.NOT_STARTED,
     config: { data: { target: 2, includeOngoing: false } },
     createdBy: adminUser.id,
-    updatedBy: annotatorUser.id
+    updatedBy: annotatorUser.id,
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport2 = await createJobTask({
     projectId: task1.projectId,
@@ -641,7 +824,8 @@ const generateTestData = async function() {
     config: { data: { target: 2, includeOngoing: false } },
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
-    startedAt: "2019-01-01T00:00:00.000Z"
+    startedAt: "2019-01-01T00:00:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport3 = await createJobTask({
     projectId: task1.projectId,
@@ -656,7 +840,8 @@ const generateTestData = async function() {
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
     startedAt: "2019-01-02T00:00:00.000Z",
-    finishedAt: "2019-01-02T00:01:00.000Z"
+    finishedAt: "2019-01-02T00:01:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport4 = await createJobTask({
     projectId: task2.projectId,
@@ -671,7 +856,8 @@ const generateTestData = async function() {
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
     startedAt: "2019-01-03T00:00:00.000Z",
-    finishedAt: "2019-01-03T00:01:00.000Z"
+    finishedAt: "2019-01-03T00:01:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   const jobTask_taskExport5 = await createJobTask({
     projectId: task2.projectId,
@@ -686,7 +872,8 @@ const generateTestData = async function() {
     createdBy: adminUser.id,
     updatedBy: annotatorUser.id,
     startedAt: "2019-01-03T00:00:00.000Z",
-    finishedAt: "2019-01-03T00:01:00.000Z"
+    finishedAt: "2019-01-03T00:01:00.000Z",
+    createdAt: "2019-01-05T00:00:00.000Z"
   });
   return {
     users: {
@@ -698,9 +885,15 @@ const generateTestData = async function() {
       differentAdminUser
     },
     projects: { project1, project2, project3, project4, project5 },
-    mediaSources: { mediaSource1, mediaSource2, mediaSource3 },
+    mediaSources: {
+      mediaSource1,
+      mediaSource2,
+      mediaSource3,
+      mediaSource4,
+      mediaSource5
+    },
     taskTemplates: { template1, template2, template3, template4 },
-    tasks: { task1, task2, task3, task4 },
+    tasks: { task1, task2, task3, task4, task5, task6, task7 },
     taskAssignments: { taskAssignment1, taskAssignment2 },
     mediaItems: {
       mediaItem1,
@@ -734,19 +927,15 @@ const generateTestData = async function() {
 
 module.exports = {
   db: {
+    setupDb,
     resetTestDb,
     createUser,
     createProject,
     createTaskTemplate,
     createTask,
-    createMediaSource,
-    generateTestData: async () => {
-      try {
-        const data = await generateTestData();
-        return data;
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    createTaskItem,
+    createTaskAssignment,
+    createAnnotation,
+    createMediaSource
   }
 };
