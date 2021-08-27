@@ -1,0 +1,1189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`taskMaintenance STATUS_RESET Settings 1 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 0,
+        },
+        Object {
+          "id": 3,
+          "status": 0,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 0,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 0,
+        },
+        Object {
+          "id": 8,
+          "status": 0,
+        },
+      ],
+      "id": 9,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 2 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 0,
+        },
+        Object {
+          "id": 3,
+          "status": 0,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 0,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 0,
+        },
+        Object {
+          "id": 8,
+          "status": 0,
+        },
+      ],
+      "id": 9,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 0,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 3 should work correctly, multiple label 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 0,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 3 should work correctly, one label 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 4 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 0,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 5 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 3,
+      "status": 100,
+    },
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 5,
+      "status": 100,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 0,
+        },
+        Object {
+          "id": 3,
+          "status": 0,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 0,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 0,
+        },
+        Object {
+          "id": 8,
+          "status": 0,
+        },
+      ],
+      "id": 9,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 6 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 3,
+      "status": 100,
+    },
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 0,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 0,
+        },
+        Object {
+          "id": 5,
+          "status": 0,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 9,
+          "status": 0,
+        },
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 0,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 7 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 1,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 1,
+        },
+        Object {
+          "id": 5,
+          "status": 1,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+        Object {
+          "id": 9,
+          "status": 1,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 8 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 1,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 1,
+        },
+        Object {
+          "id": 5,
+          "status": 1,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+        Object {
+          "id": 9,
+          "status": 1,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 0,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 9 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 3,
+      "status": 100,
+    },
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 5,
+      "status": 100,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 1,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 1,
+        },
+        Object {
+          "id": 5,
+          "status": 1,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+        Object {
+          "id": 9,
+          "status": 1,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 10 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 3,
+      "status": 500,
+    },
+    Object {
+      "id": 5,
+      "status": 500,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 1,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 1,
+        },
+        Object {
+          "id": 5,
+          "status": 1,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+        Object {
+          "id": 9,
+          "status": 1,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;
+
+exports[`taskMaintenance STATUS_RESET Settings 11 should work correctly 1`] = `
+Object {
+  "id": 8,
+  "taskAssignments": Array [
+    Object {
+      "id": 3,
+      "status": 100,
+    },
+    Object {
+      "id": 4,
+      "status": 100,
+    },
+    Object {
+      "id": 5,
+      "status": 100,
+    },
+  ],
+  "taskItems": Array [
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 1,
+          "status": 1,
+        },
+        Object {
+          "id": 2,
+          "status": 1,
+        },
+        Object {
+          "id": 3,
+          "status": 1,
+        },
+      ],
+      "id": 7,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 4,
+          "status": 1,
+        },
+        Object {
+          "id": 5,
+          "status": 1,
+        },
+        Object {
+          "id": 6,
+          "status": 1,
+        },
+      ],
+      "id": 8,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 7,
+          "status": 1,
+        },
+        Object {
+          "id": 8,
+          "status": 1,
+        },
+      ],
+      "id": 9,
+      "status": 1,
+    },
+    Object {
+      "annotations": Array [
+        Object {
+          "id": 10,
+          "status": 0,
+        },
+        Object {
+          "id": 11,
+          "status": 0,
+        },
+        Object {
+          "id": 12,
+          "status": 0,
+        },
+        Object {
+          "id": 9,
+          "status": 1,
+        },
+      ],
+      "id": 10,
+      "status": 0,
+    },
+    Object {
+      "annotations": Array [],
+      "id": 11,
+      "status": 1,
+    },
+  ],
+}
+`;

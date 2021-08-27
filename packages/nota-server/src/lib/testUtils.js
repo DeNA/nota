@@ -10,6 +10,7 @@ const {
   MediaItem,
   MediaSource,
   TaskItem,
+  Annotation,
   JobTask,
   sequelize
 } = require("../models");
@@ -262,6 +263,28 @@ const createTaskItem = async ({
   }
 
   return taskItem.get({ plain: true });
+};
+
+const createAnnotation = async ({
+  taskItemId = 1,
+  boundaries = null,
+  labels = null,
+  labelsName = "test",
+  status = 0,
+  createdBy = 1,
+  updatedBy = 1
+}) => {
+  const annotation = await Annotation.create({
+    taskItemId,
+    boundaries,
+    labels,
+    labelsName,
+    status,
+    createdBy,
+    updatedBy
+  });
+
+  return annotation.get({ plain: true });
 };
 
 const createJobTask = async ({
@@ -910,6 +933,9 @@ module.exports = {
     createProject,
     createTaskTemplate,
     createTask,
+    createTaskItem,
+    createTaskAssignment,
+    createAnnotation,
     createMediaSource
   }
 };
