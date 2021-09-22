@@ -9,12 +9,54 @@
   width: 100%;
 }
 
-.vis-container.timeline-chart {
+.vis-container .timeline-chart {
   height: 100%;
   width: 100%;
+}
+
+.vis-container .timeline-chart .timeline-progress {
+  height: 100%;
+  width: 2px;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  background-color: rgba(238, 235, 210, 0.735);
 }
 
 .vis-container .rv-crosshair__inner {
   bottom: 0 !important;
   top: auto !important;
+}
+
+.vis-container .toggle-controls {
+  position: absolute;
+  cursor: pointer;
+  bottom: 0;
+  right: 0;
+  padding-left: 4px;
+  padding-bottom: 2px;
+  padding-right: 2px;
+  padding-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: darkgray;
+}
+
+.vis-container .toggle-controls:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.vis-container .vis-controls {
+  position: absolute;
+  cursor: pointer;
+  bottom: 0;
+  right: 0;
+  background-color: rgb(220, 220, 220);
+  padding-bottom: 20px;
+  border-radius: 3px;
+}
+
+.vis-container .vis-controls .rv-discrete-color-legend-item__color {
+  overflow: visible;
 }
