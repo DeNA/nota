@@ -25,7 +25,8 @@ function VideoTimelineVisualizations({
   const [visualizations, setVisualizations] = useState({});
   const [loading, setLoading] = useState(false);
   const {
-    videoControls: { setTime, getDuration }
+    videoControls: { setTime, getDuration },
+    videoStatus: { currentTime }
   } = useContext(videoControlsContext);
 
   useEffect(() => {
@@ -98,6 +99,7 @@ function VideoTimelineVisualizations({
   }
 
   const showGraph = !loading && lines.length > 0;
+  const progressPosition = ((width - 6) / getDuration()) * currentTime * 1000;
 
   return (
     <div
@@ -108,6 +110,10 @@ function VideoTimelineVisualizations({
       <Loading loading={loading} />
       {showGraph ? (
         <div className="timeline-chart" data-testid="timeline-chart">
+          <div
+            className="timeline-progress"
+            style={{ left: progressPosition + 1 }}
+          />
           <XYPlot
             width={width}
             height={height}

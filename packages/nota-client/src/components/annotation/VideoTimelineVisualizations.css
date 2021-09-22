@@ -9,9 +9,18 @@
   width: 100%;
 }
 
-.vis-container.timeline-chart {
+.vis-container .timeline-chart {
   height: 100%;
   width: 100%;
+}
+
+.vis-container .timeline-chart .timeline-progress {
+  height: 100%;
+  width: 2px;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  background-color: rgba(238, 235, 210, 0.735);
 }
 
 .vis-container .rv-crosshair__inner {
