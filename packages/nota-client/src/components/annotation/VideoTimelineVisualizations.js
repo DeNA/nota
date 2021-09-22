@@ -89,6 +89,10 @@ function VideoTimelineVisualizations({
     }
   };
 
+  const handleMouseLeave = function() {
+    setTooltip(null);
+  };
+
   if (!hasVis) {
     return null;
   }
@@ -96,7 +100,11 @@ function VideoTimelineVisualizations({
   const showGraph = !loading && lines.length > 0;
 
   return (
-    <div ref={observe} className="vis-container">
+    <div
+      ref={observe}
+      className="vis-container"
+      onMouseLeave={handleMouseLeave}
+    >
       <Loading loading={loading} />
       {showGraph ? (
         <div className="timeline-chart" data-testid="timeline-chart">
