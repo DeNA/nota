@@ -5,6 +5,14 @@
   "mediaOptions": {
     "timelineVis": [
       {
+        "id": "GT",
+        "label": "GT",
+        "type": "backgroundArea",
+        "min": 0,
+        "max": 1,
+        "color": "rgb(255,149,149)"
+      },
+      {
         "id": "prediction_1",
         "label": "予測A",
         "min": 0,

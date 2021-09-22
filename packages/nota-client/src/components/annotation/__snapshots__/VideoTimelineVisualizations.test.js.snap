@@ -44,6 +44,10 @@ exports[`VideoTimeLineVisualizations render timeline correctly 2`] = `
       data-testid="timeline-chart"
     >
       <div
+        class="timeline-progress"
+        style="left: -1px;"
+      />
+      <div
         class="rv-xy-plot "
         style="width: 0px; height: 0px;"
       >

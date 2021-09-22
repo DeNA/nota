@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import useDimensions from "react-cool-dimensions";
 import { useTranslation } from "react-i18next";
-import { Crosshair, LineSeries, XYPlot } from "react-vis";
+import { AreaSeries, Crosshair, LineSeries, XYPlot } from "react-vis";
 import "react-vis/dist/style.css";
 import { getVis } from "../../lib/binaryVis";
 import Loading from "../Loading";
@@ -9,6 +9,11 @@ import { videoControlsContext } from "./videoControls";
 import "./VideoTimelineVisualizations.css";
 
 const DEFAULT_COLOR = "red";
+const VISUALIZATION_TYPE = {
+  LINE: "line",
+  BACKGROUND_AREA: "backgroundArea"
+};
+const DEFAULT_VISUALIZATION_TYPE = VISUALIZATION_TYPE.LINE;
 
 function VideoTimelineVisualizations({
   projectId,
@@ -52,22 +57,46 @@ function VideoTimelineVisualizations({
       return vis
         ? {
             id: visOptions.id,
+            type: visOptions.type || DEFAULT_VISUALIZATION_TYPE,
             label: vis.label || visOptions.label || visOptions.id,
             color: vis.color || visOptions.color || DEFAULT_COLOR,
             data: vis.values.map(([time, value]) => {
-              return {
-                x: time,
-                y: value
-              };
+              return visOptions.type === VISUALIZATION_TYPE.BACKGROUND_AREA
+                ? {
+                    s: time,
+                    e: value,
+                    data: [
+                      { x: time, y: min },
+                      { x: time, y: max },
+                      { x: value, y: max },
+                      { x: value, y: min }
+                    ]
+                  }
+                : {
+                    x: time,
+                    y: value
+                  };
             })
           }
         : null;
     })
-    .filter(line => line !== null);
+    .filter(line => line !== null)
+    .sort(a => (a.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? -1 : 1));
 
   const handleOnNearestX = function({ x, y }, { index }) {
     const tooltip = lines
       .map(line => {
+        if (line.type === VISUALIZATION_TYPE.BACKGROUND_AREA) {
+          return line.data.some(area => area.s <= x && area.e >= x)
+            ? {
+                label: line.label,
+                id: line.id,
+                y: "true",
+                x
+              }
+            : null;
+        }
+
         const found = line.data.find(data => data.x === x);
 
         return found
@@ -112,7 +141,9 @@ function VideoTimelineVisualizations({
         <div className="timeline-chart" data-testid="timeline-chart">
           <div
             className="timeline-progress"
-            style={{ left: progressPosition + 1 }}
+            style={{
+              left: isNaN(progressPosition) ? -1 : progressPosition + 1
+            }}
           />
           <XYPlot
             width={width}
@@ -122,15 +153,26 @@ function VideoTimelineVisualizations({
             yDomain={[min, max]}
             onClick={handleOnClick}
           >
-            {lines.map((line, i) => (
-              <LineSeries
-                key={line.id}
-                className={line.id}
-                color={line.color}
-                data={line.data}
-                onNearestX={i === 0 ? handleOnNearestX : null}
-              />
-            ))}
+            {lines.map(line =>
+              line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? (
+                line.data.map(area => (
+                  <AreaSeries
+                    key={`${line.id}_${area.s}_${area.e}`}
+                    className={line.id}
+                    color={line.color}
+                    data={area.data}
+                  />
+                ))
+              ) : (
+                <LineSeries
+                  key={line.id}
+                  className={line.id}
+                  color={line.color}
+                  data={line.data}
+                  onNearestX={handleOnNearestX}
+                />
+              )
+            )}
             <Crosshair
               values={tooltip}
               itemsFormat={values => {
