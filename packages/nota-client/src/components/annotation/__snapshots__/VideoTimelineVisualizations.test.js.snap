@@ -8,6 +8,14 @@ exports[`VideoTimeLineVisualizations render message when no matching vis 1`] = `
     <div>
       vis-not-found
     </div>
+    <div
+      class="toggle-controls"
+    >
+      <span
+        aria-hidden="true"
+        class="oi oi-cog"
+      />
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -29,6 +37,14 @@ exports[`VideoTimeLineVisualizations render timeline correctly 1`] = `
     </div>
     <div>
       vis-not-found
+    </div>
+    <div
+      class="toggle-controls"
+    >
+      <span
+        aria-hidden="true"
+        class="oi oi-cog"
+      />
     </div>
   </div>
 </DocumentFragment>
@@ -70,6 +86,14 @@ exports[`VideoTimeLineVisualizations render timeline correctly 2`] = `
           />
         </svg>
       </div>
+    </div>
+    <div
+      class="toggle-controls"
+    >
+      <span
+        aria-hidden="true"
+        class="oi oi-cog"
+      />
     </div>
   </div>
 </DocumentFragment>

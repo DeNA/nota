@@ -7,6 +7,8 @@ import { getVis } from "../../lib/binaryVis";
 import Loading from "../Loading";
 import { videoControlsContext } from "./videoControls";
 import "./VideoTimelineVisualizations.css";
+import VideoTimelineVisualizationsControls from "./VideoTimelineVisualizationsControls";
+import Icon from "../Icon";
 
 const DEFAULT_COLOR = "red";
 const VISUALIZATION_TYPE = {
@@ -28,7 +30,9 @@ function VideoTimelineVisualizations({
   const { observe, width, height } = useDimensions();
   const [tooltip, setTooltip] = useState(null);
   const [visualizations, setVisualizations] = useState({});
+  const [disabledItems, setDisabledItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showControls, setShowControls] = useState(false);
   const {
     videoControls: { setTime, getDuration },
     videoStatus: { currentTime }
@@ -127,6 +131,25 @@ function VideoTimelineVisualizations({
     return null;
   }
 
+  const handleToggleControls = function() {
+    setShowControls(!showControls);
+  };
+
+  const handleToggleItem = function(id) {
+    const newDisabledItems = [...disabledItems];
+    const index = newDisabledItems.findIndex(
+      disabledItem => disabledItem === id
+    );
+
+    if (index === -1) {
+      newDisabledItems.push(id);
+    } else {
+      newDisabledItems.splice(index, 1);
+    }
+
+    setDisabledItems(newDisabledItems);
+  };
+
   const showGraph = !loading && lines.length > 0;
   const progressPosition = ((width - 6) / getDuration()) * currentTime * 1000;
 
@@ -153,26 +176,28 @@ function VideoTimelineVisualizations({
             yDomain={[min, max]}
             onClick={handleOnClick}
           >
-            {lines.map(line =>
-              line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? (
-                line.data.map(area => (
-                  <AreaSeries
-                    key={`${line.id}_${area.s}_${area.e}`}
+            {lines
+              .filter(vis => !disabledItems.includes(vis.id))
+              .map(line =>
+                line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? (
+                  line.data.map(area => (
+                    <AreaSeries
+                      key={`${line.id}_${area.s}_${area.e}`}
+                      className={line.id}
+                      color={line.color}
+                      data={area.data}
+                    />
+                  ))
+                ) : (
+                  <LineSeries
+                    key={line.id}
                     className={line.id}
                     color={line.color}
-                    data={area.data}
+                    data={line.data}
+                    onNearestX={handleOnNearestX}
                   />
-                ))
-              ) : (
-                <LineSeries
-                  key={line.id}
-                  className={line.id}
-                  color={line.color}
-                  data={line.data}
-                  onNearestX={handleOnNearestX}
-                />
-              )
-            )}
+                )
+              )}
             <Crosshair
               values={tooltip}
               itemsFormat={values => {
@@ -193,6 +218,22 @@ function VideoTimelineVisualizations({
       ) : (
         <div>{t("vis-not-found")}</div>
       )}
+      {showControls ? (
+        <VideoTimelineVisualizationsControls
+          items={lines.map(line => ({
+            id: line.id,
+            title: line.label,
+            color: line.color,
+            strokeWidth:
+              line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? 10 : undefined,
+            disabled: disabledItems.includes(line.id)
+          }))}
+          onToggleItem={handleToggleItem}
+        />
+      ) : null}
+      <div className="toggle-controls" onClick={handleToggleControls}>
+        <Icon name="cog" />
+      </div>
     </div>
   );
 }
