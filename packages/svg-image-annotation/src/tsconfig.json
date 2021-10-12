@@ -4,7 +4,7 @@
     "declarationDir": "./dist",
     "module": "es6",
     "noImplicitAny": true,
-    "target": "es5",
+    "target": "es2015",
     "outDir": "../built",
     "newLine": "LF"
   },
