@@ -154,18 +154,16 @@ module.exports = function(sequelize) {
     if (user.isSuperAdmin) {
       return this.scope(["defaultScope", "notDeleted"]).findAll(options);
     }
-
-    const subquery = sequelize.dialect.QueryGenerator.selectQuery(
-      sequelize.models.ProjectGroup.tableName,
-      {
+    const subquery = sequelize.dialect.queryGenerator
+      .selectQuery(sequelize.models.ProjectGroup.tableName, {
         attributes: ["project_id"],
         where: {
           name: {
             [Op.in]: user.groups.map(group => group.name)
           }
         }
-      }
-    ).slice(0, -1);
+      })
+      .slice(0, -1);
 
     return this.scope(["defaultScope", "ready"]).findAll({
       ...options,
@@ -209,17 +207,16 @@ module.exports = function(sequelize) {
     const query = { ...options, include };
 
     if (!user.isSuperAdmin) {
-      const subquery = sequelize.dialect.QueryGenerator.selectQuery(
-        sequelize.models.ProjectGroup.tableName,
-        {
+      const subquery = sequelize.dialect.queryGenerator
+        .selectQuery(sequelize.models.ProjectGroup.tableName, {
           attributes: ["project_id"],
           where: {
             name: {
               [Op.in]: user.groups.map(group => group.name)
             }
           }
-        }
-      ).slice(0, -1);
+        })
+        .slice(0, -1);
 
       query.where = {
         id: {
