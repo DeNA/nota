@@ -58,7 +58,9 @@ describe("/api/projects/:projectId/tasks", () => {
           path: "files1",
           excludeAlreadyUsed: true,
           limit: 5000
-        }
+        },
+        assignmentDefaultItems: 500,
+        assignmentDefaultOrder: "SEQUENTIAL"
       });
       expect(response.body[1]).toMatchObject({
         id: data.tasks.task2.id,
@@ -226,7 +228,9 @@ describe("/api/projects/:projectId/tasks", () => {
           path: "files1",
           excludeAlreadyUsed: true,
           limit: 5000
-        }
+        },
+        assignmentDefaultItems: 500,
+        assignmentDefaultOrder: "SEQUENTIAL"
       });
       expect(response.body.assignments.length).toBe(2);
       expect(response.body.assignments[0]).toMatchObject({
@@ -370,7 +374,9 @@ describe("/api/projects/:projectId/tasks", () => {
           excludeAlreadyUsed: false,
           limit: 500
         },
-        conditions: { filter_string: "aaa" }
+        conditions: { filter_string: "aaa" },
+        assignmentDefaultItems: 300,
+        assignmentDefaultOrder: "SEQUENTIAL"
       };
     });
     afterAll(async () => {
@@ -403,7 +409,9 @@ describe("/api/projects/:projectId/tasks", () => {
             excludeAlreadyUsed: false,
             limit: 500
           },
-          conditions: { filter_string: "aaa" }
+          conditions: { filter_string: "aaa" },
+          assignmentDefaultItems: 300,
+          assignmentDefaultOrder: "SEQUENTIAL"
         }),
         mediaSourceId: 1,
         name: "new_task",
@@ -537,7 +545,7 @@ describe("/api/projects/:projectId/tasks", () => {
       data = await db.resetTestDb();
     });
 
-    test("Should be able to update name/description/status (super admin)", async () => {
+    test("Should be able to update name/description/status/assignmentdefaults (super admin)", async () => {
       const response = await request(app)
         .put(`/api/projects/1/tasks/${data.tasks.task1.id}`)
         .set("Content-type", "application/json")
@@ -547,7 +555,9 @@ describe("/api/projects/:projectId/tasks", () => {
         .send({
           name: "newName1",
           description: "newDescription1",
-          status: Task.STATUS.HIDDEN
+          status: Task.STATUS.HIDDEN,
+          assignmentDefaultItems: 111,
+          assignmentDefaultOrder: "RANDOM"
         });
 
       expect(response.body).toMatchObject({
@@ -565,7 +575,9 @@ describe("/api/projects/:projectId/tasks", () => {
         updatedBy: {
           id: data.users.superadminUser.id,
           username: data.users.superadminUser.username
-        }
+        },
+        assignmentDefaultItems: 111,
+        assignmentDefaultOrder: "RANDOM"
       });
     });
     test("Should be able to update name/description/status (project admin)", async () => {
@@ -576,7 +588,9 @@ describe("/api/projects/:projectId/tasks", () => {
         .send({
           name: "newName2",
           description: "newDescription2",
-          status: Task.STATUS.DONE
+          status: Task.STATUS.DONE,
+          assignmentDefaultItems: 222,
+          assignmentDefaultOrder: "RANDOM"
         });
 
       expect(response.body).toMatchObject({
@@ -594,7 +608,9 @@ describe("/api/projects/:projectId/tasks", () => {
         updatedBy: {
           id: data.users.adminUser.id,
           username: data.users.adminUser.username
-        }
+        },
+        assignmentDefaultItems: 222,
+        assignmentDefaultOrder: "RANDOM"
       });
     });
     test("Should be able to update name/description/status (app admin)", async () => {
@@ -605,7 +621,9 @@ describe("/api/projects/:projectId/tasks", () => {
         .send({
           name: "newName3",
           description: "newDescription3",
-          status: Task.STATUS.READY
+          status: Task.STATUS.READY,
+          assignmentDefaultItems: 333,
+          assignmentDefaultOrder: "SEQUENTIAL"
         });
 
       expect(response.body).toMatchObject({
@@ -623,7 +641,9 @@ describe("/api/projects/:projectId/tasks", () => {
         updatedBy: {
           id: data.users.appadminUser.id,
           username: data.users.appadminUser.username
-        }
+        },
+        assignmentDefaultItems: 333,
+        assignmentDefaultOrder: "SEQUENTIAL"
       });
     });
 

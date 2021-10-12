@@ -181,7 +181,13 @@ module.exports = function(sequelize) {
       {
         model: sequelize.models.Task,
         required: false,
-        attributes: ["id", "name", "description", "status"],
+        attributes: [
+          "id",
+          "name",
+          "description",
+          "status",
+          "mediaSourceConfig"
+        ],
         where: {
           status: {
             [Op.notIn]: [
