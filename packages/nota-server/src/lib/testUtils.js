@@ -105,7 +105,7 @@ const createUser = async ({
 };
 
 const createMediaSource = async ({
-  name = "mediaSource",
+  name = `mediaSource${Math.random()}`,
   description = "media source description",
   projectId = 1,
   datasource = "file",
