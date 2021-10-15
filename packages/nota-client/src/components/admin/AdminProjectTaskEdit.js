@@ -11,7 +11,12 @@ import Loading from "../Loading";
 
 function AdminProjectTaskEdit({ resource: task, project, loading }) {
   const { t } = useTranslation();
-  const canSaveTask = ({ name, description }) => name && description;
+  const canSaveTask = ({
+    name,
+    description,
+    assignmentDefaultItems,
+    assignmentDefaultOrder
+  }) => name && description && assignmentDefaultItems && assignmentDefaultOrder;
   const [showDeleteModal, setShowDeleteModal] = React.useState(false);
 
   const saveTask = async function(values) {
@@ -23,7 +28,12 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
         id: task.id,
         name: values.name,
         description: values.description,
-        status: values.status
+        status: values.status,
+        assignmentDefaultItems: Math.max(
+          parseInt(values.assignmentDefaultItems),
+          Task.MIN_ASSIGNMENT_SIZE
+        ),
+        assignmentDefaultOrder: values.assignmentDefaultOrder
       }
     });
 
@@ -45,7 +55,9 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
   const formSchema = {
     name: string().required(),
     description: string().required(),
-    status: integer().required()
+    status: integer().required(),
+    assignmentDefaultItems: integer().required(),
+    assignmentDefaultOrder: string().required()
   };
 
   const [
@@ -55,7 +67,13 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
   ] = useInputForm(saveTask, formSchema, {
     name: task ? task.name : "",
     description: task ? task.description : "",
-    status: task ? task.status : ""
+    status: task ? task.status : "",
+    assignmentDefaultItems: task
+      ? task.assignmentDefaultItems
+      : Task.DEFAULT_ASSIGNMENT_SIZE,
+    assignmentDefaultOrder: task
+      ? task.assignmentDefaultOrder
+      : Task.DEFAULT_ASSIGNMENT_ORDER
   });
 
   if (loading) {
@@ -115,6 +133,56 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
               />
               <Form.Control.Feedback type="invalid">
                 {t("required-error", { field: t("task-description") })}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>{t("task-assignment-default-items")}</Form.Label>
+              <Form.Control
+                type="number"
+                name="assignmentDefaultItems"
+                value={values.assignmentDefaultItems}
+                min={Task.MIN_ASSIGNMENT_SIZE}
+                onChange={handleChange}
+                isInvalid={
+                  touched.assignmentDefaultItems &&
+                  errors.assignmentDefaultItems
+                }
+              />
+              <Form.Control.Feedback type="invalid">
+                {t("required-error", {
+                  field: t("task-assignment-default-items")
+                })}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>{t("task-assignment-default-order")}</Form.Label>
+              <Form.Control
+                as="select"
+                value={values.assignmentDefaultOrder}
+                name="assignmentDefaultOrder"
+                onChange={handleChange}
+                isInvalid={
+                  touched.assignmentDefaultOrder &&
+                  errors.assignmentDefaultOrder
+                }
+              >
+                <option
+                  key={Task.ASSIGNMENT_ORDER.RANDOM}
+                  value={Task.ASSIGNMENT_ORDER.RANDOM}
+                >
+                  {t("random")}
+                </option>
+                <option
+                  key={Task.ASSIGNMENT_ORDER.SEQUENTIAL}
+                  value={Task.ASSIGNMENT_ORDER.SEQUENTIAL}
+                >
+                  {t("in-order")}
+                </option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {t("required-error", {
+                  field: t("task-assignment-default-order")
+                })}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>

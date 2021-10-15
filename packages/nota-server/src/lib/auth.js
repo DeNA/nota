@@ -3,7 +3,8 @@ const { User } = require("../models");
 const authUtils = require("./authUtils");
 const config = require("../config");
 
-function init() {
+function init(app) {
+  app.use(passport.initialize());
   const LocalStrategy = require("passport-local").Strategy;
   const CookieStrategy = require("passport-cookie").Strategy;
 
