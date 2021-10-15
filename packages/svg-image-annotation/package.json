@@ -1,7 +1,7 @@
 {
   "name": "svg-image-annotation",
   "private": true,
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "svg-image-annotation",
   "main": "dist/bundle.js",
   "module": "dist/bundle.es.js",
