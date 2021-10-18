@@ -17,23 +17,28 @@ import { Task, TaskAssignment } from "../lib/models";
 import DashboardProjectTaskAssignment from "./DashboardProjectTaskAssignment";
 import Loading from "./Loading";
 
+const MIN_ASSIGNMENT_SIZE = 1;
+const MAX_ASSIGNMENT_SIZE = 500;
+const ORDER = {
+  RANDOM: "RANDOM",
+  SEQUENTIAL: "SEQUENTIAL"
+};
+
 const DashboardProjectTask = function({ project, task, reload }) {
   const { t } = useTranslation();
   const [updating, setUpdating] = React.useState(false);
   const [showComplete, setShowComplete] = React.useState(false);
-  const [newAssignmentSize, setNewAssignmentSize] = React.useState(
-    task.assignmentDefaultItems?.toString() ??
-      Task.DEFAULT_ASSIGNMENT_SIZE.toString()
-  );
-  const [random, setRandom] = React.useState(
-    task.assignmentDefaultOrder ?? Task.DEFAULT_ASSIGNMENT_ORDER
-  );
+  const [newAssignmentSize, setNewAssignmentSize] = React.useState("100");
+  const [random, setRandom] = React.useState(ORDER.RANDOM);
   const toggleShowComplete = function() {
     setShowComplete(!showComplete);
   };
   const handleAssignmentSizeChange = function(evt) {
     const size = parseInt(evt.target.value);
-    const limitedSize = Math.max(Task.MIN_ASSIGNMENT_SIZE, size);
+    const limitedSize = Math.min(
+      Math.max(MIN_ASSIGNMENT_SIZE, size),
+      MAX_ASSIGNMENT_SIZE
+    );
     setNewAssignmentSize(limitedSize.toString());
   };
   const handleRandomChange = function(value) {
@@ -46,7 +51,7 @@ const DashboardProjectTask = function({ project, task, reload }) {
       taskId: task.id,
       options: {
         size: newAssignmentSize,
-        random: random === Task.ASSIGNMENT_ORDER.RANDOM ? true : false
+        random: random === ORDER.RANDOM ? true : false
       }
     });
 
@@ -121,15 +126,12 @@ const DashboardProjectTask = function({ project, task, reload }) {
                     value={random}
                     onChange={handleRandomChange}
                   >
-                    <ToggleButton
-                      variant="outline-dark"
-                      value={Task.ASSIGNMENT_ORDER.RANDOM}
-                    >
+                    <ToggleButton variant="outline-dark" value={ORDER.RANDOM}>
                       {t("random")}
                     </ToggleButton>
                     <ToggleButton
                       variant="outline-dark"
-                      value={Task.ASSIGNMENT_ORDER.SEQUENTIAL}
+                      value={ORDER.SEQUENTIAL}
                     >
                       {t("in-order")}
                     </ToggleButton>

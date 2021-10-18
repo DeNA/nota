@@ -6,8 +6,7 @@ export default {
   output: [
     {
       file: "dist/bundle.js",
-      format: "cjs",
-      exports: "auto"
+      format: "cjs"
     },
     {
       file: "dist/bundle.es.js",

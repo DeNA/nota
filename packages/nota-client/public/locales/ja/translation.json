@@ -182,7 +182,5 @@
   "super-admin-user": "全プロジェクト管理者",
   "normal-user": "ユーザ",
   "inactive-user": "無効・削除済み",
-  "vis-not-found": "表示するデータがありません",
-  "task-assignment-default-items": "アサインサイズ",
-  "task-assignment-default-order": "アサイン順番"
+  "vis-not-found": "表示するデータがありません"
 }

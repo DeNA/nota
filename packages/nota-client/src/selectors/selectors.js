@@ -7,7 +7,6 @@ import {
 } from "../constants";
 import {
   parseAnnotationFields,
-  validateSelectionValue,
   validateTextInputLabel
 } from "../lib/annotationUtils";
 import { Annotation } from "../lib/models";
@@ -170,24 +169,9 @@ export const canAnnotationBeSetAsDone = function(state, select) {
 
     switch (field.type) {
       case "TEXT_INPUT":
-        return (
-          !validateTextInputLabel(field, value) ||
-          value === undefined ||
-          value === ""
-        );
-      case "SINGLE_SELECTION":
-        return (
-          value === undefined ||
-          !validateSelectionValue(value, field?.options?.items)
-        );
+        return !validateTextInputLabel(field, value) || value === "";
       case "MULTIPLE_SELECTION":
-        return (
-          value === undefined ||
-          !value.length ||
-          !value.some(value =>
-            validateSelectionValue(value, field?.options?.items)
-          )
-        );
+        return value === undefined || !value.length;
       default:
         return value === undefined;
     }

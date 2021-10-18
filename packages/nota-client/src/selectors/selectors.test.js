@@ -19,7 +19,6 @@ import {
   annotationLabelPopup,
   annotationTemplate,
   annotationValues,
-  canAnnotationBeSetAsDone,
   doneImages,
   firstOngoingImageAnnotationId,
   firstOngoingImageId,
@@ -202,7 +201,7 @@ const taskAssignment = {
 };
 
 describe("folderTemplate", () => {
-  test("should return folderTemplate if found", () => {
+  it("should return folderTemplate if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment }
     };
@@ -212,7 +211,7 @@ describe("folderTemplate", () => {
     expect(result).toEqual(templateContents1);
   });
 
-  test("should return {} if not found", () => {
+  it("should return {} if not found", () => {
     const state = {
       taskAssignment: {
         data: null
@@ -227,7 +226,7 @@ describe("folderTemplate", () => {
 });
 
 describe("folderTemplateOptions", () => {
-  test("should return folderTemplateOptions if found", () => {
+  it("should return folderTemplateOptions if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment }
     };
@@ -237,7 +236,7 @@ describe("folderTemplateOptions", () => {
     expect(result).toEqual(templateOptions1);
   });
 
-  test("should return {} if not found", () => {
+  it("should return {} if not found", () => {
     const state = {
       taskAssignment: {
         data: null
@@ -280,7 +279,7 @@ describe("folderTemplateShownMetadataFields", () => {
       }
     }
   };
-  test("should return parsed folderTemplateShownMetadataFields", () => {
+  it("should return parsed folderTemplateShownMetadataFields", () => {
     const state = {
       selectedImageId: 1,
       imageList: [
@@ -315,7 +314,7 @@ describe("folderTemplateShownMetadataFields", () => {
     ]);
   });
 
-  test("should return undefined values if not externalMetadata found", () => {
+  it("should return undefined values if not externalMetadata found", () => {
     const state = {
       selectedImageId: 1,
       imageList: [
@@ -346,7 +345,7 @@ describe("folderTemplateShownMetadataFields", () => {
     ]);
   });
 
-  test("should return [] values if not showMetadataFields option found", () => {
+  it("should return [] values if not showMetadataFields option found", () => {
     const state = {
       selectedImageId: 1,
       imageList: [
@@ -380,7 +379,7 @@ describe("folderTemplateShownMetadataFields", () => {
 });
 
 describe("folderTemplateAnnotations", () => {
-  test("should return folderTemplateAnnotations if found", () => {
+  it("should return folderTemplateAnnotations if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment }
     };
@@ -390,7 +389,7 @@ describe("folderTemplateAnnotations", () => {
     expect(result).toEqual(templateAnnotations1);
   });
 
-  test("should return [] if not found", () => {
+  it("should return [] if not found", () => {
     const state = {
       taskAssignment: {
         data: null
@@ -405,7 +404,7 @@ describe("folderTemplateAnnotations", () => {
 });
 
 describe("annotation", () => {
-  test("should return selected annotation if found", () => {
+  it("should return selected annotation if found", () => {
     const state = {
       annotations,
       selectedAnnotationId: 1
@@ -416,7 +415,7 @@ describe("annotation", () => {
     expect(result).toEqual(annotation1);
   });
 
-  test("should return annotation if found when passing id", () => {
+  it("should return annotation if found when passing id", () => {
     const state = {
       annotations,
       selectedAnnotationId: 1
@@ -427,7 +426,7 @@ describe("annotation", () => {
     expect(result).toEqual(annotation2);
   });
 
-  test("should return null if not found", () => {
+  it("should return null if not found", () => {
     const state = {
       annotations,
       selectedAnnotationId: 100
@@ -441,7 +440,7 @@ describe("annotation", () => {
 });
 
 describe("annotationTemplate", () => {
-  test("should return selected annotationTemplate if found", () => {
+  it("should return selected annotationTemplate if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -453,7 +452,7 @@ describe("annotationTemplate", () => {
     expect(result).toEqual(annotationTemplate1);
   });
 
-  test("should return annotationTemplate if found when passing id", () => {
+  it("should return annotationTemplate if found when passing id", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -465,7 +464,7 @@ describe("annotationTemplate", () => {
     expect(result).toEqual(annotationTemplate2);
   });
 
-  test("should return {} if annotation not found", () => {
+  it("should return {} if annotation not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -478,7 +477,7 @@ describe("annotationTemplate", () => {
     expect(result).toEqual({});
   });
 
-  test("should return {} if annotationTemplate not found", () => {
+  it("should return {} if annotationTemplate not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -493,7 +492,7 @@ describe("annotationTemplate", () => {
 });
 
 describe("annotationFields", () => {
-  test("should return selected annotationFields if found", () => {
+  it("should return selected annotationFields if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -505,7 +504,7 @@ describe("annotationFields", () => {
     expect(result).toEqual(fields1);
   });
 
-  test("should return annotationFields if found when passing id", () => {
+  it("should return annotationFields if found when passing id", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -517,7 +516,7 @@ describe("annotationFields", () => {
     expect(result).toEqual(fields1);
   });
 
-  test("should return [] if annotationTemplate not found", () => {
+  it("should return [] if annotationTemplate not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -532,7 +531,7 @@ describe("annotationFields", () => {
 });
 
 describe("newAnnotationType", () => {
-  test("should return newAnnotationType when found", () => {
+  it("should return newAnnotationType when found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -547,7 +546,7 @@ describe("newAnnotationType", () => {
     expect(result).toEqual(annotationTemplate2);
   });
 
-  test("should return null when annotationTemplate not found", () => {
+  it("should return null when annotationTemplate not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -564,7 +563,7 @@ describe("newAnnotationType", () => {
 });
 
 describe("annotationValues", () => {
-  test("should return selected annotationValues if found", () => {
+  it("should return selected annotationValues if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -576,7 +575,7 @@ describe("annotationValues", () => {
     expect(result).toEqual(annotationLabels1);
   });
 
-  test("should return {} if annotation not found", () => {
+  it("should return {} if annotation not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -590,7 +589,7 @@ describe("annotationValues", () => {
 });
 
 describe("annotationBoundaries", () => {
-  test("should return selected annotationBoundaries if found", () => {
+  it("should return selected annotationBoundaries if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -602,7 +601,7 @@ describe("annotationBoundaries", () => {
     expect(result).toEqual(annotationBoundaries1);
   });
 
-  test("should return {} if annotation not found", () => {
+  it("should return {} if annotation not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -616,7 +615,7 @@ describe("annotationBoundaries", () => {
 });
 
 describe("annotationDone", () => {
-  test("should return true if found", () => {
+  it("should return true if found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -628,7 +627,7 @@ describe("annotationDone", () => {
     expect(result).toBe(true);
   });
 
-  test("should return false if annotation not done", () => {
+  it("should return false if annotation not done", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -640,7 +639,7 @@ describe("annotationDone", () => {
     expect(result).toBe(false);
   });
 
-  test("should return false if annotation not found", () => {
+  it("should return false if annotation not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -654,7 +653,7 @@ describe("annotationDone", () => {
 });
 
 describe("image", () => {
-  test("should return selected image if found", () => {
+  it("should return selected image if found", () => {
     const state = {
       imageList,
       selectedImageId: 1
@@ -665,7 +664,7 @@ describe("image", () => {
     expect(result).toEqual(image1);
   });
 
-  test("should return null if image not found", () => {
+  it("should return null if image not found", () => {
     const state = {
       imageList,
       selectedImageId: 100
@@ -678,7 +677,7 @@ describe("image", () => {
 });
 
 describe("imageUri", () => {
-  test("should return the imageUri if image found", () => {
+  it("should return the imageUri if image found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       imageList,
@@ -690,7 +689,7 @@ describe("imageUri", () => {
     expect(result).toMatch("/api/projects/1/tasks/10/taskItems/1/binary");
   });
 
-  test("should return null if image not found", () => {
+  it("should return null if image not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       imageList,
@@ -704,7 +703,7 @@ describe("imageUri", () => {
 });
 
 describe("imageDone", () => {
-  test("should return true if found", () => {
+  it("should return true if found", () => {
     const state = {
       imageList,
       selectedImageId: 1
@@ -715,7 +714,7 @@ describe("imageDone", () => {
     expect(result).toBe(true);
   });
 
-  test("should return false if annotation not done", () => {
+  it("should return false if annotation not done", () => {
     const state = {
       imageList,
       selectedImageId: 2
@@ -726,7 +725,7 @@ describe("imageDone", () => {
     expect(result).toBe(false);
   });
 
-  test("should return false if annotation not found", () => {
+  it("should return false if annotation not found", () => {
     const state = {
       imageList,
       selectedImageId: 100
@@ -739,7 +738,7 @@ describe("imageDone", () => {
 });
 
 describe("imageAnnotations", () => {
-  test("should return imageAnnotations for selected image", () => {
+  it("should return imageAnnotations for selected image", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -752,7 +751,7 @@ describe("imageAnnotations", () => {
     expect(result).toMatchObject([annotation2, annotation3, annotation4]);
   });
 
-  test("should return [] if image not found", () => {
+  it("should return [] if image not found", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -765,7 +764,7 @@ describe("imageAnnotations", () => {
     expect(result).toEqual([]);
   });
 
-  test("should return imageAnnotations for id", () => {
+  it("should return imageAnnotations for id", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -778,7 +777,7 @@ describe("imageAnnotations", () => {
     expect(result).toMatchObject([annotation1, annotation2]);
   });
 
-  test("should skip missing annotations", () => {
+  it("should skip missing annotations", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -793,7 +792,7 @@ describe("imageAnnotations", () => {
 });
 
 describe("annotationLabelFocus", () => {
-  test("should return false when no fields", () => {
+  it("should return false when no fields", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -806,7 +805,7 @@ describe("annotationLabelFocus", () => {
     expect(result).toBe(false);
   });
 
-  test("should return false when lastAction is null", () => {
+  it("should return false when lastAction is null", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -821,7 +820,7 @@ describe("annotationLabelFocus", () => {
 
   // ACTION_CREATE_ANNOTATION
 
-  test("should return true when ACTION_CREATE_ANNOTATION and OPTION_FOCUS", () => {
+  it("should return true when ACTION_CREATE_ANNOTATION and OPTION_FOCUS", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -837,7 +836,7 @@ describe("annotationLabelFocus", () => {
     expect(result).toBe(true);
   });
 
-  test("should return true when ACTION_CREATE_ANNOTATION and OPTION_POPUP_FOCUS", () => {
+  it("should return true when ACTION_CREATE_ANNOTATION and OPTION_POPUP_FOCUS", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -853,7 +852,7 @@ describe("annotationLabelFocus", () => {
     expect(result).toBe(true);
   });
 
-  test("should return false when ACTION_CREATE_ANNOTATION and not [OPTION_FOCUS, OPTION_POPUP_FOCUS]", () => {
+  it("should return false when ACTION_CREATE_ANNOTATION and not [OPTION_FOCUS, OPTION_POPUP_FOCUS]", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -871,7 +870,7 @@ describe("annotationLabelFocus", () => {
 });
 
 describe("annotationLabelPopup", () => {
-  test("should return false when no fields", () => {
+  it("should return false when no fields", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -884,7 +883,7 @@ describe("annotationLabelPopup", () => {
     expect(result).toBe(false);
   });
 
-  test("should return false when lastAction is null", () => {
+  it("should return false when lastAction is null", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -899,7 +898,7 @@ describe("annotationLabelPopup", () => {
 
   // ACTION_CREATE_ANNOTATION
 
-  test("should return true when ACTION_CREATE_ANNOTATION and OPTION_POPUP_FOCUS", () => {
+  it("should return true when ACTION_CREATE_ANNOTATION and OPTION_POPUP_FOCUS", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -915,7 +914,7 @@ describe("annotationLabelPopup", () => {
     expect(result).toBe(true);
   });
 
-  test("should return false when ACTION_CREATE_ANNOTATION and not OPTION_POPUP_FOCUS", () => {
+  it("should return false when ACTION_CREATE_ANNOTATION and not OPTION_POPUP_FOCUS", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -933,7 +932,7 @@ describe("annotationLabelPopup", () => {
 });
 
 describe("doneImages", () => {
-  test("should return doneImages", () => {
+  it("should return doneImages", () => {
     const state = {
       imageList
     };
@@ -943,7 +942,7 @@ describe("doneImages", () => {
     expect(result).toEqual([image1, image4]);
   });
 
-  test("should return doneImages for given imageList", () => {
+  it("should return doneImages for given imageList", () => {
     const state = {};
     const select = selector(state).select;
     const result = doneImages(state, select, imageList);
@@ -953,7 +952,7 @@ describe("doneImages", () => {
 });
 
 describe("annotationFieldAnnotations", () => {
-  test("should return annotationFieldAnnotations", () => {
+  it("should return annotationFieldAnnotations", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       annotations,
@@ -1003,7 +1002,7 @@ describe("annotationFieldAnnotations", () => {
 });
 
 describe("firstOngoingImageAnnotationId", () => {
-  test("should return the id of the first ongoing annotation for the current image", () => {
+  it("should return the id of the first ongoing annotation for the current image", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       imageList,
@@ -1016,7 +1015,7 @@ describe("firstOngoingImageAnnotationId", () => {
     expect(result).toEqual(annotation2.id);
   });
 
-  test("should return the id of the first ongoing annotation for the given image id", () => {
+  it("should return the id of the first ongoing annotation for the given image id", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       imageList,
@@ -1029,7 +1028,7 @@ describe("firstOngoingImageAnnotationId", () => {
     expect(result).toEqual(annotation2.id);
   });
 
-  test("should return the id of the first annotation when all complete", () => {
+  it("should return the id of the first annotation when all complete", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       imageList,
@@ -1042,7 +1041,7 @@ describe("firstOngoingImageAnnotationId", () => {
     expect(result).toEqual(image4.annotations[0].id);
   });
 
-  test("should return null if no imageAnnotations", () => {
+  it("should return null if no imageAnnotations", () => {
     const state = {
       taskAssignment: { data: taskAssignment },
       imageList,
@@ -1057,7 +1056,7 @@ describe("firstOngoingImageAnnotationId", () => {
 });
 
 describe("firstOngoingImageId", () => {
-  test("should return the id for the first ongoing image", () => {
+  it("should return the id for the first ongoing image", () => {
     const state = {
       imageList
     };
@@ -1067,7 +1066,7 @@ describe("firstOngoingImageId", () => {
     expect(result).toEqual(image2.id);
   });
 
-  test("should return the id for the first ongoing image for the given imageList", () => {
+  it("should return the id for the first ongoing image for the given imageList", () => {
     const state = {};
     const select = selector(state).select;
     const result = firstOngoingImageId(state, select, imageList);
@@ -1075,7 +1074,7 @@ describe("firstOngoingImageId", () => {
     expect(result).toEqual(image2.id);
   });
 
-  test("should return the id for the first image if not onging images", () => {
+  it("should return the id for the first image if not onging images", () => {
     const state = {
       imageList: [image1, image4]
     };
@@ -1085,7 +1084,7 @@ describe("firstOngoingImageId", () => {
     expect(result).toEqual(image1.id);
   });
 
-  test("should return null if no images", () => {
+  it("should return null if no images", () => {
     const state = {
       imageList: []
     };
@@ -1093,345 +1092,5 @@ describe("firstOngoingImageId", () => {
     const result = firstOngoingImageId(state, select);
 
     expect(result).toBeNull();
-  });
-});
-
-describe("canAnnotationBeSetAsDone", () => {
-  const state = {
-    taskAssignment: {
-      data: {
-        task: {
-          taskTemplate: {
-            template: {
-              annotations: [
-                {
-                  name: "test",
-                  labels: [
-                    {
-                      name: "text_required",
-                      type: "TEXT_INPUT",
-                      options: { required: true }
-                    },
-                    {
-                      name: "text",
-                      type: "TEXT_INPUT",
-                      options: { required: false }
-                    },
-                    {
-                      name: "boolean_required",
-                      type: "BOOLEAN",
-                      options: { required: true }
-                    },
-                    {
-                      name: "boolean",
-                      type: "BOOLEAN",
-                      options: { required: false }
-                    },
-                    {
-                      name: "label_single_required",
-                      type: "SINGLE_SELECTION",
-                      options: {
-                        required: true,
-                        items: [
-                          { value: "label_sr_1" },
-                          { value: "label_sr_2" },
-                          { value: "label_sr_3" }
-                        ]
-                      }
-                    },
-                    {
-                      name: "label_single",
-                      type: "SINGLE_SELECTION",
-                      options: {
-                        required: false,
-                        items: [
-                          { value: "label_s_1" },
-                          { value: "label_s_2" },
-                          { value: "label_s_3" }
-                        ]
-                      }
-                    },
-                    {
-                      name: "label_multiple_required",
-                      type: "MULTIPLE_SELECTION",
-                      options: {
-                        required: true,
-                        items: [
-                          { value: "label_mr_1" },
-                          { value: "label_mr_2" },
-                          { value: "label_mr_3" }
-                        ]
-                      }
-                    },
-                    {
-                      name: "label_multiple",
-                      type: "MULTIPLE_SELECTION",
-                      options: {
-                        required: false,
-                        items: [
-                          { value: "label_m_1" },
-                          { value: "label_m_2" },
-                          { value: "label_m_3" }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        }
-      }
-    }
-  };
-
-  test("should return true all ok", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            text: "bar",
-            boolean_required: false,
-            boolean: false,
-            label_single_required: "label_sr_1",
-            label_single: "label_s_1",
-            label_multiple_required: ["label_mr_1"],
-            label_multiple: ["label_m_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(true);
-  });
-
-  test("should return true only required", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: false,
-            label_single_required: "label_sr_1",
-            label_multiple_required: ["label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(true);
-  });
-
-  test("should return false undefined required text", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            boolean_required: false,
-            label_single_required: "label_sr_1",
-            label_multiple_required: ["label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-  test("should return false empty required text", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "",
-            boolean_required: false,
-            label_single_required: "label_sr_1",
-            label_multiple_required: ["label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-
-  test("should return false undefined required boolean", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: undefined,
-            label_single_required: "label_sr_1",
-            label_multiple_required: ["label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-
-  test("should return false undefined required single selection", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: false,
-            label_single_required: undefined,
-            label_multiple_required: ["label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-  test("should return false invalid required single selection", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: false,
-            label_single_required: "invalid_value",
-            label_multiple_required: ["label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-  test("should return false undefined required multiple selection", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: false,
-            label_single_required: "label_sr_1",
-            label_multiple_required: undefined
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-  test("should return false invalid required multiple selection", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: false,
-            label_single_required: "label_sr_1",
-            label_multiple_required: ["invalid_value"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-  test("should return false empty array required multiple selection", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: true,
-            label_single_required: "label_sr_1",
-            label_multiple_required: []
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(false);
-  });
-  test("should return true mixed required multiple selection", () => {
-    const testState = {
-      ...state,
-      annotations: {
-        1: {
-          id: 1,
-          labels: {
-            text_required: "foo",
-            boolean_required: false,
-            label_single_required: "label_sr_1",
-            label_multiple_required: ["invalid_value", "label_mr_1"]
-          },
-          labelsName: "test"
-        }
-      },
-      selectedAnnotationId: 1
-    };
-    const select = selector(testState).select;
-    const result = canAnnotationBeSetAsDone(testState, select);
-
-    expect(result).toBe(true);
   });
 });

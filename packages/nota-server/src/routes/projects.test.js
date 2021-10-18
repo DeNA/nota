@@ -274,9 +274,7 @@ describe("/api/projects", () => {
             id: 1,
             name: "task_1",
             status: 100,
-            total: 6,
-            assignmentDefaultItems: 500,
-            assignmentDefaultOrder: "SEQUENTIAL"
+            total: 6
           },
           {
             assignable: 0,

@@ -143,14 +143,10 @@ export const parseAnnotationFields = (
 };
 
 export const validateTextInputLabel = function(label, value) {
-  const regExpString = label.options.regExp || ".*";
+  const regExpString = label.options.regExp || "*";
   const regExp = new RegExp(regExpString);
 
   return regExp.test(value);
-};
-
-export const validateSelectionValue = function(value, items = []) {
-  return items.some(item => item.value === value);
 };
 
 // Same logic as server src/lib/utils.js#annotationDefaultLabels

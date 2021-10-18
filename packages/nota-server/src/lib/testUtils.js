@@ -105,7 +105,7 @@ const createUser = async ({
 };
 
 const createMediaSource = async ({
-  name = `mediaSource${Math.random()}`,
+  name = "mediaSource",
   description = "media source description",
   projectId = 1,
   datasource = "file",
@@ -519,9 +519,7 @@ const generateTestData = async function() {
     mediaSourceId: mediaSource1.id,
     mediaSourceConfig: {
       options: { path: "files1", excludeAlreadyUsed: true, limit: 5000 },
-      conditions: { filter_string: "foo", filter_integer: [0, 10] },
-      assignmentDefaultItems: 500,
-      assignmentDefaultOrder: "SEQUENTIAL"
+      conditions: { filter_string: "foo", filter_integer: [0, 10] }
     },
     status: 100,
     createdBy: adminUser.id,

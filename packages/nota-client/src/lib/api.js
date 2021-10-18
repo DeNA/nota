@@ -167,9 +167,7 @@ export async function persistTask({
   projectId,
   mediaSourceId,
   options,
-  conditions,
-  assignmentDefaultItems,
-  assignmentDefaultOrder
+  conditions
 }) {
   return await fetch(`/api/projects/${projectId}/tasks`, {
     method: "post",
@@ -179,9 +177,7 @@ export async function persistTask({
       projectId,
       mediaSourceId,
       options,
-      conditions,
-      assignmentDefaultItems,
-      assignmentDefaultOrder
+      conditions
     }),
     headers: new Headers({
       "content-type": "application/json"
