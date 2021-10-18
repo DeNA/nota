@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "archiver": "3.0.0",
-    "aws-sdk": "2.604.0",
+    "aws-sdk": "2.1009.0",
     "axios": "^0.21.1",
     "bcryptjs": "2.4.3",
     "body-parser": "1.18.3",
