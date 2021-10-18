@@ -13,8 +13,8 @@
     "start": "cd src && ../node_modules/.bin/pm2-dev ecosystem.json --env dev",
     "start:web": "cd src && pm2-runtime ecosystem.json --only nota",
     "start:worker": "cd src && pm2-runtime ecosystem.json --only nota-worker",
-    "test": "NODE_ENV=test node_modules/.bin/jest --detectOpenHandles --runInBand",
-    "test:staged": "NODE_ENV=test node_modules/.bin/jest --findRelatedTests --detectOpenHandles --runInBand",
+    "test": "NODE_ENV=test node_modules/.bin/jest --detectOpenHandles --runInBand --forceExit",
+    "test:staged": "NODE_ENV=test node_modules/.bin/jest --findRelatedTests --detectOpenHandles --runInBand --forceExit",
     "resetdb": "sequelize db:drop; sequelize db:create && sequelize db:migrate",
     "seed": "sequelize db:seed:all"
   },
@@ -55,9 +55,11 @@
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@types/redlock": "^4.0.2",
+    "aws-sdk-mock": "^5.4.0",
     "child-process-promise": "^2.2.1",
     "concurrently": "^5.3.0",
     "jest": "^27.0.6",
+    "mock-fs": "^5.1.1",
     "pm2": "^5.1.1",
     "sequelize-cli": "^5.5.0",
     "sqlite3": "^4.0.9",

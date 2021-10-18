@@ -90,7 +90,12 @@ const listItems = async function({ importPaths = null }, { resource = null }) {
     importPath.id
   );
 
-  return files;
+  const prefix = absolutePath("", [resource.file], true, false);
+
+  return files.map(file => {
+    file.metadata.resource = file.metadata.resource.substring(prefix.length);
+    return file;
+  });
 };
 
 const statItem = async function({ importPaths }, { metadata = {} }) {
