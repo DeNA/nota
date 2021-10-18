@@ -13,7 +13,6 @@ import history from "../../lib/history";
 import useInputForm, { integer, string } from "../../lib/useInputForm";
 import Loading from "../Loading";
 import { Filters } from "./Filters";
-import { Task } from "../../lib/models";
 import MediaSourceItemsTree from "./MediaSourceItemsTree";
 
 function AdminProjectTaskNew({ resource, project, loading }) {
@@ -30,20 +29,15 @@ function AdminProjectTaskNew({ resource, project, loading }) {
     description,
     templateId,
     mediaSourceId,
-    mediaSourceSelectedPath,
-    assignmentDefaultItems,
-    assignmentDefaultOrder
+    mediaSourceSelectedPath
   }) =>
     name &&
     description &&
     templateId &&
     mediaSourceId &&
-    mediaSourceSelectedPath &&
-    assignmentDefaultItems &&
-    assignmentDefaultOrder;
+    mediaSourceSelectedPath;
 
   const saveTask = async function(values) {
-    debugger;
     if (!canSaveTask(values)) return;
 
     const conditions = {};
@@ -62,12 +56,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
         excludeAlreadyUsed,
         limit: null
       },
-      conditions,
-      assignmentDefaultItems: Math.max(
-        parseInt(values.assignmentDefaultItems),
-        Task.MIN_ASSIGNMENT_SIZE
-      ),
-      assignmentDefaultOrder: values.assignmentDefaultOrder
+      conditions
     });
 
     history.push(`/admin/projects/${project.id}`);
@@ -97,9 +86,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
     description: string().required(),
     templateId: integer().required(),
     mediaSourceId: string().required(),
-    mediaSourceSelectedPath: string().required(),
-    assignmentDefaultItems: integer().required(),
-    assignmentDefaultOrder: string().required()
+    mediaSourceSelectedPath: string().required()
   };
 
   const [
@@ -111,9 +98,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
     description: "",
     templateId: "",
     mediaSourceId: "",
-    mediaSourceSelectedPath: "",
-    assignmentDefaultItems: Task.DEFAULT_ASSIGNMENT_SIZE,
-    assignmentDefaultOrder: Task.DEFAULT_ASSIGNMENT_ORDER
+    mediaSourceSelectedPath: ""
   });
   const mediaSource =
     values.mediaSourceId &&
@@ -188,54 +173,6 @@ function AdminProjectTaskNew({ resource, project, loading }) {
             />
             <Form.Control.Feedback type="invalid">
               {t("required-error", { field: t("task-description") })}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>{t("task-assignment-default-items")}</Form.Label>
-            <Form.Control
-              type="number"
-              name="assignmentDefaultItems"
-              value={values.assignmentDefaultItems}
-              min={Task.MIN_ASSIGNMENT_SIZE}
-              onChange={handleChange}
-              isInvalid={
-                touched.assignmentDefaultItems && errors.assignmentDefaultItems
-              }
-            />
-            <Form.Control.Feedback type="invalid">
-              {t("required-error", {
-                field: t("task-assignment-default-items")
-              })}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>{t("task-assignment-default-order")}</Form.Label>
-            <Form.Control
-              as="select"
-              value={values.assignmentDefaultOrder}
-              name="assignmentDefaultOrder"
-              onChange={handleChange}
-              isInvalid={
-                touched.assignmentDefaultOrder && errors.assignmentDefaultOrder
-              }
-            >
-              <option
-                key={Task.ASSIGNMENT_ORDER.RANDOM}
-                value={Task.ASSIGNMENT_ORDER.RANDOM}
-              >
-                {t("random")}
-              </option>
-              <option
-                key={Task.ASSIGNMENT_ORDER.SEQUENTIAL}
-                value={Task.ASSIGNMENT_ORDER.SEQUENTIAL}
-              >
-                {t("in-order")}
-              </option>
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {t("required-error", {
-                field: t("task-assignment-default-order")
-              })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>

@@ -14,7 +14,7 @@ require("./models");
 
 // Auth setup
 const auth = require("./lib/auth");
-auth.init(app);
+auth.init();
 
 // Requests/Responses settings
 app.use(helmet());

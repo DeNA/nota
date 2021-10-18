@@ -19,11 +19,10 @@
   },
   "author": "Jonatan Alama <jonatan.alama@dena.com>",
   "devDependencies": {
-    "postcss": "^8.3.9",
-    "prettier": "^2.4.1",
-    "rollup": "^2.58.0",
-    "rollup-plugin-postcss": "^4.0.1",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "typescript": "^4.4.3"
+    "prettier": "^1.18.2",
+    "rollup": "^1.19.4",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "typescript": "^3.5.3"
   }
 }

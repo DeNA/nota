@@ -160,32 +160,6 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">
-                        {t("task-assignment-default-items")}
-                      </Col>
-                      <Col>
-                        <code>
-                          {task.assignmentDefaultItems ??
-                            Task.DEFAULT_ASSIGNMENT_SIZE}
-                        </code>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="col-3 text-right">
-                        {t("task-assignment-default-order")}
-                      </Col>
-                      <Col>
-                        <code>
-                          {t(
-                            Task.ASSIGNMENT_ORDER_TEXT[
-                              task.assignmentDefaultOrder ??
-                                Task.DEFAULT_ASSIGNMENT_ORDER
-                            ]
-                          )}
-                        </code>
-                      </Col>
-                    </Row>
-                    <Row>
                       <Col className="col-3 text-right">{t("progress")}</Col>
                       <Col className="d-flex flex-row align-items-center">
                         <Badge variant="secondary">

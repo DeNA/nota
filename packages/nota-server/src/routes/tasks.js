@@ -14,8 +14,6 @@ const taskResponseTemplate = function(task) {
     description: task.description,
     status: task.status,
     template: task.taskTemplate,
-    assignmentDefaultItems: task.mediaSourceConfig.assignmentDefaultItems,
-    assignmentDefaultOrder: task.mediaSourceConfig.assignmentDefaultOrder,
     mediaSource: { id: task.mediaSource.id, name: task.mediaSource.name },
     mediaSourceOptions: {
       path: task.mediaSourceConfig.options.path,
@@ -104,15 +102,7 @@ const getTask = async function(req, res, next) {
 };
 
 const createTask = async function(req, res, next) {
-  const {
-    name,
-    description,
-    mediaSourceId,
-    options,
-    conditions,
-    assignmentDefaultItems,
-    assignmentDefaultOrder
-  } = req.body;
+  const { name, description, mediaSourceId, options, conditions } = req.body;
   let task;
 
   try {
@@ -144,12 +134,7 @@ const createTask = async function(req, res, next) {
           excludeAlreadyUsed: options.excludeAlreadyUsed,
           limit: options.limit
         },
-        conditions,
-        assignmentDefaultItems:
-          assignmentDefaultItems !== undefined
-            ? Math.max(1, assignmentDefaultItems)
-            : undefined,
-        assignmentDefaultOrder
+        conditions
       },
       status: Task.STATUS.CREATING,
       createdBy: req.user.id,
@@ -172,13 +157,7 @@ const createTask = async function(req, res, next) {
 
 const updateTask = async function(req, res, next) {
   try {
-    const {
-      name,
-      description,
-      status,
-      assignmentDefaultItems,
-      assignmentDefaultOrder
-    } = req.body;
+    const { name, description, status } = req.body;
 
     const updateData = {
       updatedBy: req.user.id
@@ -193,21 +172,6 @@ const updateTask = async function(req, res, next) {
     if (description !== undefined) {
       updateData.description = description;
       updateFields.push("description");
-    }
-
-    if (
-      assignmentDefaultItems !== undefined ||
-      assignmentDefaultOrder !== undefined
-    ) {
-      updateData.mediaSourceConfig = { ...res.locals.task.mediaSourceConfig };
-      updateData.mediaSourceConfig.assignmentDefaultItems = assignmentDefaultItems
-        ? Math.max(1, assignmentDefaultItems)
-        : updateData.mediaSourceConfig.assignmentDefaultItems;
-      updateData.mediaSourceConfig.assignmentDefaultOrder =
-        assignmentDefaultOrder ??
-        updateData.mediaSourceConfig.assignmentDefaultOrder;
-
-      updateFields.push("mediaSourceConfig");
     }
 
     if (
