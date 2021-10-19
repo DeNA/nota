@@ -4,7 +4,6 @@ jest.mock("archiver");
 const { db } = require("../lib/testUtils");
 const taskExport = require("./taskExport");
 const { Task } = require("../models");
-const ds = require("../lib/datasource");
 const archiver = require("archiver");
 
 let data;
@@ -22,8 +21,6 @@ const delay = async function(ms) {
 
 beforeAll(async () => {
   data = await db.resetTestDb();
-  // @ts-ignore
-  ds()._resetFilesForTest();
   archiver.mockImplementation(() => ({
     append: archiverAppend,
     finalize: archiverFinalize,
@@ -32,8 +29,6 @@ beforeAll(async () => {
 });
 
 afterAll(() => {
-  // @ts-ignore
-  ds()._resetFilesForTest();
   archiver.mockReset();
 });
 
