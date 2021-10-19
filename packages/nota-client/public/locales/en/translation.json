@@ -182,5 +182,7 @@
   "super-admin-user": "Admin (All projects+users)",
   "normal-user": "Normal",
   "inactive-user": "Inactive/Deleted",
-  "vis-not-found": "Visualization data not found"
+  "vis-not-found": "Visualization data not found",
+  "task-assignment-default-items": "Assignment Size",
+  "task-assignment-default-order": "Assignment Order"
 }
