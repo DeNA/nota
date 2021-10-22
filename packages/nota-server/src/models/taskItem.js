@@ -77,6 +77,29 @@ module.exports = function(sequelize) {
     TaskItem.addScope("withAnnotations", {
       include: [sequelize.models.Annotation]
     });
+    TaskItem.addScope("forAnnotation", {
+      attributes: ["id", "status"],
+      include: [
+        {
+          model: sequelize.models.MediaItem,
+          attributes: ["name", "metadata"],
+          required: true
+        },
+        {
+          model: sequelize.models.Annotation,
+          attributes: [
+            "id",
+            "labelsName",
+            "labels",
+            "boundaries",
+            "status",
+            "taskItemId"
+          ],
+          required: true
+        }
+      ],
+      order: [["id", "ASC"]]
+    });
     TaskItem.addScope("raw", {
       raw: true
     });

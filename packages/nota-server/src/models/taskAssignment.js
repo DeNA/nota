@@ -156,44 +156,26 @@ module.exports = function(sequelize) {
       include: [
         {
           model: sequelize.models.User.scope("forReference"),
-          as: "annotatorUser"
-        },
-        {
-          model: sequelize.models.TaskItem,
-          attributes: ["id", "status"],
-          include: [
-            {
-              model: sequelize.models.MediaItem,
-              attributes: ["name", "metadata"]
-            },
-            {
-              model: sequelize.models.Annotation,
-              attributes: [
-                "id",
-                "labelsName",
-                "labels",
-                "boundaries",
-                "status",
-                "taskItemId"
-              ]
-            }
-          ]
+          as: "annotatorUser",
+          required: true
         },
         {
           model: sequelize.models.Task.scope("forReference"),
           include: [
             {
               model: sequelize.models.TaskTemplate.scope("forReference"),
-              attributes: ["id", "name", "template"]
+              attributes: ["id", "name", "template"],
+              required: true
             },
             {
               model: sequelize.models.Project.scope("forReference"),
-              attributes: ["id", "name"]
+              attributes: ["id", "name"],
+              required: true
             }
-          ]
+          ],
+          required: true
         }
-      ],
-      order: [[sequelize.models.TaskItem, "id", "ASC"]]
+      ]
     });
 
     // ASSOCIATIONS

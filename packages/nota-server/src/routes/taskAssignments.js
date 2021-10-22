@@ -1,4 +1,10 @@
-const { Task, TaskAssignment, User, sequelize } = require("../models");
+const {
+  Task,
+  TaskAssignment,
+  TaskItem,
+  User,
+  sequelize
+} = require("../models");
 const { taskItemTemplate } = require("./taskItems");
 
 const taskAssignmentTemplate = function(taskAssignment) {
@@ -17,6 +23,11 @@ const getTaskAssignment = async function(req, res, next) {
     const taskAssignment = await TaskAssignment.scope("forAnnotation").findByPk(
       res.locals.taskAssignment.id
     );
+    taskAssignment.taskItems = await TaskItem.scope("forAnnotation").findAll({
+      where: {
+        taskAssignmentId: taskAssignment.id
+      }
+    });
 
     taskAssignment.editable =
       taskAssignment.status === TaskAssignment.STATUS.ANNOTATION_READY &&
