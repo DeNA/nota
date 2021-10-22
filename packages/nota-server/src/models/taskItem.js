@@ -94,8 +94,7 @@ module.exports = function(sequelize) {
             "boundaries",
             "status",
             "taskItemId"
-          ],
-          required: true
+          ]
         }
       ],
       order: [["id", "ASC"]]
