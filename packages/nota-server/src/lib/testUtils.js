@@ -468,7 +468,7 @@ const generateTestData = async function() {
     name: "template_1",
     projectId: project1.id,
     template: {
-      parser: "json",
+      parser: "jsonv2",
       foo: "bar",
       annotations: [
         {

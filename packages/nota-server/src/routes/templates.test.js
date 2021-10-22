@@ -148,7 +148,7 @@ describe("/api/projects/:projectId/templates", () => {
         name: data.taskTemplates.template1.name,
         description: data.taskTemplates.template1.description,
         projectId: data.taskTemplates.template1.projectId,
-        template: { parser: "json", foo: "bar" },
+        template: { parser: "jsonv2", foo: "bar" },
         createdBy: {
           id: 1,
           username: "admin"
