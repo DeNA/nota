@@ -94,20 +94,23 @@ module.exports = function(sequelize) {
 
       // Prepare auto-create annotations
       const annotationsDefinition = taskTemplate.template.annotations || [];
-      const autoCreateAnnotations = annotationsDefinition.filter(
+      const autoCreateAnnotationsDefinitions = annotationsDefinition.filter(
         annotationDefinition =>
           annotationDefinition.options &&
           annotationDefinition.options.autoCreate
       );
+      const autoCreateAnnotations = autoCreateAnnotationsDefinitions.map(
+        annotation => ({
+          labelsName: annotation.name,
+          labels: annotationDefaultLabels(annotation.labels)
+        })
+      );
+
       let added = 0;
 
       // Create items
       for (const mediaItem of importItems) {
-        // auto-create annotations
-        const annotations = autoCreateAnnotations.map(annotation => ({
-          labelsName: annotation.name,
-          labels: annotationDefaultLabels(annotation.labels)
-        }));
+        const annotations = [];
 
         // Check for sidecar json file annotations
         const jsonFileName = mediaItem.name + ".json";
@@ -138,7 +141,35 @@ module.exports = function(sequelize) {
 
           const json = JSON.parse(jsonFileContents);
           const imageData = p.parse(json);
-          annotations.push(...(imageData.annotations || []));
+          const jsonAnnotations = imageData.annotations || [];
+
+          // Do not auto-create annotations if existent in json
+          for (const autoCreateAnnotation of autoCreateAnnotations) {
+            const existingAnnotations = jsonAnnotations.filter(
+              jsonAnnotation =>
+                autoCreateAnnotation.labelsName === jsonAnnotation.labelsName
+            );
+
+            if (existingAnnotations.length) {
+              annotations.push(...existingAnnotations);
+            } else {
+              annotations.push(autoCreateAnnotation);
+            }
+          }
+
+          // Add the rest of json annotations at the end
+          annotations.push(
+            ...jsonAnnotations.filter(
+              jsonAnnotation =>
+                !autoCreateAnnotations.some(
+                  autoCreateAnnotation =>
+                    autoCreateAnnotation.labelsName ===
+                    jsonAnnotation.labelsName
+                )
+            )
+          );
+        } else {
+          annotations.push(...autoCreateAnnotations);
         }
 
         // Create item

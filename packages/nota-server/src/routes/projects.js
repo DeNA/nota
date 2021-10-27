@@ -49,6 +49,8 @@ const availableTemplate = function([projects, tasks, taskAssignments]) {
         name: task.name,
         description: task.description,
         status: task.status,
+        assignmentDefaultItems: task.mediaSourceConfig.assignmentDefaultItems,
+        assignmentDefaultOrder: task.mediaSourceConfig.assignmentDefaultOrder,
         assignable:
           parseInt(taskTotal.get("total")) > 0
             ? parseInt(taskTotal.get("assignable"))

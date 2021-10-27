@@ -468,7 +468,7 @@ const generateTestData = async function() {
     name: "template_1",
     projectId: project1.id,
     template: {
-      parser: "json",
+      parser: "jsonv2",
       foo: "bar",
       annotations: [
         {
@@ -519,7 +519,9 @@ const generateTestData = async function() {
     mediaSourceId: mediaSource1.id,
     mediaSourceConfig: {
       options: { path: "files1", excludeAlreadyUsed: true, limit: 5000 },
-      conditions: { filter_string: "foo", filter_integer: [0, 10] }
+      conditions: { filter_string: "foo", filter_integer: [0, 10] },
+      assignmentDefaultItems: 500,
+      assignmentDefaultOrder: "SEQUENTIAL"
     },
     status: 100,
     createdBy: adminUser.id,
