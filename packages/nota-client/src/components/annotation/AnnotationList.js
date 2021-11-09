@@ -51,7 +51,7 @@ const AnnotationList = ({
     return false;
   });
 
-  const renderAnnotation = annotation => {
+  const renderAnnotation = (annotation, i) => {
     return (
       <AnnotationListItem
         key={annotation.id}
@@ -62,6 +62,7 @@ const AnnotationList = ({
         imageUri={imageUri}
         boundaries={annotation.boundaries}
         name={annotation.name}
+        order={i + 1}
         active={selectedAnnotationId === annotation.id}
         complete={annotation.complete}
         editable={editable}
@@ -73,7 +74,7 @@ const AnnotationList = ({
   };
   return (
     <List className="annotation-list">
-      {annotations.map((annotation, index) => renderAnnotation(annotation))}
+      {annotations.map((annotation, i) => renderAnnotation(annotation, i))}
     </List>
   );
 };

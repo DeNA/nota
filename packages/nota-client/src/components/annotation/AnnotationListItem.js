@@ -12,6 +12,7 @@ const AnnotationListItem = ({
   boundaries,
   imageUri,
   name,
+  order,
   active,
   complete,
   editable,
@@ -34,6 +35,7 @@ const AnnotationListItem = ({
     <div ref={wrap}>
       <List.Item onClick={() => !active && onSelect()} active={active}>
         <div className={`header ${complete ? t("complete") : ""}`}>
+          <div className="order">{order}</div>
           <div className="status">{completeIcon}</div>
           <div className="color" style={{ backgroundColor: color }} />
           <div className="name">{name}</div>

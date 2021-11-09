@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Card, Form, Nav, Modal } from "react-bootstrap";
+import { Button, Card, Form, Modal, Nav } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { fetchTask, updateTask, deleteTask } from "../../lib/api";
+import { deleteTask, fetchTask, updateTask } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import history from "../../lib/history";
 import { Task } from "../../lib/models";
@@ -68,12 +68,14 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
     name: task ? task.name : "",
     description: task ? task.description : "",
     status: task ? task.status : "",
-    assignmentDefaultItems: task
-      ? task.assignmentDefaultItems
-      : Task.DEFAULT_ASSIGNMENT_SIZE,
-    assignmentDefaultOrder: task
-      ? task.assignmentDefaultOrder
-      : Task.DEFAULT_ASSIGNMENT_ORDER
+    assignmentDefaultItems:
+      task && task.assignmentDefaultItems
+        ? task.assignmentDefaultItems
+        : Task.DEFAULT_ASSIGNMENT_SIZE,
+    assignmentDefaultOrder:
+      task && task.assignmentDefaultOrder
+        ? task.assignmentDefaultOrder
+        : Task.DEFAULT_ASSIGNMENT_ORDER
   });
 
   if (loading) {

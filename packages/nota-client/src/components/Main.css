@@ -427,6 +427,12 @@ body {
   align-items: center;
 }
 
+.Preview .annotation-list .item .header .order {
+  padding-left: 2px;
+  padding-right: 2px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 .Preview .annotation-list .item .header .status {
   width: 18px;
 }
