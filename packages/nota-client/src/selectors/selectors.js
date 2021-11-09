@@ -239,7 +239,50 @@ export const imageAnnotations = function(state, select, id) {
     }
   });
 
-  return imageAnnotations;
+  // Sort by time events
+  const folderTemplateAnnotations = select("folderTemplateAnnotations");
+  const videoEventAnnotationTemplates = folderTemplateAnnotations.filter(
+    annotation =>
+      annotation.options &&
+      annotation.options.videoEvent &&
+      annotation.options.videoEvent.start
+  );
+
+  return videoEventAnnotationTemplates.length
+    ? imageAnnotations.sort((a, b) => {
+        const aTemplate = videoEventAnnotationTemplates.find(
+          template => template.name === a.labelsName
+        );
+        const bTemplate = videoEventAnnotationTemplates.find(
+          template => template.name === b.labelsName
+        );
+
+        if (!aTemplate && !bTemplate) {
+          return a.id - b.id;
+        }
+
+        if (!aTemplate) {
+          return -1;
+        } else if (!bTemplate) {
+          return 1;
+        }
+
+        const aStart = a.labels[aTemplate.options.videoEvent.start] || null;
+        const bStart = b.labels[bTemplate.options.videoEvent.start] || null;
+
+        if (!aStart && !bStart) {
+          return a.id - b.id;
+        }
+
+        if (!aStart) {
+          return -1;
+        } else if (!bStart) {
+          return 1;
+        }
+
+        return aStart - bStart;
+      })
+    : imageAnnotations;
 };
 
 export const dirtyAnnotations = function(state, select) {
