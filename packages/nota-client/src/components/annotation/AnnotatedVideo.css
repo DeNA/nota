@@ -97,7 +97,7 @@
 .annotated-seekbar-bar .progress-container .events .event-content {
   height: 100%;
   flex-grow: 1;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .annotated-seekbar-bar
@@ -105,6 +105,11 @@
   .events
   .event.selected
   .event-content {
+  opacity: 0.8;
+}
+
+.annotated-seekbar-bar .progress-container .events .event.selected .event-start,
+.annotated-seekbar-bar .progress-container .events .event.selected .event-end {
   opacity: 1;
 }
 
