@@ -1,6 +1,6 @@
 {
   "name": "nota-server",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
   "main": "src/bin/www",
   "repository": {
