@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
-import Icon from "../Icon";
 import { videoControlsContext } from "./videoControls";
 
 const AnnotationLabelVideoTimestampReview = props => {
@@ -23,7 +22,7 @@ const AnnotationLabelVideoTimestampReview = props => {
       onClick={handleGoToTime}
     >
       <small className="text-truncate mr-1">
-        {label.label} <Icon name="eye" />
+        {label.label}({(value / 1000).toFixed(2)}s)
       </small>
     </Button>
   ) : (
