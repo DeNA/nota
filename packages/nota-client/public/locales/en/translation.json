@@ -25,7 +25,7 @@
   "show-complete": "Show complete assignments",
   "id": "ID",
   "unmark-complete": "Set as not complete",
-  "mark-complate": "Set as complete",
+  "mark-complete": "Set as complete",
   "return-ongoing-items": "Return remaining items",
   "go-to-annotation": "Start Annotation",
   "progress": "Progress",

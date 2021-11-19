@@ -25,7 +25,7 @@
   "show-complete": "完了しているアノテーションを表示",
   "id": "ID",
   "unmark-complete": "未完了に戻す",
-  "mark-complate": "完了にする",
+  "mark-complete": "完了にする",
   "return-ongoing-items": "完了していない件数を戻す",
   "go-to-annotation": "アノテーションへ",
   "progress": "進捗",

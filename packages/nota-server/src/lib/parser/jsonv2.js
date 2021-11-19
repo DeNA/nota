@@ -37,7 +37,7 @@ const parser = {
   },
   parse: json => {
     const annotations = (json.annotations || []).map(
-      ({ boundaries = {}, type, labels }) => ({
+      ({ boundaries, type, labels }) => ({
         boundaries,
         labelsName: type,
         labels
