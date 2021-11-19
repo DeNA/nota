@@ -205,7 +205,7 @@ class SVGScaledAnnotatedImage extends Component {
     const { annotations, hideCompleted } = this.state;
 
     const sorted = annotations
-      .filter(annotation => !!annotation.boundaries)
+      .filter(annotation => annotation.boundaries && annotation.boundaries.type)
       .filter(annotation =>
         hideCompleted
           ? annotation.status === Annotation.STATUS.NOT_DONE ||
