@@ -3,6 +3,7 @@ import { selectImageAnnotationByUser } from "../../../actions";
 import { DEFAULT_ANNOTATION_COLOR } from "../../../constants";
 import hotkeys from "../../../lib/Hotkeys";
 import { selector } from "../../../lib/selector";
+import { setOptions } from "../../../actions";
 import AnnotatedVideo from "../AnnotatedVideo";
 
 const getEventAnnotations = (annotations, template) => {
@@ -47,7 +48,8 @@ const mapStateToProps = state => {
     videoUri: db.select("imageUri"),
     framerate: mediaOptions.framerate || 25,
     events: getEventAnnotations(annotations, template),
-    selectedAnnotationId: state.selectedAnnotationId
+    selectedAnnotationId: state.selectedAnnotationId,
+    options: state.options
   };
 };
 
@@ -55,6 +57,9 @@ const mapDispatchToProps = dispatch => {
   return {
     selectAnnotation: annotationId => {
       dispatch(selectImageAnnotationByUser(annotationId));
+    },
+    changeOptions: options => {
+      dispatch(setOptions(options));
     }
   };
 };
