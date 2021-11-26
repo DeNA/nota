@@ -57,30 +57,28 @@ function VideoTimelineVisualizations({
   const lines = timelineVis
     .map(visOptions => {
       const vis = visualizations[visOptions.id];
-
       return vis
         ? {
             id: visOptions.id,
             type: visOptions.type || DEFAULT_VISUALIZATION_TYPE,
             label: vis.label || visOptions.label || visOptions.id,
             color: vis.color || visOptions.color || DEFAULT_COLOR,
-            data: vis.values.map(([time, value]) => {
-              return visOptions.type === VISUALIZATION_TYPE.BACKGROUND_AREA
-                ? {
-                    s: time,
-                    e: value,
-                    data: [
-                      { x: time, y: min },
-                      { x: time, y: max },
-                      { x: value, y: max },
-                      { x: value, y: min }
-                    ]
-                  }
-                : {
+            rawData: vis.values,
+            data:
+              visOptions.type === VISUALIZATION_TYPE.BACKGROUND_AREA
+                ? vis.values.reduce((data, [start, end]) => {
+                    data.push(
+                      { x: start, y: min },
+                      { x: start, y: max },
+                      { x: end, y: max },
+                      { x: end, y: min }
+                    );
+                    return data;
+                  }, [])
+                : vis.values.map(([time, value]) => ({
                     x: time,
                     y: value
-                  };
-            })
+                  }))
           }
         : null;
     })
@@ -91,7 +89,7 @@ function VideoTimelineVisualizations({
     const tooltip = lines
       .map(line => {
         if (line.type === VISUALIZATION_TYPE.BACKGROUND_AREA) {
-          return line.data.some(area => area.s <= x && area.e >= x)
+          return line.rawData.some(([start, end]) => start <= x && end >= x)
             ? {
                 label: line.label,
                 id: line.id,
@@ -180,14 +178,13 @@ function VideoTimelineVisualizations({
               .filter(vis => !disabledItems.includes(vis.id))
               .map(line =>
                 line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? (
-                  line.data.map(area => (
-                    <AreaSeries
-                      key={`${line.id}_${area.s}_${area.e}`}
-                      className={line.id}
-                      color={line.color}
-                      data={area.data}
-                    />
-                  ))
+                  <AreaSeries
+                    key={`${line.id}`}
+                    className={line.id}
+                    color={line.color}
+                    data={line.data}
+                    onNearestX={handleOnNearestX}
+                  />
                 ) : (
                   <LineSeries
                     key={line.id}
