@@ -7,7 +7,8 @@ const defaultState = {
   zoomSensibility: 1,
   minScale: 0.5,
   maxScale: 12,
-  maxScaleClick: 8
+  maxScaleClick: 8,
+  timelineZoom: 1
 };
 const savedState = {
   ...defaultState,

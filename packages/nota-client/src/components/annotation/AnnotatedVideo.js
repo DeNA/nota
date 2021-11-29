@@ -9,6 +9,8 @@ const AnnotatedVideo = function({
   framerate,
   events,
   selectedAnnotationId,
+  options,
+  changeOptions,
   selectAnnotation,
   onNextFrame,
   onPreviousFrame,
@@ -28,6 +30,10 @@ const AnnotatedVideo = function({
 
   const handleVideoReady = function() {
     setVideo([video, framerate]);
+  };
+
+  const handleChangeTimelineZoom = function(newZoom) {
+    changeOptions({ ...options, timelineZoom: newZoom });
   };
 
   if (!videoUri) {
@@ -64,6 +70,8 @@ const AnnotatedVideo = function({
           setTime={setTime}
           events={events}
           selectedAnnotationId={selectedAnnotationId}
+          timelineZoom={options.timelineZoom}
+          changeTimelineZoom={handleChangeTimelineZoom}
           selectAnnotation={selectAnnotation}
           skipFrames={skipFrames}
           onNextFrame={onNextFrame}

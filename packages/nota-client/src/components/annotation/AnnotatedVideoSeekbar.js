@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import Icon from "../Icon";
 import "./AnnotatedVideo.css";
 
+const TIMELINE_ZOOM_MIN = 1;
+const TIMELINE_ZOOM_MAX = 5;
+
 const calculateTime = function(duration, currentTime) {
   const length = duration.toFixed(2);
   const current = currentTime.toFixed(2);
@@ -36,6 +39,8 @@ const AnnotatedVideoSeekbar = function({
   events,
   selectedAnnotationId,
   selectAnnotation,
+  timelineZoom,
+  changeTimelineZoom,
   skipFrames,
   onNextFrame,
   onPreviousFrame,
@@ -48,7 +53,9 @@ const AnnotatedVideoSeekbar = function({
   const { t } = useTranslation();
   const [seeking, setSeeking] = useState(false);
   const [playUntil, setPlayUntil] = useState(+Infinity);
+  const annotatedEventsPosition = useRef();
   const progressContainer = useRef();
+  const annotatedEventsContainer = useRef();
   const progress = duration ? (currentTime / duration) * 100 : 0;
   const time = duration ? calculateTime(duration, currentTime) : "--:--";
 
@@ -104,7 +111,17 @@ const AnnotatedVideoSeekbar = function({
     if (playUntil && currentTime >= playUntil / 1000) {
       setTime(playUntil);
     }
-  }, [playUntil, currentTime]);
+
+    if (timelineZoom > TIMELINE_ZOOM_MIN && annotatedEventsPosition.current) {
+      // Use timeout to scroll after new position is rendered
+      setTimeout(() => {
+        annotatedEventsPosition.current.scrollIntoView({
+          inline: "center",
+          behavior: "smooth"
+        });
+      }, 20);
+    }
+  }, [playUntil, currentTime, timelineZoom]);
 
   const handleEventSelection = function(event) {
     selectAnnotation(event.annotation.id);
@@ -165,9 +182,9 @@ const AnnotatedVideoSeekbar = function({
   };
 
   const handleBlankClick = function(evt) {
-    if (!duration || !progressContainer.current) return;
+    if (!duration || !annotatedEventsContainer.current) return;
 
-    const rect = progressContainer.current.getBoundingClientRect();
+    const rect = annotatedEventsContainer.current.getBoundingClientRect();
     const x = evt.clientX - rect.left; //x position within the element
     const width = rect.right - rect.left;
     const progress = x / width;
@@ -181,6 +198,13 @@ const AnnotatedVideoSeekbar = function({
     setPlayUntil(nextPauseTime);
     selectAnnotation(null);
     setTime(prevPauseTime, true);
+  };
+
+  const handleZoomOut = function() {
+    changeTimelineZoom(Math.max(TIMELINE_ZOOM_MIN, timelineZoom - 1));
+  };
+  const handleZoomIn = function() {
+    changeTimelineZoom(Math.min(TIMELINE_ZOOM_MAX, timelineZoom + 1));
   };
 
   onNextFrame(evt => handleSkip(1));
@@ -258,6 +282,27 @@ const AnnotatedVideoSeekbar = function({
             <Icon name={`chevron-right`} />
             <Icon name={`chevron-right`} />
           </Button>
+          <div className="zoom-controls">
+            <Button
+              variant="light"
+              className="zoom-out-button"
+              disabled={timelineZoom <= TIMELINE_ZOOM_MIN}
+              size="sm"
+              onClick={handleZoomOut}
+            >
+              <Icon name={`zoom-out`} />
+            </Button>
+            <Button
+              variant="light"
+              className="zoom-in-button"
+              disabled={timelineZoom >= TIMELINE_ZOOM_MAX}
+              size="sm"
+              onClick={handleZoomIn}
+            >
+              <Icon name={`zoom-in`} />
+            </Button>
+            <span>{timelineZoom}x</span>
+          </div>
         </div>
       </div>
       <div className="spacer" />
@@ -278,8 +323,17 @@ const AnnotatedVideoSeekbar = function({
           onMouseDown={handleProgressbarMouseDown}
         >
           <div className="progress" style={{ width: `${progress}%` }} />
+        </div>
+        <div className="time">{time}</div>
+      </div>
+      <div className="annotated-events-container">
+        <div
+          className="annotated-events-zoom"
+          style={{ width: `${100 * timelineZoom}%` }}
+        >
           <div
-            className="events"
+            className="annotated-events"
+            ref={annotatedEventsContainer}
             onClick={handleBlankClick}
             onMouseDown={evt => evt.stopPropagation()}
           >
@@ -331,9 +385,16 @@ const AnnotatedVideoSeekbar = function({
                 </div>
               );
             })}
+            <div
+              className="position"
+              style={{
+                left: progress < 50 ? `${progress}%` : undefined,
+                right: progress >= 50 ? `${100 - progress}%` : undefined
+              }}
+              ref={annotatedEventsPosition}
+            />
           </div>
         </div>
-        <div className="time">{time}</div>
       </div>
     </>
   );
