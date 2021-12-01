@@ -4,7 +4,7 @@ const annotationTemplate = function(annotation) {
   return {
     id: annotation.id,
     boundaries: annotation.boundaries,
-    labels: annotation.labels,
+    labels: annotation.labels ?? {},
     labelsName: annotation.labelsName,
     taskItemId: annotation.taskItemId,
     status: annotation.status
