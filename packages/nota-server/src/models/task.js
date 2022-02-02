@@ -193,7 +193,7 @@ module.exports = function(sequelize) {
             include: [sequelize.models.Annotation]
           });
           batch = [];
-          await sleep(200);
+          // await sleep(200);
         }
       }
 
