@@ -57,4 +57,10 @@ const annotationDefaultLabels = function(templateLabels) {
   return labels;
 };
 
-module.exports = { compareIds, compareByKey, annotationDefaultLabels };
+const sleep = async function(ms) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(true), ms);
+  });
+};
+
+module.exports = { compareIds, compareByKey, annotationDefaultLabels, sleep };

@@ -4,7 +4,7 @@ const parser = require("../lib/parser");
 const { logger } = require("../lib/logger");
 const { prepareArchive, writeArchives } = require("../lib/exportUtils");
 const moment = require("moment");
-const { annotationDefaultLabels } = require("../lib/utils");
+const { annotationDefaultLabels, sleep } = require("../lib/utils");
 const config = require("../config");
 const { absolutePath } = require("../lib/datasource/utils");
 
@@ -109,6 +109,7 @@ module.exports = function(sequelize) {
       let added = 0;
 
       // Create items
+      let batch = [];
       for (const mediaItem of importItems) {
         const annotations = [];
 
@@ -172,22 +173,37 @@ module.exports = function(sequelize) {
           annotations.push(...autoCreateAnnotations);
         }
 
-        // Create item
-        await this.createTaskItem(
-          {
-            mediaItemId: mediaItem.id,
-            status: sequelize.models.TaskItem.STATUS.NOT_DONE,
-            annotations: annotations.map(annotation => ({
-              ...annotation,
-              createdBy: this.createdBy
-            })),
+        // Add to batch
+        batch.push({
+          mediaItemId: mediaItem.id,
+          taskId: this.id,
+          status: sequelize.models.TaskItem.STATUS.NOT_DONE,
+          annotations: annotations.map(annotation => ({
+            ...annotation,
             createdBy: this.createdBy
-          },
-          {
-            include: [sequelize.models.Annotation]
-          }
-        );
+          })),
+          createdBy: this.createdBy
+        });
         added++;
+
+        // Create batch
+        if (batch.length >= 100) {
+          await sequelize.models.TaskItem.bulkCreate(batch, {
+            fields: ["mediaItemId", "taskId", "status", "createdBy"],
+            include: [sequelize.models.Annotation]
+          });
+          batch = [];
+          await sleep(200);
+        }
+      }
+
+      // Create remaining
+      if (batch.length) {
+        await sequelize.models.TaskItem.bulkCreate(batch, {
+          fields: ["mediaItemId", "taskId", "status", "createdBy"],
+          include: [sequelize.models.Annotation]
+        });
+        batch = [];
       }
 
       if (!refresh || this.status !== Task.STATUS.READY) {
