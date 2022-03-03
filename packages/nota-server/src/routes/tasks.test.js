@@ -406,8 +406,7 @@ describe("/api/projects/:projectId/tasks", () => {
         mediaSourceConfig: JSON.stringify({
           options: {
             path: "foo/bar/path",
-            excludeAlreadyUsed: false,
-            limit: 500
+            excludeAlreadyUsed: false
           },
           conditions: { filter_string: "aaa" },
           assignmentDefaultItems: 300,
@@ -421,7 +420,7 @@ describe("/api/projects/:projectId/tasks", () => {
       expect(spy.mock.calls.length).toBe(1);
       expect(spy.mock.calls[0]).toEqual([
         {
-          data: { refresh: false },
+          data: { refresh: false, limit: 500 },
           projectId: 1,
           resourceId: response.body.id,
           userId: data.users.superadminUser.id

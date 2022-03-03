@@ -143,8 +143,7 @@ const createTask = async function(req, res, next) {
       mediaSourceConfig: {
         options: {
           path: absolutePath("", [options.path], false, false),
-          excludeAlreadyUsed: options.excludeAlreadyUsed,
-          limit: options.limit
+          excludeAlreadyUsed: options.excludeAlreadyUsed
         },
         conditions,
         assignmentDefaultItems:
@@ -162,7 +161,7 @@ const createTask = async function(req, res, next) {
     await taskInitializeService.add({
       projectId: res.locals.project.id,
       resourceId: task.id,
-      data: { refresh: false },
+      data: { refresh: false, limit: options.limit },
       userId: req.user.id
     });
 

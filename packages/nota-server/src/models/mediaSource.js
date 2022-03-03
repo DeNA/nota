@@ -227,11 +227,10 @@ module.exports = function(sequelize) {
       raw: true
     });
 
-    if (limit && limit < mediaItemIds.length) {
-      return mediaItemIds.slice(0, limit - 1);
-    }
-
-    return mediaItemIds.map(mediaItem => mediaItem.id);
+    return (limit !== null && limit < mediaItemIds.length
+      ? mediaItemIds.slice(0, limit)
+      : mediaItemIds
+    ).map(mediaItem => mediaItem.id);
   };
 
   MediaSource.prototype.fetchMediaItems = async function(refresh = false) {

@@ -186,5 +186,8 @@
   "task-assignment-default-items": "アサインサイズ",
   "task-assignment-default-order": "アサイン順番",
   "task-manualUrl": "マニュアルUrl",
-  "manual": "マニュアル"
+  "manual": "マニュアル",
+  "task-is-test-creation": "タスク作成件数上限 (試し用)",
+  "task-test-task-limit": "件数上限",
+  "task-test-task-limit-items": "件"
 }

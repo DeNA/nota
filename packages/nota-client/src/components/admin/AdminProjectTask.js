@@ -187,7 +187,9 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">{t("manualUrl")}</Col>
+                      <Col className="col-3 text-right">
+                        {t("task-manualUrl")}
+                      </Col>
                       <Col>
                         <code>{task.manualUrl ?? ""}</code>{" "}
                         {task.manualUrl && (

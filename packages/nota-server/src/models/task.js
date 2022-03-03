@@ -35,7 +35,10 @@ module.exports = function(sequelize) {
     );
   };
 
-  Task.prototype.initializeTask = async function(refresh = false) {
+  Task.prototype.initializeTask = async function(
+    refresh = false,
+    limit = null
+  ) {
     try {
       const mediaSource = await this.getMediaSource();
       const taskTemplate = await this.getTaskTemplate();
@@ -49,7 +52,7 @@ module.exports = function(sequelize) {
           path: options.path || "",
           taskTemplateId: taskTemplate.id,
           extensions: taskTemplate.template.mediaExtensions || [],
-          limit: options.limit,
+          limit: limit,
           excludeAlreadyUsed: options.excludeAlreadyUsed || false
         },
         conditions
@@ -193,7 +196,6 @@ module.exports = function(sequelize) {
             include: [sequelize.models.Annotation]
           });
           batch = [];
-          // await sleep(200);
         }
       }
 
