@@ -17,6 +17,7 @@ import { fetchProjectAssignableUsers, fetchTask } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import { Project, Task, TaskAssignment } from "../../lib/models";
 import { parseDate } from "../../lib/utils";
+import Icon from "../Icon";
 import Loading from "../Loading";
 import AdminProjectTaskAssignment from "./AdminProjectTaskAssignment";
 import AdminProjectTaskExport from "./AdminProjectTaskExport";
@@ -186,6 +187,21 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
+                      <Col className="col-3 text-right">{t("manualUrl")}</Col>
+                      <Col>
+                        <code>{task.manualUrl ?? ""}</code>{" "}
+                        {task.manualUrl && (
+                          <a
+                            href={task.manualUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Icon name="external-link" />
+                          </a>
+                        )}
+                      </Col>
+                    </Row>
+                    <Row>
                       <Col className="col-3 text-right">{t("progress")}</Col>
                       <Col className="d-flex flex-row align-items-center">
                         <Badge variant="secondary">
@@ -218,7 +234,7 @@ export function AdminProjectTask({ resource, project, loading, doGet }) {
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="col-3 text-right">Status</Col>
+                      <Col className="col-3 text-right">{t("status")}</Col>
                       <Col>
                         <code>{t(Task.STATUS_TEXT[task.status])}</code>
                       </Col>

@@ -10,7 +10,7 @@ import {
 } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import history from "../../lib/history";
-import useInputForm, { integer, string } from "../../lib/useInputForm";
+import useInputForm, { integer, string, url } from "../../lib/useInputForm";
 import Loading from "../Loading";
 import { Filters } from "./Filters";
 import { Task } from "../../lib/models";
@@ -43,7 +43,6 @@ function AdminProjectTaskNew({ resource, project, loading }) {
     assignmentDefaultOrder;
 
   const saveTask = async function(values) {
-    debugger;
     if (!canSaveTask(values)) return;
 
     const conditions = {};
@@ -67,7 +66,8 @@ function AdminProjectTaskNew({ resource, project, loading }) {
         parseInt(values.assignmentDefaultItems),
         Task.MIN_ASSIGNMENT_SIZE
       ),
-      assignmentDefaultOrder: values.assignmentDefaultOrder
+      assignmentDefaultOrder: values.assignmentDefaultOrder,
+      manualUrl: values.manualUrl
     });
 
     history.push(`/admin/projects/${project.id}`);
@@ -95,6 +95,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
   const formSchema = {
     name: string().required(),
     description: string().required(),
+    manualUrl: url(),
     templateId: integer().required(),
     mediaSourceId: string().required(),
     mediaSourceSelectedPath: string().required(),
@@ -109,6 +110,7 @@ function AdminProjectTaskNew({ resource, project, loading }) {
   ] = useInputForm(saveTask, formSchema, {
     name: "",
     description: "",
+    manualUrl: "",
     templateId: "",
     mediaSourceId: "",
     mediaSourceSelectedPath: "",
@@ -188,6 +190,20 @@ function AdminProjectTaskNew({ resource, project, loading }) {
             />
             <Form.Control.Feedback type="invalid">
               {t("required-error", { field: t("task-description") })}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>{t("task-manualUrl")}</Form.Label>
+            <Form.Control
+              type="url"
+              placeholder={t("task-manualUrl")}
+              name="manualUrl"
+              value={values.manualUrl}
+              onChange={handleChange}
+              isInvalid={touched.manualUrl && errors.manualUrl}
+            />
+            <Form.Control.Feedback type="invalid">
+              {t("invalid-error", { field: t("task-manualUrl") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>

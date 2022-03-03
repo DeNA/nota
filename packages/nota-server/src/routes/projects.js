@@ -48,6 +48,7 @@ const availableTemplate = function([projects, tasks, taskAssignments]) {
         id: task.id,
         name: task.name,
         description: task.description,
+        manualUrl: task.mediaSourceConfig.manualUrl,
         status: task.status,
         assignmentDefaultItems: task.mediaSourceConfig.assignmentDefaultItems,
         assignmentDefaultOrder: task.mediaSourceConfig.assignmentDefaultOrder,

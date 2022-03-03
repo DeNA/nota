@@ -10,6 +10,7 @@ const mapStateToProps = state => {
   return {
     project: state.taskAssignment.data.project.name,
     task: state.taskAssignment.data.task.name,
+    manualUrl: state.taskAssignment.data.manualUrl,
     options: state.options,
     taskItemId: state.selectedImageId,
     totalItems: state.imageList.length,

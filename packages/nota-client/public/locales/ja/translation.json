@@ -184,5 +184,7 @@
   "inactive-user": "無効・削除済み",
   "vis-not-found": "表示するデータがありません",
   "task-assignment-default-items": "アサインサイズ",
-  "task-assignment-default-order": "アサイン順番"
+  "task-assignment-default-order": "アサイン順番",
+  "task-manualUrl": "マニュアルUrl",
+  "manual": "マニュアル"
 }

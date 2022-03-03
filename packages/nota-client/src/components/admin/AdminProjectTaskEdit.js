@@ -6,7 +6,7 @@ import { deleteTask, fetchTask, updateTask } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import history from "../../lib/history";
 import { Task } from "../../lib/models";
-import useInputForm, { integer, string } from "../../lib/useInputForm";
+import useInputForm, { integer, string, url } from "../../lib/useInputForm";
 import Loading from "../Loading";
 
 function AdminProjectTaskEdit({ resource: task, project, loading }) {
@@ -33,7 +33,8 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
           parseInt(values.assignmentDefaultItems),
           Task.MIN_ASSIGNMENT_SIZE
         ),
-        assignmentDefaultOrder: values.assignmentDefaultOrder
+        assignmentDefaultOrder: values.assignmentDefaultOrder,
+        manualUrl: values.manualUrl
       }
     });
 
@@ -55,6 +56,7 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
   const formSchema = {
     name: string().required(),
     description: string().required(),
+    manualUrl: url(),
     status: integer().required(),
     assignmentDefaultItems: integer().required(),
     assignmentDefaultOrder: string().required()
@@ -67,6 +69,7 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
   ] = useInputForm(saveTask, formSchema, {
     name: task ? task.name : "",
     description: task ? task.description : "",
+    manualUrl: task ? task.manualUrl : "",
     status: task ? task.status : "",
     assignmentDefaultItems:
       task && task.assignmentDefaultItems
@@ -135,6 +138,20 @@ function AdminProjectTaskEdit({ resource: task, project, loading }) {
               />
               <Form.Control.Feedback type="invalid">
                 {t("required-error", { field: t("task-description") })}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>{t("task-manualUrl")}</Form.Label>
+              <Form.Control
+                type="url"
+                placeholder={t("task-manualUrl")}
+                name="manualUrl"
+                value={values.manualUrl}
+                onChange={handleChange}
+                isInvalid={touched.manualUrl && errors.manualUrl}
+              />
+              <Form.Control.Feedback type="invalid">
+                {t("required-error", { field: t("task-manualUrl") })}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group>

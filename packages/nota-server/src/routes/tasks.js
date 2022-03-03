@@ -12,6 +12,7 @@ const taskResponseTemplate = function(task) {
     projectId: task.projectId,
     name: task.name,
     description: task.description,
+    manualUrl: task.mediaSourceConfig.manualUrl,
     status: task.status,
     template: task.taskTemplate,
     assignmentDefaultItems: task.mediaSourceConfig.assignmentDefaultItems,
@@ -107,6 +108,7 @@ const createTask = async function(req, res, next) {
   const {
     name,
     description,
+    manualUrl,
     mediaSourceId,
     options,
     conditions,
@@ -149,7 +151,8 @@ const createTask = async function(req, res, next) {
           assignmentDefaultItems !== undefined
             ? Math.max(1, assignmentDefaultItems)
             : undefined,
-        assignmentDefaultOrder
+        assignmentDefaultOrder,
+        manualUrl
       },
       status: Task.STATUS.CREATING,
       createdBy: req.user.id,
@@ -175,6 +178,7 @@ const updateTask = async function(req, res, next) {
     const {
       name,
       description,
+      manualUrl,
       status,
       assignmentDefaultItems,
       assignmentDefaultOrder
@@ -197,7 +201,8 @@ const updateTask = async function(req, res, next) {
 
     if (
       assignmentDefaultItems !== undefined ||
-      assignmentDefaultOrder !== undefined
+      assignmentDefaultOrder !== undefined ||
+      manualUrl !== undefined
     ) {
       updateData.mediaSourceConfig = { ...res.locals.task.mediaSourceConfig };
       updateData.mediaSourceConfig.assignmentDefaultItems = assignmentDefaultItems
@@ -206,6 +211,8 @@ const updateTask = async function(req, res, next) {
       updateData.mediaSourceConfig.assignmentDefaultOrder =
         assignmentDefaultOrder ??
         updateData.mediaSourceConfig.assignmentDefaultOrder;
+      updateData.mediaSourceConfig.manualUrl =
+        manualUrl ?? updateData.mediaSourceConfig.manualUrl;
 
       updateFields.push("mediaSourceConfig");
     }

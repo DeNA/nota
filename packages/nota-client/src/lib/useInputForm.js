@@ -63,6 +63,17 @@ const validator = function(type) {
 };
 export const string = () => validator("string");
 export const integer = () => validator("integer");
+export const url = () =>
+  validator("string").addValidation(value => {
+    if (value === "") {
+      return [null, null];
+    }
+    const regex = new RegExp(
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi
+    );
+
+    return value.match(regex) ? [null, value] : ["not valid url"];
+  });
 
 /**
  * @param {(values: any) => void} saveTask
@@ -137,7 +148,6 @@ const useInputForm = function(saveTask, schema, initialValues = {}) {
       {}
     );
     const newErrors = await validate(values);
-
     if (Object.keys(newErrors).length) {
       setFormStatus({
         errors: newErrors,
