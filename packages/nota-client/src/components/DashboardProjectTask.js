@@ -15,6 +15,7 @@ import { persistTaskAssignment } from "../lib/api";
 import history from "../lib/history";
 import { Task, TaskAssignment } from "../lib/models";
 import DashboardProjectTaskAssignment from "./DashboardProjectTaskAssignment";
+import Icon from "./Icon";
 import Loading from "./Loading";
 
 const DashboardProjectTask = function({ project, task, reload }) {
@@ -79,6 +80,18 @@ const DashboardProjectTask = function({ project, task, reload }) {
               <h3>
                 {task.status === Task.STATUS.HIDDEN && `${t("task-hidden")}`}{" "}
                 {project.name} - {task.name}
+                {task.manualUrl && (
+                  <small>
+                    <a
+                      className="ml-3"
+                      href={task.manualUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t("manual")} <Icon name="external-link" />
+                    </a>
+                  </small>
+                )}
               </h3>
             </Nav.Item>
             <Nav.Item>

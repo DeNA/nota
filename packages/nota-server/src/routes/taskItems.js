@@ -150,11 +150,38 @@ const getTaskItemVis = async function(req, res, next) {
       resource: taskItem.mediaItem.path
     };
 
-    // Check for existence
+    // Check for single file existence
     const stat = await ds.statItem({ metadata });
 
     if (!stat) {
-      return res.json({});
+      // Check for individual files
+      const response = {};
+
+      for (const vis of timelineVis) {
+        const metadata = {
+          ...taskItem.mediaItem.metadata,
+          fileName: `${taskItem.mediaItem.name}.vis.${vis.id}.json`,
+          importPathId: taskItem.mediaItem.mediaSource.id,
+          resource: taskItem.mediaItem.path
+        };
+        const stat = await ds.statItem({ metadata });
+
+        if (!stat) {
+          continue;
+        }
+
+        const jsonFileReadStream = await ds.readItem({ metadata });
+        let jsonFileContents = "";
+
+        for await (const chunk of jsonFileReadStream) {
+          jsonFileContents += chunk;
+        }
+
+        const json = JSON.parse(jsonFileContents);
+        response[vis.id] = json;
+      }
+
+      return res.json(response);
     }
 
     // Return file

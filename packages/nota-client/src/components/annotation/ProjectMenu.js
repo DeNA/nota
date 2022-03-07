@@ -16,6 +16,7 @@ import { Dropdown } from "./semantic";
 const ProjectMenu = ({
   project,
   task,
+  manualUrl,
   options,
   changeOptions,
   closeTask,
@@ -61,6 +62,16 @@ const ProjectMenu = ({
                 <br />
                 <span>{task}</span>
                 <br />
+                {manualUrl && (
+                  <>
+                    <span>
+                      <a href={manualUrl} target="_blank" rel="noreferrer">
+                        {t("manual")} <Icon name="external-link" />
+                      </a>
+                    </span>
+                    <br />
+                  </>
+                )}
                 <span>
                   {t("progress")} {completeItems}/{totalItems}
                 </span>

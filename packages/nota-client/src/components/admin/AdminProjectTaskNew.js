@@ -10,16 +10,19 @@ import {
 } from "../../lib/api";
 import { apiContainerFactory } from "../../lib/apiContainerFactory";
 import history from "../../lib/history";
-import useInputForm, { integer, string } from "../../lib/useInputForm";
+import useInputForm, { integer, string, url } from "../../lib/useInputForm";
 import Loading from "../Loading";
 import { Filters } from "./Filters";
 import { Task } from "../../lib/models";
 import MediaSourceItemsTree from "./MediaSourceItemsTree";
 
+const DEFAULT_TASK_CREATION_TEST_LIMIT = 10;
+
 function AdminProjectTaskNew({ resource, project, loading }) {
   const { t } = useTranslation();
   const [count, setCount] = React.useState(null);
   const [filterConditions, setFilterConditions] = React.useState({});
+  const [isTestCreation, setIsTestCreation] = React.useState(false);
   const [excludeAlreadyUsed, setExcludeAlreadyUsed] = React.useState(false);
   const { templates, mediaSources } = resource || {
     templates: null,
@@ -43,7 +46,6 @@ function AdminProjectTaskNew({ resource, project, loading }) {
     assignmentDefaultOrder;
 
   const saveTask = async function(values) {
-    debugger;
     if (!canSaveTask(values)) return;
 
     const conditions = {};
@@ -60,14 +62,19 @@ function AdminProjectTaskNew({ resource, project, loading }) {
         taskTemplateId: values.templateId,
         path: values.mediaSourceSelectedPath,
         excludeAlreadyUsed,
-        limit: null
+        limit: isTestCreation
+          ? values.testTaskLimit
+            ? parseInt(values.testTaskLimit)
+            : DEFAULT_TASK_CREATION_TEST_LIMIT
+          : undefined
       },
       conditions,
       assignmentDefaultItems: Math.max(
         parseInt(values.assignmentDefaultItems),
         Task.MIN_ASSIGNMENT_SIZE
       ),
-      assignmentDefaultOrder: values.assignmentDefaultOrder
+      assignmentDefaultOrder: values.assignmentDefaultOrder,
+      manualUrl: values.manualUrl
     });
 
     history.push(`/admin/projects/${project.id}`);
@@ -92,14 +99,20 @@ function AdminProjectTaskNew({ resource, project, loading }) {
     setCount(result.items);
   };
 
+  const handleIsTestCreationChange = function(evt) {
+    setIsTestCreation(evt.target.checked);
+  };
+
   const formSchema = {
     name: string().required(),
     description: string().required(),
+    manualUrl: url(),
     templateId: integer().required(),
     mediaSourceId: string().required(),
     mediaSourceSelectedPath: string().required(),
     assignmentDefaultItems: integer().required(),
-    assignmentDefaultOrder: string().required()
+    assignmentDefaultOrder: string().required(),
+    testTaskLimit: integer()
   };
 
   const [
@@ -109,11 +122,13 @@ function AdminProjectTaskNew({ resource, project, loading }) {
   ] = useInputForm(saveTask, formSchema, {
     name: "",
     description: "",
+    manualUrl: "",
     templateId: "",
     mediaSourceId: "",
     mediaSourceSelectedPath: "",
     assignmentDefaultItems: Task.DEFAULT_ASSIGNMENT_SIZE,
-    assignmentDefaultOrder: Task.DEFAULT_ASSIGNMENT_ORDER
+    assignmentDefaultOrder: Task.DEFAULT_ASSIGNMENT_ORDER,
+    testTaskLimit: DEFAULT_TASK_CREATION_TEST_LIMIT
   });
   const mediaSource =
     values.mediaSourceId &&
@@ -188,6 +203,20 @@ function AdminProjectTaskNew({ resource, project, loading }) {
             />
             <Form.Control.Feedback type="invalid">
               {t("required-error", { field: t("task-description") })}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>{t("task-manualUrl")}</Form.Label>
+            <Form.Control
+              type="url"
+              placeholder={t("task-manualUrl")}
+              name="manualUrl"
+              value={values.manualUrl}
+              onChange={handleChange}
+              isInvalid={touched.manualUrl && errors.manualUrl}
+            />
+            <Form.Control.Feedback type="invalid">
+              {t("invalid-error", { field: t("task-manualUrl") })}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
@@ -364,6 +393,42 @@ function AdminProjectTaskNew({ resource, project, loading }) {
               )}
             </>
           )}
+          <Form.Group>
+            <Form.Row className="align-items-center">
+              <Col xs="auto">
+                <Form.Check
+                  type="checkbox"
+                  name="isTestCreation"
+                  checked={isTestCreation}
+                  onChange={handleIsTestCreationChange}
+                  label={t("task-is-test-creation")}
+                />
+              </Col>
+              <Col xs="auto">
+                <Form.Control
+                  type="number"
+                  size="sm"
+                  name="testTaskLimit"
+                  disabled={!isTestCreation}
+                  style={{
+                    opacity: isTestCreation ? 1 : 0.3
+                  }}
+                  value={values.testTaskLimit}
+                  min={0}
+                  onChange={handleChange}
+                  isInvalid={touched.testTaskLimit && errors.testTaskLimit}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {t("invalid-error", {
+                    field: t("task-test-task-limit")
+                  })}
+                </Form.Control.Feedback>
+              </Col>
+              <Col xs="auto">
+                <span>{t("task-test-task-limit-items")}</span>
+              </Col>
+            </Form.Row>
+          </Form.Group>
         </Form>
       </Card.Body>
       <Card.Footer>

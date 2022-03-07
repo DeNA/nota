@@ -24,24 +24,24 @@ module.exports = function(sequelize) {
       ],
       group: ["path"]
     });
-    const tree = items.map((item) => ({
+    const tree = items.map(item => ({
       path: `/${item.path}`,
       files: parseInt(item.get("files"))
     }));
     const emptyBranches = [];
 
-    tree.forEach((branch) => {
+    tree.forEach(branch => {
       const [, ...folders] = branch.path
         .substr(1)
         .split("/")
         .reverse();
       let path = "";
-      folders.reverse().forEach((folder) => {
+      folders.reverse().forEach(folder => {
         path = `${path}/${folder}`;
 
         if (
-          !tree.some((branch) => branch.path === path) &&
-          !emptyBranches.some((branch) => branch.path === path)
+          !tree.some(branch => branch.path === path) &&
+          !emptyBranches.some(branch => branch.path === path)
         ) {
           emptyBranches.push({ path, files: 0 });
         }
@@ -57,8 +57,8 @@ module.exports = function(sequelize) {
 
   const createStringCondition = function(name, values, alias) {
     const parsed = values
-      .filter((value) => !!value)
-      .map((value) => sequelize.escape(value));
+      .filter(value => !!value)
+      .map(value => sequelize.escape(value));
 
     if (!parsed.length) {
       return null;
@@ -69,7 +69,7 @@ module.exports = function(sequelize) {
   };
   const createIntegerCondition = function(name, values, alias) {
     const parsed = values.filter(
-      (value) =>
+      value =>
         value && (Number.isInteger(value[0]) || Number.isInteger(value[1]))
     );
 
@@ -88,7 +88,7 @@ module.exports = function(sequelize) {
           ? null
           : `${alias}.value_integer <= ${sequelize.escape(higher)}`
       ]
-        .filter((condition) => !!condition)
+        .filter(condition => !!condition)
         .join(" AND ");
 
       return `(${valueConditions})`;
@@ -98,7 +98,7 @@ module.exports = function(sequelize) {
   };
 
   const createDatetimeCondition = function(name, values, alias) {
-    const parsed = values.filter((value) => value && (value[0] || value[1]));
+    const parsed = values.filter(value => value && (value[0] || value[1]));
 
     if (!parsed.length) {
       return null;
@@ -115,7 +115,7 @@ module.exports = function(sequelize) {
           ? null
           : `${alias}.value_datetime <= ${sequelize.escape(higher)}`
       ]
-        .filter((condition) => !!condition)
+        .filter(condition => !!condition)
         .join(" AND ");
 
       return `(${valueConditions})`;
@@ -127,7 +127,7 @@ module.exports = function(sequelize) {
   const createMediaItemTagsSubquery = function(filters = [], conditions = {}) {
     const whereStatements = Object.entries(conditions).map(
       ([name, values], i) => {
-        const filter = filters.find((filter) => filter.name === name);
+        const filter = filters.find(filter => filter.name === name);
 
         if (!filter) {
           return null;
@@ -147,7 +147,7 @@ module.exports = function(sequelize) {
     );
 
     const filteredWhereStatements = whereStatements.filter(
-      (condition) => !!condition
+      condition => !!condition
     );
 
     if (!filteredWhereStatements.length) {
@@ -201,7 +201,7 @@ module.exports = function(sequelize) {
 
     if (extensions && extensions.length) {
       where.name = {
-        [Op.or]: extensions.map((extension) => ({
+        [Op.or]: extensions.map(extension => ({
           [Op.like]: `%.${extension}`
         }))
       };
@@ -227,11 +227,10 @@ module.exports = function(sequelize) {
       raw: true
     });
 
-    if (limit && limit < mediaItemIds.length) {
-      return mediaItemIds.slice(0, limit - 1);
-    }
-
-    return mediaItemIds.map((mediaItem) => mediaItem.id);
+    return (limit !== null && limit < mediaItemIds.length
+      ? mediaItemIds.slice(0, limit)
+      : mediaItemIds
+    ).map(mediaItem => mediaItem.id);
   };
 
   MediaSource.prototype.fetchMediaItems = async function(refresh = false) {
@@ -245,8 +244,8 @@ module.exports = function(sequelize) {
       });
 
       const mediaExtensions = this.config.extensions;
-      const mediaFiles = files.filter((file) =>
-        mediaExtensions.some((extension) => file.name.endsWith("." + extension))
+      const mediaFiles = files.filter(file =>
+        mediaExtensions.some(extension => file.name.endsWith("." + extension))
       );
       const newMediaFiles = [];
 
@@ -259,7 +258,7 @@ module.exports = function(sequelize) {
         for (const file of mediaFiles) {
           if (
             !allMediaItems.find(
-              (mi) =>
+              mi =>
                 mi.name === file.metadata.fileName &&
                 mi.path === file.metadata.resource
             )
@@ -276,12 +275,14 @@ module.exports = function(sequelize) {
 
       let added = 0;
 
+      // Create items
+      let batch = [];
       for (const mediaFile of refresh ? newMediaFiles : mediaFiles) {
         // Check for meta json file
         let meta;
         const metaFileName = mediaFile.metadata.fileName + ".meta.json";
         const metaFileExists = files.find(
-          (file) =>
+          file =>
             file.name === metaFileName &&
             file.metadata.resource === mediaFile.metadata.resource
         );
@@ -303,23 +304,9 @@ module.exports = function(sequelize) {
           meta = JSON.parse(metaFileContents);
         }
 
-        const mediaItem = await this.createMediaItem({
-          name: mediaFile.name,
-          path: mediaFile.metadata.resource,
-          metadata: {
-            ...mediaFile.metadata,
-            name: mediaFile.name,
-            externalMetadata: meta
-          },
-          status: sequelize.models.MediaItem.STATUS.OK,
-          createdBy: this.createdBy
-        });
-        added++;
-
+        const tags = [];
         if (this.config.filters && meta) {
-          const tags = [];
-
-          this.config.filters.forEach((filter) => {
+          this.config.filters.forEach(filter => {
             const filterPath = filter.name.split(".");
             let value = meta[filterPath[0]];
 
@@ -334,7 +321,6 @@ module.exports = function(sequelize) {
               switch (filter.type) {
                 case sequelize.models.MediaItemTag.TYPE.STRING:
                   tags.push({
-                    mediaItemId: mediaItem.id,
                     name: filter.name,
                     type: sequelize.models.MediaItemTag.TYPE.STRING,
                     valueString: value.toString()
@@ -348,7 +334,6 @@ module.exports = function(sequelize) {
                   }
 
                   tags.push({
-                    mediaItemId: mediaItem.id,
                     name: filter.name,
                     type: sequelize.models.MediaItemTag.TYPE.INTEGER,
                     valueInteger: integerValue
@@ -374,7 +359,6 @@ module.exports = function(sequelize) {
                   }
 
                   tags.push({
-                    mediaItemId: mediaItem.id,
                     name: filter.name,
                     type: sequelize.models.MediaItemTag.TYPE.DATETIME,
                     valueDatetime: datetimeValue.toDate()
@@ -384,17 +368,59 @@ module.exports = function(sequelize) {
               }
             }
           });
-
-          if (tags.length) {
-            await sequelize.models.MediaItemTag.bulkCreate(tags);
-          }
         }
+
+        batch.push({
+          name: mediaFile.name,
+          mediaSourceId: this.id,
+          path: mediaFile.metadata.resource,
+          metadata: {
+            ...mediaFile.metadata,
+            name: mediaFile.name,
+            externalMetadata: meta
+          },
+          mediaItemTags: tags,
+          status: sequelize.models.MediaItem.STATUS.OK,
+          createdBy: this.createdBy
+        });
+        added++;
+
+        if (batch.length >= 100) {
+          await sequelize.models.MediaItem.bulkCreate(batch, {
+            fields: [
+              "name",
+              "mediaSourceId",
+              "path",
+              "metadata",
+              "status",
+              "createdBy"
+            ],
+            include: [sequelize.models.MediaItemTag]
+          });
+          batch = [];
+        }
+      }
+
+      if (batch.length) {
+        await sequelize.models.MediaItem.bulkCreate(batch, {
+          fields: [
+            "name",
+            "mediaSourceId",
+            "path",
+            "metadata",
+            "status",
+            "createdBy"
+          ],
+          include: [sequelize.models.MediaItemTag]
+        });
+        batch = [];
       }
 
       this.status = MediaSource.STATUS.READY;
       await this.save();
       return added;
     } catch (error) {
+      console.log(error);
       logger.error(error);
       if (!refresh) {
         this.status = MediaSource.STATUS.CREATING_ERROR;

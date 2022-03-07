@@ -9,7 +9,7 @@ const taskInitialize = async function(jobTask, logger) {
     throw new Error("taskId and userId are required");
   }
   const task = await Task.findByPk(taskId);
-  const added = await task.initializeTask(data.refresh);
+  const added = await task.initializeTask(data.refresh, data.limit);
 
   if (data.refresh) {
     task.updatedBy = userId;

@@ -184,5 +184,10 @@
   "inactive-user": "Inactive/Deleted",
   "vis-not-found": "Visualization data not found",
   "task-assignment-default-items": "Assignment Size",
-  "task-assignment-default-order": "Assignment Order"
+  "task-assignment-default-order": "Assignment Order",
+  "task-manualUrl": "Manual Url",
+  "manual": "Manual",
+  "task-is-test-creation": "Task Items Limit (for test)",
+  "task-test-task-limit": "Task Items Limit",
+  "task-test-task-limit-items": "items"
 }

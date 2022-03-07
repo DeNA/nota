@@ -161,6 +161,7 @@ module.exports = function(sequelize) {
         },
         {
           model: sequelize.models.Task.scope("forReference"),
+          attributes: ["id", "name", "status", "mediaSourceConfig"],
           include: [
             {
               model: sequelize.models.TaskTemplate.scope("forReference"),

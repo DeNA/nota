@@ -14,6 +14,7 @@ const taskAssignmentTemplate = function(taskAssignment) {
     annotator: taskAssignment.annotatorUser,
     project: taskAssignment.task.project,
     task: taskAssignment.task,
+    manualUrl: taskAssignment.manualUrl,
     taskItems: taskAssignment.taskItems.map(taskItemTemplate),
     editable: taskAssignment.editable
   };
@@ -29,6 +30,7 @@ const getTaskAssignment = async function(req, res, next) {
       }
     });
 
+    taskAssignment.manualUrl = taskAssignment.task.mediaSourceConfig.manualUrl;
     taskAssignment.editable =
       taskAssignment.status === TaskAssignment.STATUS.ANNOTATION_READY &&
       taskAssignment.task.canBeAnnotated() &&
