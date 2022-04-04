@@ -72,7 +72,9 @@ describe("taskExport", () => {
       image: {
         path: "aaa",
         name: "media_item_1.jpg",
-        notaUrl: "http://example.com/annotation/1/1/1/1"
+        notaUrl: "http://example.com/annotation/1/1/1/1",
+        taskId: 1,
+        templateId: 1
       },
       done: true,
       annotations: []
@@ -84,7 +86,9 @@ describe("taskExport", () => {
       image: {
         path: "aaa/bbb",
         name: "media_item_2.jpg",
-        notaUrl: "http://example.com/annotation/1/1/1/2"
+        notaUrl: "http://example.com/annotation/1/1/1/2",
+        taskId: 1,
+        templateId: 1
       },
       done: true,
       annotations: []
@@ -128,7 +132,9 @@ describe("taskExport", () => {
       image: {
         path: "aaa/bbb",
         name: "media_item_2.jpg",
-        notaUrl: "http://example.com/annotation/1/1/1/2"
+        notaUrl: "http://example.com/annotation/1/1/1/2",
+        taskId: 1,
+        templateId: 1
       },
       done: true,
       annotations: []

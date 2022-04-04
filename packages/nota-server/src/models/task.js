@@ -430,6 +430,8 @@ ${onlyOngoingSubquery}`,
           mediaItem.taskAssignment ? mediaItem.taskAssignment.id : "??",
           mediaItem.id
         ].join("/");
+        mediaItem.taskId = this.id;
+        mediaItem.templateId = this.taskTemplateId;
 
         const [parsedFileName, parsedFile] = p.serialize(mediaItem);
         return parsedFile ? [parsedFileName, parsedFile] : null;

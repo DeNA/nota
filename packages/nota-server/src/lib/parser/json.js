@@ -2,7 +2,14 @@ const IMAGE_DONE = 1;
 
 const parser = {
   serialize: taskItem => {
-    const { status, annotations = [], mediaItem, notaUrl } = taskItem;
+    const {
+      status,
+      annotations = [],
+      mediaItem,
+      notaUrl,
+      taskId,
+      templateId
+    } = taskItem;
     const path = mediaItem.path;
     const name = mediaItem.name;
     const height = mediaItem.metadata.size
@@ -18,7 +25,9 @@ const parser = {
         name,
         width,
         height,
-        notaUrl
+        notaUrl,
+        templateId,
+        taskId
       },
       metadata: mediaItem.metadata.externalMetadata || undefined,
       done: status === IMAGE_DONE ? true : false,
