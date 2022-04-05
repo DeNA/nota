@@ -8,17 +8,31 @@ const defaultState = {
   minScale: 0.5,
   maxScale: 12,
   maxScaleClick: 8,
-  timelineZoom: 1
-};
-const savedState = {
-  ...defaultState,
-  ...(JSON.parse(window.localStorage.getItem(KEY)) || {})
+  timelineZoom: 1,
+  timelineVisState: {}
 };
 
-export default (state = savedState, action, root) => {
+export default (
+  state = {
+    ...defaultState,
+    ...(JSON.parse(window.localStorage.getItem(KEY)) || {})
+  },
+  action,
+  root
+) => {
   switch (action.type) {
     case SET_OPTIONS_ACTION:
-      const newState = { ...state, ...action.options };
+      const { timelineVisState = {}, ...options } = action.options;
+      const newTimelineVisState = {
+        ...state.timelineVisState,
+        ...timelineVisState
+      };
+      const newState = {
+        ...state,
+        ...options,
+        timelineVisState: newTimelineVisState
+      };
+
       window.localStorage.setItem(KEY, JSON.stringify(newState));
 
       return newState;
