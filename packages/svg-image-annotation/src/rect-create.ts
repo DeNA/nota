@@ -13,6 +13,10 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
   movingPoint: Position2D = null;
   verticalGuide: SVGLineElement = null;
   horizontalGuide: SVGLineElement = null;
+  labelBgDefs: SVGDefsElement = null;
+  labelBg: SVGElement = null;
+  label: SVGTextElement = null;
+  label2: SVGTextElement = null;
   constructor(
     annotation: RectangleNewAnnotation,
     parent: ImageAnnotation,
@@ -39,6 +43,34 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
       "vector-effect": "non-scaling-stroke"
     }) as SVGLineElement;
 
+    const rand = Math.random();
+    this.labelBgDefs = getNode("defs") as SVGDefsElement;
+    const labelBgFilter = getNode("filter", {
+      x: "-0.02",
+      y: "0",
+      width: "1.04",
+      height: "1.1",
+      id: `${rand}_textBackground`
+    });
+    this.labelBg = getNode("feFlood", {
+      "flood-color": "rgba(200,200,200,1)"
+    });
+    labelBgFilter.appendChild(this.labelBg);
+    labelBgFilter.appendChild(
+      getNode("feComposite", {
+        in: "SourceGraphic",
+        operator: "xor"
+      })
+    );
+    this.labelBgDefs.appendChild(labelBgFilter);
+    this.label = getNode("text", {
+      filter: `url(#${rand}_textBackground)`,
+      "text-anchor": "left"
+    }) as SVGTextElement;
+    this.label2 = getNode("text", {
+      "text-anchor": "left"
+    }) as SVGTextElement;
+
     this.parent.elements.drawCanvas.style.cursor = "none";
     this.verticalGuide.style.cursor = "none";
     this.horizontalGuide.style.cursor = "none";
@@ -47,6 +79,9 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     this.group.appendChild(this.verticalGuide);
     this.group.appendChild(this.horizontalGuide);
     this.group.appendChild(this.rect);
+    this.group.appendChild(this.labelBgDefs);
+    this.group.appendChild(this.label);
+    this.group.appendChild(this.label2);
     this.verticalGuide.addEventListener("mousedown", this.mouseDownHandler);
     this.horizontalGuide.addEventListener("mousedown", this.mouseDownHandler);
     this.canvas.addEventListener("mousedown", this.mouseDownHandler);
@@ -91,10 +126,10 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     if (!isMinHeight || !isMinWidth) {
       return;
     }
-    
+
     window.removeEventListener("mouseup", this.mouseUpHandler);
     window.removeEventListener("mousemove", this.mouseMoveHandler);
-    
+
     const properties = {
       ...this.annotation.properties,
       x,
@@ -112,6 +147,7 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     const { style, minHeight = 0, minWidth = 0 } = this.annotation.properties;
     const { strokeColor, fillColor } = this.style;
     const { startPoint, movingPoint } = this;
+    const scaleFactor = 1 / this.parent.status.scale;
 
     this.verticalGuide.setAttributeNS(
       null,
@@ -166,6 +202,10 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     const isMinHeight = height >= minHeight;
     const isMinWidth = width >= minWidth;
     const className = !isMinHeight || !isMinWidth ? "not-min-size" : "";
+    const labelWidth = Math.floor(width);
+    const labelHeight = Math.floor(height);
+    const labelTotal = labelWidth * labelHeight;
+    const sizeLabel = `${labelWidth}x${labelHeight} (${labelTotal})`;
 
     this.rect.setAttribute("class", className);
     this.rect.setAttributeNS(null, "x", x.toString());
@@ -174,6 +214,24 @@ class RectCreate extends ElementCreate<RectangleNewAnnotation> {
     this.rect.setAttributeNS(null, "height", height.toString());
     this.rect.setAttributeNS(null, "stroke", style.strokeColor || strokeColor);
     this.rect.setAttributeNS(null, "fill", style.fillColor || fillColor);
+
+    this.labelBg.setAttributeNS(
+      null,
+      "flood-color",
+      style.strokeColor || strokeColor
+    );
+    this.label.textContent = sizeLabel;
+    this.label.setAttributeNS(null, "x", (x + 0 * scaleFactor).toString());
+    this.label.setAttributeNS(null, "y", (y - 3 * scaleFactor).toString());
+    this.label.setAttributeNS(null, "font-size", `${scaleFactor}em`);
+    this.label.setAttributeNS(null, "fill", style.strokeColor || strokeColor);
+    this.label2.textContent = sizeLabel;
+    this.label2.setAttributeNS(null, "x", (x + 0 * scaleFactor).toString());
+    this.label2.setAttributeNS(null, "y", (y - 3 * scaleFactor).toString());
+    this.label2.setAttributeNS(null, "font-size", `${scaleFactor}em`);
+    this.label2.setAttributeNS(null, "fill", "rgb(0,0,0)");
+
+    this.group.setAttribute("class", "label-always");
   }
   destroy() {
     this.verticalGuide.removeEventListener("mousedown", this.mouseDownHandler);
