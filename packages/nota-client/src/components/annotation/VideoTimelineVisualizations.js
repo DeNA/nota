@@ -9,6 +9,7 @@ import { videoControlsContext } from "./videoControls";
 import "./VideoTimelineVisualizations.css";
 import VideoTimelineVisualizationsControls from "./VideoTimelineVisualizationsControls";
 import Icon from "../Icon";
+import { ALL_PRESET, CUSTOM_PRESET } from "../../constants";
 
 const DEFAULT_COLOR = "red";
 const VISUALIZATION_TYPE = {
@@ -20,17 +21,20 @@ const DEFAULT_VISUALIZATION_TYPE = VISUALIZATION_TYPE.LINE;
 function VideoTimelineVisualizations({
   projectId,
   taskId,
+  templateId,
   taskItemId,
   timelineVis = [],
+  timelineVisPresets = [],
+  selectedPreset,
   min,
-  max
+  max,
+  changeTimelineVisState
 }) {
   const { t } = useTranslation();
   const hasVis = timelineVis.length > 0;
   const { observe, width, height } = useDimensions();
   const [tooltip, setTooltip] = useState(null);
   const [visualizations, setVisualizations] = useState({});
-  const [disabledItems, setDisabledItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const {
@@ -134,18 +138,35 @@ function VideoTimelineVisualizations({
   };
 
   const handleToggleItem = function(id) {
-    const newDisabledItems = [...disabledItems];
-    const index = newDisabledItems.findIndex(
-      disabledItem => disabledItem === id
-    );
+    const newVisItems = [...selectedPreset.vis];
+    const index = newVisItems.findIndex(disabledItem => disabledItem === id);
 
     if (index === -1) {
-      newDisabledItems.push(id);
+      newVisItems.push(id);
     } else {
-      newDisabledItems.splice(index, 1);
+      newVisItems.splice(index, 1);
     }
 
-    setDisabledItems(newDisabledItems);
+    // ALL_PRESET if all selected
+    const allItems = timelineVis.map(vis => vis.id);
+    if (
+      newVisItems.length === allItems.length &&
+      allItems.every(allItem => newVisItems.includes(allItem))
+    ) {
+      changeTimelineVisState(templateId, ALL_PRESET);
+    } else {
+      changeTimelineVisState(templateId, CUSTOM_PRESET, newVisItems);
+    }
+  };
+
+  const handleChangePreset = function(presetId) {
+    const preset = timelineVisPresets.find(preset => preset.id === presetId);
+
+    if (presetId === ALL_PRESET) {
+      changeTimelineVisState(templateId, ALL_PRESET);
+    } else if (preset) {
+      changeTimelineVisState(templateId, presetId);
+    }
   };
 
   const showGraph = !loading && lines.length > 0;
@@ -175,7 +196,7 @@ function VideoTimelineVisualizations({
             onClick={handleOnClick}
           >
             {lines
-              .filter(vis => !disabledItems.includes(vis.id))
+              .filter(vis => selectedPreset.vis.includes(vis.id))
               .map(line =>
                 line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? (
                   <AreaSeries
@@ -223,9 +244,12 @@ function VideoTimelineVisualizations({
             color: line.color,
             strokeWidth:
               line.type === VISUALIZATION_TYPE.BACKGROUND_AREA ? 10 : undefined,
-            disabled: disabledItems.includes(line.id)
+            disabled: !selectedPreset.vis.includes(line.id)
           }))}
           onToggleItem={handleToggleItem}
+          selectedPresetId={selectedPreset.id}
+          presets={timelineVisPresets}
+          onChangePreset={handleChangePreset}
         />
       ) : null}
       <div className="toggle-controls" onClick={handleToggleControls}>

@@ -27,6 +27,10 @@ export const OPTION_LABEL_SHOW_OFF = "label_show_off";
 export const OPTION_LABEL_SHOW_HOVER = "label_show_hover";
 export const OPTION_LABEL_SHOW_ALWAYS = "label_show_always";
 
+/** TimelineVis Presets */
+export const CUSTOM_PRESET = "@@@CUSTOM@@@";
+export const ALL_PRESET = "@@@ALL@@@";
+
 export const ACTION_SELECT_ANNOTATION = "select_annotation";
 export const ACTION_SELECT_ANNOTATION_USER = "select_annotation_user";
 export const ACTION_CREATE_ANNOTATION = "create_annotation";
