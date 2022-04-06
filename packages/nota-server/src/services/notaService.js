@@ -1,13 +1,8 @@
-const { Queue } = require("bullmq");
+const { Queue, Job } = require("bullmq");
 const { JobTask } = require("../models");
-const redlock = require("../lib/lock");
 const { logger } = require("../lib/logger");
 const notaScheduler = require("./notaScheduler");
 const { getRedisClient } = require("../lib/redisClient");
-
-const LOCK_TTL = 1000;
-const LOCK_RENEW_INTERVAL = 500;
-const MAX_JOBS_TO_KEEP = 100;
 
 const notaService = function(name, task, processor, scheduler) {
   let queue;
@@ -16,8 +11,6 @@ const notaService = function(name, task, processor, scheduler) {
       logger[level](message, { ...meta, service: name, jobId: job.id });
     };
     let jobTask = null;
-    let lock = null;
-    let lockInterval = null;
 
     try {
       logger.info(`STARTED JOB`, { service: name, jobId: job.id });
@@ -26,23 +19,6 @@ const notaService = function(name, task, processor, scheduler) {
       if (!jobTask) {
         throw new Error(`JobTask ${job.data.jobTaskId} not found`);
       }
-
-      lock = await redlock.lock(
-        `locks:${name}:${jobTask.resourceId ?? "common"}`,
-        LOCK_TTL
-      );
-      lockInterval = setInterval(async () => {
-        try {
-          await lock?.extend(LOCK_TTL);
-        } catch (error) {
-          // We cannot access running task scope but we should log and stop the
-          // interval to prevent infinite retries on error
-          logger.error(error);
-          logger.info("Error refreshing lock, stopping lock refresh");
-
-          clearInterval(lockInterval);
-        }
-      }, LOCK_RENEW_INTERVAL);
 
       await jobTask.update({
         startedAt: new Date(),
@@ -75,12 +51,6 @@ const notaService = function(name, task, processor, scheduler) {
       }
     } finally {
       logger.info(`FINISHED JOB`, { service: name, jobId: job.id });
-
-      clearInterval(lockInterval);
-
-      if (lock) {
-        await lock.unlock();
-      }
     }
   };
 
@@ -113,6 +83,13 @@ const notaService = function(name, task, processor, scheduler) {
       userId,
       type = JobTask.TYPE.ADHOC
     }) {
+      const jobId = `t_${task}::p_${projectId}::r_${resourceId}`;
+      const existingJob = await Job.fromId(this._queue, jobId);
+
+      if (existingJob) {
+        return null;
+      }
+
       const jobTask = await JobTask.create({
         projectId,
         resourceId,
@@ -126,7 +103,7 @@ const notaService = function(name, task, processor, scheduler) {
       const job = await this._queue.add(
         name,
         { jobTaskId: jobTask.id },
-        { removeOnComplete: MAX_JOBS_TO_KEEP, removeOnFail: MAX_JOBS_TO_KEEP }
+        { removeOnComplete: true, removeOnFail: true, jobId }
       );
 
       logger.info(`ADD JOB`, {

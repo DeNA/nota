@@ -10,7 +10,8 @@ const taskMaintenanceService = require("../services/taskMaintenanceService");
 const mediaSourceFetchService = require("../services/mediaSourceFetchService");
 const jobSchedulerService = require("../services/jobSchedulerService");
 const notaScheduler = require("../services/notaScheduler");
-const CONCURRENCY = 1;
+const config = require("../config");
+const CONCURRENCY = config.workerConcurrency || 1;
 
 logger.info({
   message: `Starting nota worker version: ${version()}`

@@ -1,11 +1,9 @@
 jest.mock("../lib/redisClient");
-jest.mock("../lib/lock");
 jest.mock("./notaScheduler");
 jest.mock("bullmq");
 
 const { JobTask } = require("../models");
 const notaService = require("./notaService");
-const redlock = require("../lib/lock");
 const notaScheduler = require("./notaScheduler");
 
 describe("notaService", () => {
@@ -40,7 +38,6 @@ describe("notaService", () => {
 
   afterEach(() => {
     jest.useRealTimers();
-    redlock.lock.mockReset();
     jobTaskSpy.mockReset();
   });
 
@@ -98,9 +95,6 @@ describe("notaService", () => {
     processor.mockImplementationOnce(() => {
       throw new Error("hogehoge");
     });
-    const unlock = jest.fn();
-    const extend = jest.fn();
-    redlock.lock.mockReturnValue(Promise.resolve({ unlock, extend }));
     await service._processor({
       id: job.id,
       data: { jobTaskId: job.jobTaskId }
@@ -118,85 +112,15 @@ describe("notaService", () => {
     expect(jobTaskSpy.mock.calls[1][0].result).toBeUndefined();
     expect(jobTaskSpy.mock.calls[1][0].finishedAt).toBeDefined();
     expect(jobTaskSpy.mock.calls[1][0].status).toBe(JobTask.STATUS.ERROR);
-
-    // should unlock
-    expect(unlock.mock.calls.length).toBe(1);
   });
 
   test("should not execute job if no jobTask", async () => {
-    const unlock = jest.fn();
-    const extend = jest.fn();
-    redlock.lock.mockReturnValue(Promise.resolve({ unlock, extend }));
     await service._processor({
       id: job.id,
       data: { jobTaskId: -1 }
     });
 
     expect(jobTaskSpy.mock.calls.length).toBe(0);
-
-    // should not lock
-    expect(redlock.lock.mock.calls.length).toBe(0);
-    expect(extend.mock.calls.length).toBe(0);
-    expect(unlock.mock.calls.length).toBe(0);
-  });
-
-  test("should update lock correctly", async () => {
-    jest.useFakeTimers();
-    processor.mockImplementationOnce(async () => {
-      return new Promise(resolve => {
-        const interval = setInterval(() => {
-          jest.advanceTimersByTime(500);
-        }, 500);
-
-        setTimeout(() => {
-          clearInterval(interval);
-          resolve(true);
-        }, 1000);
-
-        jest.advanceTimersByTime(500);
-      });
-    });
-    const unlock = jest.fn();
-    const extend = jest.fn();
-    redlock.lock.mockReturnValue(Promise.resolve({ unlock, extend }));
-
-    await service._processor({
-      id: job.id,
-      data: { jobTaskId: job.jobTaskId }
-    });
-
-    expect(redlock.lock.mock.calls).toEqual([
-      ["locks:test_service_name:1", 1000]
-    ]);
-    expect(extend.mock.calls).toEqual([[1000], [1000], [1000]]);
-    expect(unlock.mock.calls).toEqual([[]]);
-  });
-
-  test("should handle lock errors", async () => {
-    jest.useFakeTimers();
-    processor.mockImplementationOnce(async () => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(true);
-        }, 1500);
-
-        jest.advanceTimersByTime(1000);
-        jest.advanceTimersByTime(1000);
-      });
-    });
-    const unlock = jest.fn();
-    const extend = jest.fn().mockImplementationOnce(() => {
-      throw new Error("hogehoge");
-    });
-    redlock.lock.mockReturnValue(Promise.resolve({ unlock, extend }));
-
-    await service._processor({
-      id: job.id,
-      data: { jobTaskId: job.jobTaskId }
-    });
-
-    expect(extend.mock.calls).toEqual([[1000]]);
-    expect(unlock.mock.calls).toEqual([[]]);
   });
 
   test("should setup scheduler if passed", async () => {
