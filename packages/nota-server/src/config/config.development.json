@@ -5,6 +5,8 @@
   "redis": {
     "host": "redis"
   },
+  "workerConcurrency": 1,
+  "workerClusterInstances": 2,
   "db": {
     "username": "root",
     "password": null,

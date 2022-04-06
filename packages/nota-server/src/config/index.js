@@ -7,7 +7,9 @@ console.log(`NODE_ENV: ${env}`);
 
 // Override APP vars from ENV
 const environtmentVars = {
-  NOTA_APP_PORT: "port"
+  NOTA_APP_PORT: "port",
+  NOTA_WORKER_CLUSTER_INSTANCES: "workerClusterInstances",
+  NOTA_WORKER_CONCURRENCY: "workerConcurrency"
 };
 
 Object.keys(environtmentVars).forEach(variable => {

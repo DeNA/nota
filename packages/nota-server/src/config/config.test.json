@@ -2,6 +2,8 @@
   "nota": {
     "host": "http://example.com"
   },
+  "workerConcurrency": 1,
+  "workerClusterInstances": 1,
   "db": {
     "dialect": "sqlite",
     "logging": false,
