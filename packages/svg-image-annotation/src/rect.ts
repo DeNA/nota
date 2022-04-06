@@ -97,7 +97,7 @@ class Rect extends Element<RectangleAnnotation> {
       const { minHeight = 0, minWidth = 0 } = this.annotation.properties;
       const isMinHeight = movingRect ? movingRect.height >= minHeight : true;
       const isMinWidth = movingRect ? movingRect.width >= minWidth : true;
-  
+
       if (!isMinHeight || !isMinWidth) {
         return;
       }
@@ -245,16 +245,20 @@ class Rect extends Element<RectangleAnnotation> {
   }
   update() {
     const { editable, label, selectable } = this.annotation;
-    const { style = {}, minHeight = 0, minWidth = 0 } = this.annotation.properties;
+    const {
+      style = {},
+      minHeight = 0,
+      minWidth = 0
+    } = this.annotation.properties;
     let { x, y, width, height } = this.annotation.properties;
     const { strokeColor, fillColor } = this.style;
     const scaleFactor = 1 / this.parent.status.scale;
     const strokeWidth = this.selected
       ? this.parent.options.selectedAnnotationStrokeWidth
       : this.parent.options.strokeWidth;
-      
+
     this.rect.setAttribute("class", "");
-      
+
     if (this.movingRect) {
       const isMinHeight = this.movingRect.height >= minHeight;
       const isMinWidth = this.movingRect.width >= minWidth;
@@ -265,6 +269,16 @@ class Rect extends Element<RectangleAnnotation> {
       width = this.movingRect.width;
       height = this.movingRect.height;
       this.rect.setAttribute("class", rectClassName);
+
+      const labelWidth = Math.floor(width);
+      const labelHeight = Math.floor(height);
+      const labelTotal = labelWidth * labelHeight;
+      const sizeLabel = `${labelWidth}x${labelHeight} (${labelTotal})`;
+      this.label.textContent = sizeLabel;
+      this.label2.textContent = sizeLabel;
+    } else {
+      this.label.textContent = label || "";
+      this.label2.textContent = label || "";
     }
 
     this.emptyContainer();
@@ -318,12 +332,10 @@ class Rect extends Element<RectangleAnnotation> {
       "flood-color",
       style.strokeColor || strokeColor
     );
-    this.label.textContent = label || "";
     this.label.setAttributeNS(null, "x", (x + 0 * scaleFactor).toString());
     this.label.setAttributeNS(null, "y", (y - 3 * scaleFactor).toString());
     this.label.setAttributeNS(null, "font-size", `${scaleFactor}em`);
     this.label.setAttributeNS(null, "fill", style.strokeColor || strokeColor);
-    this.label2.textContent = label || "";
     this.label2.setAttributeNS(null, "x", (x + 0 * scaleFactor).toString());
     this.label2.setAttributeNS(null, "y", (y - 3 * scaleFactor).toString());
     this.label2.setAttributeNS(null, "font-size", `${scaleFactor}em`);
@@ -335,7 +347,7 @@ class Rect extends Element<RectangleAnnotation> {
     this.selectable.setAttributeNS(null, "height", height.toString());
 
     let className = "";
-    if (this.parent.options.showLabels === "always") {
+    if (this.parent.options.showLabels === "always" || this.movingRect) {
       className += " label-always";
     }
     if (this.parent.options.showLabels === "hover" && !this.movingRect) {
