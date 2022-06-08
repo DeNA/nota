@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   mysql:
-    image: mysql:5.6.44
+    image: mysql:5.7.38
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
     ports:
