@@ -36,7 +36,7 @@
     "fs-extra": "7.0.1",
     "helmet": "^3.21.1",
     "ioredis": "^4.14.0",
-    "moment": "2.24.0",
+    "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
     "mysql2": "1.6.5",
     "node-decipher-openssl": "1.0.4",
@@ -48,7 +48,7 @@
     "redlock": "^4.2.0",
     "sequelize": "^5.22.5",
     "serve-favicon": "2.5.0",
-    "sharp": "0.29.0",
+    "sharp": "0.30.6",
     "stream-buffers": "3.0.2",
     "winston": "^3.2.1"
   },
