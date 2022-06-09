@@ -1,10 +1,10 @@
-FROM node:14-stretch@sha256:b19c3c12733345aed5c0d7a2d38c6beed69609293f97ec55a18e4934fe582777
+FROM node:16-bullseye
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get install --assume-yes --no-install-recommends apt-utils git procps lsb-release \
+    && apt-get install --assume-yes --no-install-recommends apt-utils git procps lsb-release python-is-python3 \
     && npm install pm2 -g \
     && : "Clean up" \
     && apt-get autoremove --assume-yes \

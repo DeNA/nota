@@ -48,7 +48,7 @@
     "redlock": "^4.2.0",
     "sequelize": "^5.22.5",
     "serve-favicon": "2.5.0",
-    "sharp": "0.29.0",
+    "sharp": "0.30.6",
     "stream-buffers": "3.0.2",
     "winston": "^3.2.1"
   },
